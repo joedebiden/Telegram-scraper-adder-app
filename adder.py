@@ -55,43 +55,9 @@ if proxy_choice == 'y':
 else:
     proxy = None
 
-''' SELECT RANDOM PROXY a faire un fichier a part pour placer les proxies !!!!!!!!!!!!!!!!!!!!!!!!!!!
-proxies = [
-    (socks.SOCKS5, 'proxy1_host', proxy1_port),
-    (socks.SOCKS5, 'proxy2_host', proxy2_port),
-    (socks.SOCKS5, 'proxy3_host', proxy3_port)
-]
-
-selected_proxy = random.choice(proxies)
-'''
 
 #client = TelegramClient(phone, api_id, api_hash)
 client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
-
-
-
-proxy = (socks.SOCKS5, proxy_ip, int(proxy_port), True, proxy_login, proxy_password)
-
-async def auth():
-    client = TelegramClient(
-        session=phone,
-        api_id=api_id,
-        api_hash=api_hash,
-        proxy=proxy
-    )
-    await client.connect()
-    sessions = await client(GetAuthorizationsRequest())
-    print(sessions)
-
-
-if __name__ == '__main__':
-    asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(auth())
-
-
-
-
 
 
 
