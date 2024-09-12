@@ -3,7 +3,7 @@
 1. [x] setup.py
 2. [x] scraper.py
 3. [ ] adder.py / proxy update
-4. [ ] messagesender.py
+4. [x] messagesender.py
 5. [ ] start.bat
 6. [ ] licence key
 7. [ ] obfuscate code
