@@ -1,10 +1,9 @@
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.functions.account import GetAuthorizationsRequest
 from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser
 from telethon.sync import TelegramClient 
-#from telethon import TelegramClient  // for async use of api
 from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
-from dotenv import load_dotenv
 import sys
 import csv
 import traceback
@@ -13,8 +12,8 @@ import random
 import configparser
 import os
 import socks
+import asyncio
 
-load_dotenv()
 
 def banner():
     os.system('cls')
@@ -68,6 +67,32 @@ selected_proxy = random.choice(proxies)
 
 #client = TelegramClient(phone, api_id, api_hash)
 client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+
+
+
+proxy = (socks.SOCKS5, proxy_ip, int(proxy_port), True, proxy_login, proxy_password)
+
+async def auth():
+    client = TelegramClient(
+        session=phone,
+        api_id=api_id,
+        api_hash=api_hash,
+        proxy=proxy
+    )
+    await client.connect()
+    sessions = await client(GetAuthorizationsRequest())
+    print(sessions)
+
+
+if __name__ == '__main__':
+    asyncio.set_event_loop(asyncio.SelectorEventLoop())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(auth())
+
+
+
+
+
 
 
 # ====================[START CLIENT]====================
