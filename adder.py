@@ -1,6 +1,5 @@
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.messages import GetDialogsRequest
-from telethon.tl.functions.account import GetAuthorizationsRequest
 from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser
 from telethon.sync import TelegramClient 
 from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
@@ -12,7 +11,6 @@ import random
 import configparser
 import os
 import socks
-import asyncio
 
 
 def banner():
@@ -44,7 +42,11 @@ except KeyError:
     print("[!] Run python setup.py first !!\n")
     sys.exit(1)
 
+
 # ====================[PROXY DETAILS]====================
+from auth import auth
+import asyncio
+
 banner()
 print("[!] Wanna use some proxies? (y/n)\n")
 proxy_choice = input("Input: ").lower()
@@ -55,9 +57,11 @@ if proxy_choice == 'y':
 else:
     proxy = None
 
-
-#client = TelegramClient(phone, api_id, api_hash)
 client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+
+if __name__ == '__main__':
+    asyncio.run(auth())
+    # Continue avec le reste de la logique pour ajouter des membres
 
 
 
