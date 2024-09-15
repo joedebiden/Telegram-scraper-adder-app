@@ -1,70 +1,79 @@
 import configparser
-import asyncio
-import socks
-import random
-from telethon import TelegramClient
-from telethon.tl.functions.account import GetAuthorizationsRequest
+import os
 
-# Lecture des configurations API et du téléphone
-cpass = configparser.RawConfigParser()
-cpass.read('config.data')
+config = configparser.RawConfigParser()
 
-api_id = cpass['cred']['id']
-api_hash = cpass['cred']['hash']
-phone = cpass['cred']['phone']
+if not os.path.exists('proxies.ini'):
+    with open('proxies.ini', 'w') as f:
+        pass
+config.read('proxies.ini')
 
-# Lecture des proxies depuis le fichier de configuration
-proxy_config = configparser.ConfigParser()
-proxy_config.read('proxies.ini')
-proxy_sections = proxy_config.sections()
-selected_proxy = random.choice(proxy_sections)
 
-proxy = (
-    socks.SOCKS5, 
-    proxy_config[selected_proxy]['host'], 
-    int(proxy_config[selected_proxy]['port']),
-    True,  
-    proxy_config[selected_proxy].get('username'), 
-    proxy_config[selected_proxy].get('password')
-)
 
-async def auth():
-    client = TelegramClient(
-        session=phone,
-        api_id=api_id,
-        api_hash=api_hash,
-        proxy=proxy
-    )
-    await client.connect()
-    if not await client.is_user_authorized():
-        await client.send_code_request(phone)
-        code = input('[+] Enter the code sent from Telegram: ')
-        await client.sign_in(phone, code)
+def add_proxy():
+    proxy_count = len(config.sections()) + 1  # Compter les sections actuelles pour numéroter les proxies
+    section_name = f'proxy{proxy_count}'
     
-    sessions = await client(GetAuthorizationsRequest())
-    print(sessions)
+    proxy_type = input("[+] Enter Proxy Type (socks5/socks4/http): ").lower()
+    addr = input("[+] Enter Proxy Host: ")
+    port = input("[+] Enter Proxy Port: ")
+    username = input("[+] Enter Proxy Username (optional): ") or 'None'
+    password = input("[+] Enter Proxy Password (optional): ") or 'None'
+    rdns = input("[+] Use Remote DNS? (True/False): ").capitalize() or 'True'
+    
+    # ajout de "section" pour un proxy
+    config[section_name] = {
+        'proxy_type': proxy_type,
+        'addr': addr, #address
+        'port': port,
+        'username': username,
+        'password': password,
+        'rdns': rdns #remote dns, true = géré par le serveur, false = géré par le client
+    }
+
+    # Écrire dans le fichier proxies.ini
+    with open('proxies.ini', 'w') as configfile:
+        config.write(configfile)
+    print(f"[+] Proxy {section_name} added successfully!\n")
+
+def main():
+    print("[!] Proxy Setup")
+    while True:
+        add_proxy()
+
+        another = input("[+] Add another proxy? (y/n): ").lower()
+        if another != 'y':
+            break
+
+
+def test_proxy(proxy):
+    import requests
+    proxies = {
+        'http': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
+        'https': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}"
+    }
+    try:
+        response = requests.get('https://api.telegram.org', proxies=proxies, timeout=5)
+        if response.status_code == 200:
+            print("[+] Proxy works!")
+        else:
+            print(f"[-] Proxy failed with status code: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"[-] Proxy test failed: {e}")
+
+
+    # Exemple d'appel de la fonction
+    proxy = {
+        'proxy_type': 'socks5',
+        'addr': 'residential.digiproxy.cc',
+        'port': 9595,
+        'username': 'u1WhTbxkIrSoAiY-res_sc-us_louisiana_Neworleans',
+        'password': 'dmucen0uiXuhPHd'
+    }
+
+    test_proxy(proxy)
+ 
+
 
 if __name__ == '__main__':
-    asyncio.run(auth())
-
-
-''' code bien fait 
-proxy = (socks.SOCKS5, proxy_ip, int(proxy_port), True, proxy_login, proxy_password)
-
-async def auth():
-    client = TelegramClient(
-        session=phone,
-        api_id=api_id,
-        api_hash=api_hash,
-        proxy=proxy
-    )
-    await client.connect()
-    sessions = await client(GetAuthorizationsRequest())
-    print(sessions)
-
-
-if __name__ == '__main__':
-    asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(auth())
-'''
+    main()

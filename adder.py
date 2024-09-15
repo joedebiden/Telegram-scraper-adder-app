@@ -10,7 +10,6 @@ import time
 import random
 import configparser
 import os
-import socks
 
 
 def banner():
@@ -45,23 +44,17 @@ except KeyError:
 
 # ====================[PROXY DETAILS]====================
 from auth import auth
-import asyncio
 
 banner()
 print("[!] Wanna use some proxies? (y/n)\n")
 proxy_choice = input("Input: ").lower()
-if proxy_choice == 'y':
-    proxy_host = input("[+] Enter Proxy Host: ")
-    proxy_port = int(input("[+] Enter Proxy Port: "))
-    proxy = (socks.SOCKS5, proxy_host, proxy_port)
+if proxy_choice != 'y':
+    pass
 else:
-    proxy = None
+    proxy = auth()
 
 client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
 
-if __name__ == '__main__':
-    asyncio.run(auth())
-    # Continue avec le reste de la logique pour ajouter des membres
 
 
 
