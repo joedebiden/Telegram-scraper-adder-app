@@ -70,8 +70,10 @@ def main():
 
 
 def test_proxy(proxy):
-    banner()
     import requests
+    import time
+
+
     proxies = {
         'http': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
         'https': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}"
@@ -79,11 +81,16 @@ def test_proxy(proxy):
     try:
         response = requests.get('https://ipinfo.io', proxies=proxies, timeout=5)
         if response.status_code == 200:
-            print("[+] Proxy works!")
+            print("\n[+] Proxy works!")
+            time.sleep(2)
         else:
-            print(f"[-] Proxy failed with status code: {response.status_code}")
+            print(f"\n[-] Proxy failed with status code: {response.status_code}")
+            time.sleep(2)
     except requests.exceptions.RequestException as e:
-        print(f"[-] Proxy test failed: {e}")
+        print(f"\n[-] Proxy test failed: {e}")
+        time.sleep(2)
+
+
 
 
 
@@ -108,7 +115,7 @@ def display_proxies(proxies_file='proxies.ini'):
         print("[!] Invalid choice!")
         return
     
-    print(f"\n[+] Proxy Details: {chosen_section}")
+    print(f"\n[+] Proxy Number: {chosen_section}")
     proxy_info = dict(config.items(chosen_section))
     for cle, valeur in proxy_info.items():
         print(f"{cle}: {valeur}")
@@ -128,7 +135,7 @@ def display_proxies(proxies_file='proxies.ini'):
     print(f"[+] Proxy from {chosen_section} updated successfully!")    
 
 def menu():
-    print("\n=== Menu ===")
+    print("\n====== Menu ======\n")
     print("[1]. Add Proxy")
     print("[2]. Test Proxy")
     print("[3]. Display & Edit Proxies")
@@ -147,15 +154,40 @@ if __name__ == '__main__':
             main() 
 
         elif choix == '2':
-            proxy = input("Enter you proxy in that (format : socks5://user:pass@host:port) : ")
+            cpass = configparser.RawConfigParser()
+            cpass.read('proxies.ini')
+
+            try: #======/ possibility to choose the proxy withou changing manually here/======
+                proxy_type = cpass['proxy1']['proxy_type']
+                addr = cpass['proxy1']['addr']
+                port = cpass['proxy1']['port']
+                username = cpass['proxy1']['username']
+                password = cpass['proxy1']['password']
+                rdns = cpass['proxy1']['rdns']
+                proxy = {
+                    'proxy_type': proxy_type,
+                    'addr': addr,
+                    'port': port,
+                    'username': username,
+                    'password': password,
+                    'rdns': rdns
+                }
+                print(proxy)
+                
+            except KeyError:
+                banner()
+                print("\n[!] No Proxies detect in file proxies.ini !!")
+                print("\n[!] Please add some proxies first !!")
+                sys.exit(1)
             print(f"\n[!] Testing the Proxy : {proxy}...")
             test_proxy(proxy)  
+
 
         elif choix == '3':
             print("\n[*] Here your proxies :")
             display_proxies()  
 
-        elif choix == '4':
+        elif choix == '4' or choix.lower() == 'q':
             print("\n[*] Bye")
             sys.exit(0) 
 
