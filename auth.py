@@ -53,7 +53,7 @@ def test_proxy(proxy):
         'https': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}"
     }
     try:
-        response = requests.get('https://api.telegram.org', proxies=proxies, timeout=5)
+        response = requests.get('93.127.202.5:5000', proxies=proxies, timeout=5)
         if response.status_code == 200:
             print("[+] Proxy works!")
         else:
@@ -62,18 +62,73 @@ def test_proxy(proxy):
         print(f"[-] Proxy test failed: {e}")
 
 
-    # Exemple d'appel de la fonction
-    proxy = {
-        'proxy_type': 'socks5',
-        'addr': 'residential.digiproxy.cc',
-        'port': 9595,
-        'username': 'u1WhTbxkIrSoAiY-res_sc-us_louisiana_Neworleans',
-        'password': 'dmucen0uiXuhPHd'
-    }
 
-    test_proxy(proxy)
- 
+
+
+
+import asyncio
+from telethon import TelegramClient
+import sys
+from telethon.tl.functions.channels import InviteToChannelRequest
+from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser
+from telethon.sync import TelegramClient 
+from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
+
+# ==================[ CONFIG READER ]==================
+
+cpass = configparser.RawConfigParser()
+cpass.read('config.data')
+try:
+    api_id = cpass['cred']['id']
+    api_hash = cpass['cred']['hash']
+    phone = cpass['cred']['phone']
+    client = TelegramClient(phone, api_id, api_hash)
+except KeyError:
+    
+    print("[!] something went wrong with config.data file\n")
+    sys.exit(1)
+
+# ==================[ CONNECT CLIENT ]===================
+client.connect()
+if not client.is_user_authorized():
+    client.send_code_request(phone)
+    
+    client.sign_in(phone, input('[+] Enter the code: '))
+
+
+
+async def test_proxy_telethon(proxy):
+    client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+    
+    try:
+        await client.connect()
+        if await client.is_user_authorized():
+            print("[+] Proxy works and user is authorized!")
+        else:
+            print("[+] Proxy works but user is not authorized!")
+        await client.disconnect()
+    except ConnectionError:
+        print("[-] Failed to connect via proxy")
+    except Exception as e:
+        print(f"[-] Error during proxy test: {e}")
+
+
+
+
+
 
 
 if __name__ == '__main__':
-    main()
+    #main()
+    proxy = {
+    'proxy_type': 'socks5',
+    'addr': 'residential.digiproxy.cc',
+    'port': 9595,
+    'username': 'u1WhTbxkIrSoAiY-res_sc-us_louisiana_Neworleans',
+    'password': 'dmucen0uiXuhPHd',
+    'rdns': True
+    }
+    test_proxy(proxy)
+    # Appel de la fonction asynchrone
+    asyncio.run(test_proxy_telethon(proxy))
