@@ -43,7 +43,7 @@ except KeyError:
 
 
 # ====================[PROXY DETAILS]====================
-from auth import auth
+from auth import main
 
 banner()
 print("[!] Wanna use some proxies? (y/n)\n")
@@ -51,7 +51,7 @@ proxy_choice = input("Input: ").lower()
 if proxy_choice != 'y':
     pass
 else:
-    proxy = auth()
+    proxy = main()
 
 client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
 

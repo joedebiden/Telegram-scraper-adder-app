@@ -157,13 +157,30 @@ if __name__ == '__main__':
             cpass = configparser.RawConfigParser()
             cpass.read('proxies.ini')
 
-            try: #======/ possibility to choose the proxy withou changing manually here/======
-                proxy_type = cpass['proxy1']['proxy_type']
-                addr = cpass['proxy1']['addr']
-                port = cpass['proxy1']['port']
-                username = cpass['proxy1']['username']
-                password = cpass['proxy1']['password']
-                rdns = cpass['proxy1']['rdns']
+            if not config.sections():
+                print("\n[!] No proxies found!")
+                quit()
+            print("[+] Lists of proxies (q = quit):")
+            for i, section in enumerate(config.sections(), 1):
+                print(f"{i}. {section}\n")
+            choix = input("[+] Enter a number to test the proxy : ")
+            if choix.lower() == 'q':
+                quit()
+            try:
+                chosen_section = config.sections()[int(choix) - 1]
+            except (ValueError, IndexError):
+                print("[!] Invalid choice!")
+                quit()
+            
+            print(f"\n[+] The proxy you choose to test the connexion: {chosen_section}")
+
+            try:
+                proxy_type = cpass[chosen_section]['proxy_type']
+                addr = cpass[chosen_section]['addr']
+                port = cpass[chosen_section]['port']
+                username = cpass[chosen_section]['username']
+                password = cpass[chosen_section]['password']
+                rdns = cpass[chosen_section]['rdns']
                 proxy = {
                     'proxy_type': proxy_type,
                     'addr': addr,
@@ -172,14 +189,15 @@ if __name__ == '__main__':
                     'password': password,
                     'rdns': rdns
                 }
-                print(proxy)
-                
+                #print(proxy)
+            
             except KeyError:
                 banner()
                 print("\n[!] No Proxies detect in file proxies.ini !!")
                 print("\n[!] Please add some proxies first !!")
                 sys.exit(1)
-            print(f"\n[!] Testing the Proxy : {proxy}...")
+
+            print(f"\n[!] Testing the {chosen_section}...")
             test_proxy(proxy)  
 
 
