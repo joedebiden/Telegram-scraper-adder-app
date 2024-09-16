@@ -4,11 +4,12 @@
 2. [x] scraper.py
 3. [ ] adder.py 
 4. [x] proxy update
-5. [x] messagesender.py
-6. [ ] start.bat
-7. [ ] licence key
-8. [ ] obfuscate code
-9. [ ] download link on website
+5. [x] auth.py
+6. [x] messagesender.py
+7. [ ] start.bat
+8. [ ] licence key
+9. [ ] obfuscate code
+10. [ ] download link on website
 
 ## working on proxy updated on adder.py
 . install this libs : 

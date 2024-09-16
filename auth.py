@@ -27,7 +27,7 @@ if not os.path.exists('proxies.ini'):
 config.read('proxies.ini')
 
 
-
+# ====================[FUNCTION ADD PROXY]====================
 def add_proxy():
     banner()
     proxy_count = len(config.sections()) + 1  # Compter les sections actuelles pour numéroter les proxies
@@ -57,6 +57,7 @@ def add_proxy():
     print(f"[+] Proxy {section_name} added successfully!\n")
 
 
+# ====================[FUNCTION MAIN]====================
 def main():
     banner()
     print("[+] Proxy Setup")
@@ -69,10 +70,10 @@ def main():
             break
 
 
+# ====================[FUNCTION TEST PROXY (HTTP REQUESTS)]====================
 def test_proxy(proxy):
     import requests
     import time
-
 
     proxies = {
         'http': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
@@ -91,9 +92,7 @@ def test_proxy(proxy):
         time.sleep(2)
 
 
-
-
-
+# ====================[FUNCTION DISPLAY PROXIES DETAILS]====================
 def display_proxies(proxies_file='proxies.ini'):
     banner()
     config = configparser.ConfigParser()
@@ -144,15 +143,17 @@ def menu():
     return choix
 
 
+# ==================[MAIN APP]====================
 if __name__ == '__main__':
     while True:
         banner() 
         choix = menu() 
-        
+        # ============[choice 1]============
         if choix == '1':
             print("\nAdd Proxy...")
             main() 
 
+        # ============[choice 2]============
         elif choix == '2':
             cpass = configparser.RawConfigParser()
             cpass.read('proxies.ini')
@@ -193,21 +194,26 @@ if __name__ == '__main__':
             
             except KeyError:
                 banner()
-                print("\n[!] No Proxies detect in file proxies.ini !!")
-                print("\n[!] Please add some proxies first !!")
+                print("\n[!] Bad Proxy config detect in file proxies.ini !!")
+                print("\n[!] Please add again proxy or edit the file (be carefull) !!")
                 sys.exit(1)
 
             print(f"\n[!] Testing the {chosen_section}...")
             test_proxy(proxy)  
 
-
+        # ============[choice 3]============
         elif choix == '3':
             print("\n[*] Here your proxies :")
             display_proxies()  
 
+        # ============[choice 4]============
         elif choix == '4' or choix.lower() == 'q':
             print("\n[*] Bye")
             sys.exit(0) 
 
         else:
             print("\n[/!\] Invalid choice, please try again...")
+
+# ==================[END]====================
+# Code Create by @Joedebiden on github or Baudelaire for the intime ;) 
+# please dont reverse this shit
