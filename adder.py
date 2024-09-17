@@ -137,8 +137,8 @@ def presentation():
 def power():
     #dictionnaire
     modes = {
-        1: {'name': 'Night Mode', 'SLEEP_TIME_1': 130, 'SLEEP_TIME_2': 150},
-        2: {'name': 'Normal Mode', 'SLEEP_TIME_1': 50, 'SLEEP_TIME_2': 70},
+        1: {'name': 'Night Mode', 'SLEEP_TIME_1': 150, 'SLEEP_TIME_2': 180},
+        2: {'name': 'Normal Mode', 'SLEEP_TIME_1': 60, 'SLEEP_TIME_2': 80},
         3: {'name': 'Aggressive Mode', 'SLEEP_TIME_1': 20, 'SLEEP_TIME_2': 35}
     }
     presentation()
@@ -204,16 +204,18 @@ for user in users:
         #print("Adding {}".format(user['id']))
 
         if mode == 1:
-            if user['username'] == "":
+            if 'username' in user and user['username']:
+                print(f"Adding {user['username']} to group {target_group.title}")
+                user_to_add = client.get_input_entity(user['username'])
+            else:
+                print(f"[!] Username not found for {user}")
                 continue
-            user_to_add = client.get_input_entity(user['username'])
 
         elif mode == 2:
             user_to_add = client.get_entity(InputPeerUser(user['id'], user['access_hash']))
         else:
             sys.exit("[!] Invalid Mode Selected. Please Try Again.")
 
-        print(f"Trying to add user: {user_to_add} to group: {target_group.title}")
         client(InviteToChannelRequest(target_group_entity, [user_to_add]))
         print("Waiting...\n")
         time.sleep(random.randrange(SLEEP_TIME_1, SLEEP_TIME_2))
