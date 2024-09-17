@@ -43,19 +43,22 @@ except KeyError:
 
 
 # ====================[PROXY DETAILS]====================
-from auth import main
+from auth import main, test_proxy, display_proxies, add_proxy
 
 banner()
 print("[!] Wanna use some proxies? (y/n)\n")
 proxy_choice = input("Input: ").lower()
 if proxy_choice != 'y':
+    client = TelegramClient('session_name', api_id, api_hash)
     pass
+
 else:
     proxy = main()
+    client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
 
-client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
 
-
+## need to work on this part 
+# je dois implémenter mon application et pas que le main, demande a gpt
 
 
 # ====================[START CLIENT]====================
@@ -70,28 +73,52 @@ banner()
 try:
     input_file = sys.argv[1]
 except IndexError:
-    print("[!] Use like => python adder.py members.csv")
+    print("[!] Use like => python adder.py members.csv or members.txt")
     sys.exit(1)
 users = []
 
-#changed with try and except catch error
+
+# ====================[OPEN FILE]====================
+#new task, check the file before processing
+
 try:
-    with open(input_file, encoding='UTF-8') as f:
-        rows = csv.reader(f,delimiter=",",lineterminator="\n")
-        next(rows, None)
-        for row in rows:
-            user = {}
-            user['username'] = row[0]
-            user['id'] = int(row[1])
-            user['access_hash'] = int(row[2])
-            user['name'] = row[3]
-            users.append(user)
+    if input_file.endswith('.csv'):
+        try:
+            with open(input_file, encoding='UTF-8') as f:
+                rows = csv.reader(f,delimiter=",",lineterminator="\n")
+                next(rows, None)
+                for row in rows:
+                    user = {}
+                    user['username'] = row[0]
+                    user['id'] = int(row[1])
+                    user['access_hash'] = int(row[2])
+                    user['name'] = row[3]
+                    users.append(user)
+        except FileNotFoundError:
+            print("[!] File not found")
+            sys.exit(1)
+        except Exception as e:
+            print(e)
+            sys.exit(1)
+
+    elif input_file.endswith('.txt'):
+        with open(input_file, encoding='UTF-8') as f:
+            for line in f:
+                user = {}
+                username = line.strip()
+                user['username'] = username
+                users.append(user)
+
+    else:
+        print("[!] Unsupported file format. Please use a CSV or TXT file.")
+        sys.exit(1)
 except FileNotFoundError:
     print("[!] File not found")
     sys.exit(1)
 except Exception as e:
-    print(e)
+    print(f"An error occurred: {e}")
     sys.exit(1)
+
 
 chats = []
 last_date = None
@@ -174,7 +201,7 @@ for user in users:
     if n % 50 == 0: 
         time.sleep(300) 
     try: 
-        print("Adding {}".format(user['id']))
+        #print("Adding {}".format(user['id']))
 
         if mode == 1:
             if user['username'] == "":
@@ -192,7 +219,7 @@ for user in users:
         time.sleep(random.randrange(SLEEP_TIME_1, SLEEP_TIME_2))
 
     #mon pire cauchemar
-    except PeerFloodError as e: #to do a better error handling !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    except PeerFloodError as e: #to do a better error handling !
         # Capture and print all details related to the PeerFloodError
         print("[!] Getting Flood Error from telegram.")
         print(f"Error details: {e}")  # Print the error message
