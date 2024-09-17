@@ -133,13 +133,15 @@ def presentation():
         print("[1] -> Night Mode (Perfect to take all the night to add members)")
         print("[2] -> Normal Mode")
         print("[3] -> Aggressive Mode (Really not recommended)\n")
+        print("[4] -> Idiot Mode (You're a real idiot if you choose this mode)\n")
 
 def power():
     #dictionnaire
     modes = {
         1: {'name': 'Night Mode', 'SLEEP_TIME_1': 150, 'SLEEP_TIME_2': 180},
         2: {'name': 'Normal Mode', 'SLEEP_TIME_1': 60, 'SLEEP_TIME_2': 80},
-        3: {'name': 'Aggressive Mode', 'SLEEP_TIME_1': 20, 'SLEEP_TIME_2': 35}
+        3: {'name': 'Aggressive Mode', 'SLEEP_TIME_1': 20, 'SLEEP_TIME_2': 35},
+        4: {'name': 'Idiot Mode', 'SLEEP_TIME_1': 1, 'SLEEP_TIME_2': 5}
     }
     presentation()
     while True:
@@ -238,4 +240,3 @@ for user in users:
         traceback.print_exc()
         print("[!] Unexpected Error")
         continue
-    #client.disconet() ?????
