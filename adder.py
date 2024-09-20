@@ -69,6 +69,7 @@ if not client.is_user_authorized():
     client.sign_in(phone, input('[+] Enter the code sent from Telegram (to connect your account): '))   
 banner()
 
+
 # ajout gestion des erreurs
 try:
     input_file = sys.argv[1]
@@ -157,7 +158,7 @@ def power():
             else:
                 print("[!] Invalid Mode Selected. Please try again.")
         except ValueError:
-            print("[!] Invalid input. Please enter a number (1/2/3).")
+            print("[!] Invalid input. Please enter a number (1/2/3/4).")
 # Appel de la fonction power et récupération des valeurs
 SLEEP_TIME_1, SLEEP_TIME_2 = power()
 
