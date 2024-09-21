@@ -53,12 +53,37 @@ if proxy_choice != 'y':
     pass
 
 else:
-    proxy = main()
-    client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+    main()
+    print("[+] Proxies disponibles :")
+    display_proxies()
+    proxy_selection = input("[+] Choisissez le numéro d'un proxy pour l'utiliser : ")
+    config = configparser.ConfigParser()
+    config.read('proxies.ini')
+    try:
+        chosen_section = config.sections()[int(proxy_selection) - 1]
+        proxy_type = config[chosen_section]['proxy_type']
+        addr = config[chosen_section]['addr']
+        port = config[chosen_section]['port']
+        username = config[chosen_section]['username']
+        password = config[chosen_section]['password']
+        rdns = config[chosen_section]['rdns']
 
+        # Créer le dictionnaire pour le proxy
+        proxy = {
+            'proxy_type': proxy_type,
+            'addr': addr,
+            'port': port,
+            'username': username,
+            'password': password,
+            'rdns': rdns
+        }
 
-## need to work on this part 
-# je dois implémenter mon application et pas que le main, demande a gpt
+        # Connexion à Telegram en utilisant le proxy sélectionné
+        client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+
+    except (ValueError, IndexError, KeyError):
+        print("[!] Mauvaise sélection de proxy ou erreur dans la configuration.")
+
 
 
 # ====================[START CLIENT]====================

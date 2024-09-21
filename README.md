@@ -3,7 +3,7 @@
 1. [x] setup.py
 2. [x] scraper.py
 3. [x] adder.py
-4. [ ] adder(proxy main app)
+4. [x] adder(proxy main app)
 5. [ ] adder(error handling)
 6. [x] proxy update
 7. [x] auth.py
