@@ -4,7 +4,7 @@
 2. [x] scraper.py
 3. [x] adder.py
 4. [x] adder(proxy main app)
-5. [ ] adder(error handling)
+5. [x] adder(error handling)
 6. [x] proxy update
 7. [x] auth.py
 8. [x] messagesender.py
