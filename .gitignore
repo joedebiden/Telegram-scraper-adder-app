@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# Telebox sessions files
+*.session
+*.session-journal
+*.data
+*.csv
+*.ini
+
 # Distribution / packaging
 .Python
 build/
