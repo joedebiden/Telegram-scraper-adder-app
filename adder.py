@@ -2,7 +2,15 @@ from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser
 from telethon.sync import TelegramClient 
-from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
+from telethon.errors import (
+    PeerFloodError, 
+    UserPrivacyRestrictedError, 
+    FloodWaitError, 
+    UserNotMutualContactError,
+    ChatAdminRequiredError, 
+    InputUserDeactivatedError,
+    UserKickedError, 
+    ChannelPrivateError)
 import sys
 import csv
 import traceback
@@ -227,16 +235,15 @@ n = 0
 for user in users:
     n += 1
     if n % 50 == 0: 
-        time.sleep(300) 
+        print("[!] Waiting for 10 minutes... (every 50 users)...")
+        time.sleep(660) 
     try: 
-        #print("Adding {}".format(user['id']))
-
         if mode == 1:
             if 'username' in user and user['username']:
                 print(f"Adding {user['username']} to group {target_group.title}")
                 user_to_add = client.get_input_entity(user['username'])
             else:
-                print(f"[!] Username not found for {user}")
+                print(f"[!] Username not found for {user}, skipping...")
                 continue
 
         elif mode == 2:
@@ -245,24 +252,46 @@ for user in users:
             sys.exit("[!] Invalid Mode Selected. Please Try Again.")
 
         client(InviteToChannelRequest(target_group_entity, [user_to_add]))
-        print("Waiting...\n")
+        print(f"Successfully added {user['username'] if mode == 1 else user['id']} to the group.")
         time.sleep(random.randrange(SLEEP_TIME_1, SLEEP_TIME_2))
 
-    #mon pire cauchemar
-    except PeerFloodError as e: #to do a better error handling !
-        # Capture and print all details related to the PeerFloodError
-        print("[!] Getting Flood Error from telegram.")
-        print(f"Error details: {e}")  # Print the error message
-        print(f"Error arguments: {e.args}")  # Print the arguments of the exception
-        time.sleep(random.randrange(SLEEP_TIME_1, SLEEP_TIME_2))
-        
-    # except FloodWaitError as e: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! to do 
+    except PeerFloodError as e: 
+        print("[!] Too many requests to Telegram. PeerFloodError encountered.")
+        print(f"Error details: {e}")
+        time.sleep(600)
+        continue
+    
+    except FloodWaitError as e:
+        print(f"[!] FloodWaitError: Telegram is forcing a wait time of {e.seconds} seconds.")
+        time.sleep(e.seconds)
+        continue
 
     except UserPrivacyRestrictedError:
         print("[!] The user's privacy settings do not allow you to do this. Skipping.")
         time.sleep(random.randrange(SLEEP_TIME_1, SLEEP_TIME_2))
+        continue
 
-    except:
-        traceback.print_exc()
-        print("[!] Unexpected Error")
+    except UserNotMutualContactError:
+        print(f"[!] Cannot add {user['username'] if mode == 1 else user['id']} because they are not a mutual contact. Skipping.")
+        continue
+
+    except ChatAdminRequiredError:
+        print("[!] You need to be an admin to add users to this group. Skipping.")
+        break  # Stop the loop since this is a critical error
+
+    except InputUserDeactivatedError:
+        print(f"[!] The user {user['username'] if mode == 1 else user['id']} has deactivated their account. Skipping.")
+        continue
+
+    except UserKickedError:
+        print(f"[!] The user {user['username'] if mode == 1 else user['id']} was kicked from the group and cannot be re-added.")
+        continue
+
+    except ChannelPrivateError:
+        print(f"[!] Cannot add user {user['username'] if mode == 1 else user['id']} because the channel is private or restricted.")
+        continue
+
+    except Exception as e:
+        print(f"[!] Unexpected error: {str(e)}")
+        traceback.print_exc() 
         continue
