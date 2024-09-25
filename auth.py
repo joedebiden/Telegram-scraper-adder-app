@@ -5,18 +5,13 @@ import sys
 def banner():
     os.system('cls')
     print(f'''
- ____                  _      _       _
-| __ )  __ _ _   _  __| | ___| | __ _(_)_ __ ___
-|  _ \ / _` | | | |/ _` |/ _ \ |/ _` | | '__/ _ \,
-| |_) | (_| | |_| | (_| |  __/ | (_| | | | |  __/
-|____/ \__,_|\__,_|\__,_|\___|_|\__,_|_|_|  \___|
-                     _
- _ __  _ __ _____  _(_) ___  ___
-| '_ \| '__/ _ \ \/ / |/ _ \/ __|
-| |_) | | | (_) >  <| |  __/\__ \¤
-| .__/|_|  \___/_/\_\_|\___||___/
-|_|
-          ''')
+                ._______ .______  ._______   ____   ____.___ ._______.________
+                : ____  |: __   \ : .___  \  \   \_/   /: __|: .____/|    ___/
+                |    :  ||  \____|| :   |  |  \___ ___/ | : || : _/\ |___    \.
+                |   |___||   :  \ |     :  |  /   _   \ |   ||   /  \|       /
+                |___|    |   |___\ \_. ___/  /___/ \___\|   ||_.: __/|__:___/ 
+                         |___|       :/                 |___|   :/      :                                                                           
+''')
     
 
 config = configparser.RawConfigParser()
@@ -29,8 +24,7 @@ config.read('proxies.ini')
 
 # ====================[FUNCTION ADD PROXY]====================
 def add_proxy():
-    banner()
-    proxy_count = len(config.sections()) + 1  # Compter les sections actuelles pour numéroter les proxies
+    proxy_count = len(config.sections()) + 1  
     section_name = f'proxy{proxy_count}'
     
     proxy_type = input("[+] Enter Proxy Type (socks5/socks4/http): ").lower()
@@ -53,7 +47,6 @@ def add_proxy():
     # Écrire dans le fichier proxies.ini
     with open('proxies.ini', 'w') as configfile:
         config.write(configfile)
-    banner()
     print(f"[+] Proxy {section_name} added successfully!\n")
 
 
@@ -94,7 +87,6 @@ def test_proxy(proxy):
 
 # ====================[FUNCTION DISPLAY PROXIES DETAILS]====================
 def display_proxies(proxies_file='proxies.ini'):
-    banner()
     config = configparser.ConfigParser()
     config.read(proxies_file)
 

@@ -1,45 +1,85 @@
 import configparser
 import os
 
-config_file = 'config.data'
+def banner():
+    os.system('cls')
+    print(f'''
+        
+                    ░░      ░░░        ░░        ░░  ░░░░  ░░       ░░
+                    ▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒
+                    ▓▓      ▓▓▓      ▓▓▓▓▓▓▓  ▓▓▓▓▓  ▓▓▓▓  ▓▓       ▓▓
+                    ███████  ██  ███████████  █████  ████  ██  ███████
+                    ██      ███        █████  ██████      ███  ███████
+                                                                                                                                            
+''')
 
-if not os.path.exists(config_file):
-    with open(config_file, 'w') as f:
-        f.write('')
+cpass = configparser.RawConfigParser()
+if not os.path.exists('config.data'):
+    with open('config.data', 'w') as f:
+        pass
 
-cpass = configparser.ConfigParser()
-cpass.read(config_file)
+cpass.read('config.data')
 
 
 # ====================[FUNCTION DISPLAY ACCOUNTS]====================
-def display_accounts():
-    if len(cpass.sections()) == 0:
-        print("[!] No accounts found")
-    else:
-        print("[*] Comptes Telegram disponibles :")
-        for index, section in enumerate(cpass.sections(), 1):
-            print(f"{index}. {section}")
+def display_accounts(config_data='config.data'):
+    config = configparser.RawConfigParser()
+    config.read(config_data)
+
+    if not config.sections():
+        print("[! No accounts found. Please add an account first.]\n")
+        return
+    print("[+] Telegram Accounts :")
+    for i, section in enumerate(config.sections(), 1):
+        print(f"{i}. {section}\n")
+
+    choix = input("[*] Enter a number to display the account details : ")
+    if choix.lower() == 'q':
+        return
+    try:
+        chosen_section = config.sections()[int(choix) - 1]
+    except (ValueError, IndexError):
+        print("[!] Invalid choice!")
+        return
+    
+    print(f"\n[+] Account Details : {chosen_section}")
+    account_info = dict(config.items(chosen_section))
+    for cle, valeur in account_info.items():
+        print(f"{cle}: {valeur}")
+
+    edit = input("\n[+] Edit this account? (y/n): ").lower()
+    if edit != 'y':
+        return
+    
+    for cle in account_info.keys():
+        new_value = input(f"[+] Enter new value for {cle} (press enter to keep): ")
+        if new_value:
+            config.set(chosen_section, cle, new_value)
+
+    with open(config_data, 'w') as configfile:
+        config.write(configfile)
+    print(f"[+] Account '{chosen_section}' updated successfully!")
 
 
 # ====================[FUNCTION ADD ACCOUNT]====================
 def add_account():
-    account_name = input("[+] Nom du compte : ")
-    if account_name in cpass.sections():
-        print("[!] Ce compte existe déjà. Choisissez un autre nom.")
-        return
+    account_name = len(cpass.sections()) + 1
+    section_name = f'account{account_name}'
     
     cpass.add_section(account_name)
     xid = input("[+] Entrez l'API ID : ")
     xhash = input("[+] Entrez le hash ID : ")
     xphone = input("[+] Entrez le numéro de téléphone : ")
     
-    cpass.set(account_name, 'id', xid)
-    cpass.set(account_name, 'hash', xhash)
-    cpass.set(account_name, 'phone', xphone)
+    cpass[section_name] = {
+        'id': xid,
+        'hash': xhash,
+        'phone': xphone
+    }
     
-    with open(config_file, 'w') as configfile:
+    with open('config.data', 'w') as configfile:
         cpass.write(configfile)
-    print(f"[+] Compte '{account_name}' ajouté avec succès !")
+    print(f"[+] Compte '{account_name}' added successfully !\n")
 
 
 # ====================[FUNCTION EDIT ACCOUNT]====================
@@ -58,7 +98,7 @@ def modify_account():
     cpass.set(account_name, 'hash', xhash)
     cpass.set(account_name, 'phone', xphone)
     
-    with open(config_file, 'w') as configfile:
+    with open('config.data', 'w') as configfile:
         cpass.write(configfile)
     print(f"[+] Compte '{account_name}' modifié avec succès !")
 
@@ -74,7 +114,7 @@ def delete_account():
     confirm = input(f"Êtes-vous sûr de vouloir supprimer le compte '{account_name}' ? (oui/non) : ").lower()
     if confirm == 'oui':
         cpass.remove_section(account_name)
-        with open(config_file, 'w') as configfile:
+        with open('config.data', 'w') as configfile:
             cpass.write(configfile)
         print(f"[+] Compte '{account_name}' supprimé avec succès !")
     else:
@@ -84,6 +124,7 @@ def delete_account():
 
 # ====================[MAIN MENU]====================
 while True:
+    banner()
     print("\n[*] Gestion des comptes Telegram")
     print("1. Afficher les comptes")
     print("2. Ajouter un compte")
