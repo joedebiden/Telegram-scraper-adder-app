@@ -29,10 +29,11 @@ cpass.read('config.data')
 
 
 # ====================[API DETAILS]====================
+# suivre la logique dans setup / lecture aléatoire des comptes telegram
 try:
-    api_id = cpass['cred']['id']
-    api_hash = cpass['cred']['hash']
-    phone = cpass['cred']['phone']
+    api_id = cpass['account1']['id']
+    api_hash = cpass['account1']['hash']
+    phone = cpass['account1']['phone']
     client = TelegramClient(phone, api_id, api_hash)
 except KeyError:
     banner()

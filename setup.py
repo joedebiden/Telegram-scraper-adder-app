@@ -1,6 +1,7 @@
 import configparser
 import os
 from time import sleep
+import random
 
 def banner():
     os.system('cls')
@@ -119,10 +120,33 @@ def delete_account(config_data='config.data'):
         sleep(0.5)
 
 
+def api_details():
+    #implémenter la logique pour cherche un compte aléatoire dans le fichier config.data
+    #et retourner les détails de ce compte avec des variables utilisables dans les autres scripts
+    config = configparser.RawConfigParser()
+    config.read('config.data')
+
+    if not config.sections():
+        print("[!] No accounts found. Please add an account first.\n")
+        sleep(1.5)
+        return
+    try: 
+        api_details = random.choice(config.sections())
+        api_id = config[api_details]['id']
+        hash = config[api_details]['hash']
+        phone = config[api_details]['phone']
+        print(api_details, api_id, hash, phone)
+    except KeyError:
+        print("[!] Run python setup.py first !!\n")
+        sleep(1.5)
+        return
+
+
 
 # ====================[MAIN MENU]====================
 while True:
     banner()
+    api_details()
     print("\n[*] Telegram Account Manager\n")
     print("1. Display or Edit Accounts")
     print("2. Add an Account")
