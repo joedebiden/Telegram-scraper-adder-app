@@ -51,7 +51,7 @@ except KeyError:
 
 
 # ====================[PROXY DETAILS]====================
-from auth import main, test_proxy, display_proxies, add_proxy
+from auth import main, display_proxies
 
 banner()
 print("[!] Wanna use some proxies? (y/n)\n")
@@ -295,7 +295,3 @@ for user in users:
         print(f"[!] Unexpected error: {str(e)}")
         traceback.print_exc() 
         continue
-
-# ==================[END]====================
-# Code Create by @Joedebiden on github or Baudelaire for the intime ;) 
-# please dont reverse this shit

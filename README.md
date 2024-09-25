@@ -8,15 +8,8 @@
 6. [x] proxy update
 7. [x] auth.py
 8. [x] messagesender.py
-9. [ ] clean code - refaire la structure
-10. [ ] licence key
-11. [ ] Start.bat
+9. [x] refaire la structure
+10. [ ] Start.bat
+11. [ ] licence key 
 12. [ ] obfuscate code
 13. [ ] download link on website
-
-Main.py
-
-récupérer les fichiers: import scraper, adder, auth, setup 
-
-global banner() => Telegram Toolbox
-
