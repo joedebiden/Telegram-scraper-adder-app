@@ -202,7 +202,7 @@ if __name__ == '__main__':
 
         # ============[choice 4]============
         elif choix == '4' or choix.lower() == 'q':
-            print("\n[*] Bye")
+            print("[*] Bye")
             sys.exit(0) 
 
         else:
