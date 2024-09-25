@@ -6,6 +6,8 @@ from tkinter.filedialog import asksaveasfilename
 import os, sys
 import configparser
 import csv
+from time import sleep
+
 
 def banner():
     os.system('cls')
@@ -26,16 +28,11 @@ def banner():
 
 cpass = configparser.RawConfigParser()
 cpass.read('config.data')
-
+banner()
 
 
 # ====================[API DETAILS]====================
-from time import sleep
-
 from setup import get_api_details
-print("tu rentres dans setup")
-
-
 details = get_api_details()
 
 if details:
@@ -44,21 +41,17 @@ if details:
     api_hash = details['hash']
     phone = details['phone']
     
-    print(f"Account: {account_name}, API ID: {api_id}, Hash: {api_hash}, Phone: {phone}")
+    print(f"Random [{account_name}] choosen\n, API ID: {api_id}\n, Hash: {api_hash}\n, Phone: {phone}\n")
+
 else:
     print("[!] No account details found or error occurred.")
     exit(1) 
-
-sleep(3.5)
-
-
-
 
 
 # ====================[PROXY DETAILS]====================
 from auth import main, display_proxies
 
-banner()
+
 print("[!] Wanna use some proxies? (y/n)\n")
 proxy_choice = input("Input: ").lower()
 if proxy_choice != 'y':
@@ -66,10 +59,8 @@ if proxy_choice != 'y':
     pass
 
 else:
-    main()
-    print("[+] Proxies disponibles :")
     display_proxies()
-    proxy_selection = input("[+] Choisissez le numéro d'un proxy pour l'utiliser : ")
+    proxy_selection = input("[+] Please inter the section number of the proxy : ")
     config = configparser.ConfigParser()
     config.read('proxies.ini')
     try:
@@ -95,7 +86,7 @@ else:
         client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
 
     except (ValueError, IndexError, KeyError):
-        print("[!] Mauvaise sélection de proxy ou erreur dans la configuration.")
+        print("[!] Bad selection for the proxies.")
 
 
 

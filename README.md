@@ -10,7 +10,9 @@
 8. [x] messagesender.py
 9. [x] refaire la structure
 10. [x] gestion multi account tg
-11. [ ] Start.bat
-12. [ ] licence key 
-13. [ ] obfuscate code
-14. [ ] download link on website
+11. [x] random account select
+12. [ ] account swapper when PeerFloodError
+13. [ ] Start.bat
+14. [ ] licence key 
+15. [ ] obfuscate code
+16. [ ] download link on website

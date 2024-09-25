@@ -166,7 +166,7 @@ if __name__ == "__main__":
             add_account()
         elif choice == '3':
             delete_account()
-        elif choice == '4':
+        elif choice == '4' or choice.lower() == 'q':
             print("Goodbye!")
             break
         else:
