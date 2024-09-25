@@ -41,20 +41,26 @@ cpass = configparser.RawConfigParser()
 cpass.read('config.data')
 
 # ====================[API DETAILS]====================
-try:
-    api_id = cpass['cred']['id']
-    api_hash = cpass['cred']['hash']
-    phone = cpass['cred']['phone']
-except KeyError:
-    banner()
-    print("[!] Run python setup.py first !!\n")
-    sys.exit(1)
+from setup import get_api_details
+details = get_api_details()
+
+if details:
+    account_name = details['account_name']
+    api_id = details['api_id']
+    api_hash = details['hash']
+    phone = details['phone']
+    
+    print(f"Random [{account_name}] choosen\n, API ID: {api_id}\n, Hash: {api_hash}\n, Phone: {phone}\n")
+
+else:
+    print("[!] No account details found or error occurred.")
+    exit(1) 
 
 
 # ====================[PROXY DETAILS]====================
-from auth import main, display_proxies
+from auth import display_proxies
 
-banner()
+
 print("[!] Wanna use some proxies? (y/n)\n")
 proxy_choice = input("Input: ").lower()
 if proxy_choice != 'y':
@@ -62,10 +68,8 @@ if proxy_choice != 'y':
     pass
 
 else:
-    main()
-    print("[+] Proxies disponibles :")
     display_proxies()
-    proxy_selection = input("[+] Choisissez le numéro d'un proxy pour l'utiliser : ")
+    proxy_selection = input("[+] Please inter the section number of the proxy : ")
     config = configparser.ConfigParser()
     config.read('proxies.ini')
     try:
@@ -91,8 +95,7 @@ else:
         client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
 
     except (ValueError, IndexError, KeyError):
-        print("[!] Mauvaise sélection de proxy ou erreur dans la configuration.")
-
+        print("[!] Bad selection.")
 
 
 # ====================[START CLIENT]====================

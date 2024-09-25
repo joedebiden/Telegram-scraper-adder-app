@@ -10,41 +10,76 @@ import time
 def banner():
     os.system('cls')
     print(f'''
- _                     _      _       _ 
-| |__   __ _ _   _  __| | ___| | __ _(_)_ __ ___
-| '_ \ / _` | | | |/ _` |/ _ \ |/ _` | | '__/ _ \,
-| |_) | (_| | |_| | (_| |  __/ | (_| | | | |  __/
-|_.__/ \__,_|\__,_|\__,_|\___|_|\__,_|_|_|  \___|
-
- _       _
-| |_ ___| | ___  __ _ _ __ __ _ _ __ ___
-| __/ _ \ |/ _ \/ _` | '__/ _` | '_ ` _ \,
-| ||  __/ |  __/ (_| | | | (_| | | | | | |
- \__\___|_|\___|\__, |_|  \__,_|_| |_| |_|
-                |___/
-                    _
- ___  ___ _ __   __| | ___ _ __
-/ __|/ _ \ '_ \ / _` |/ _ \ '__|
-\__ \  __/ | | | (_| |  __/ |
-|___/\___|_| |_|\__,_|\___|_|
+            .▄▄ ·  ▄▄▄· ▄▄▄· • ▌ ▄ ·.     • ▌ ▄ ·. ▄▄▄ ..▄▄ · .▄▄ ·  ▄▄▄·  ▄▄ • ▄▄▄ .▄▄▄  
+            ▐█ ▀. ▐█ ▄█▐█ ▀█ ·██ ▐███▪    ·██ ▐███▪▀▄.▀·▐█ ▀. ▐█ ▀. ▐█ ▀█ ▐█ ▀ ▪▀▄.▀·▀▄ █·
+            ▄▀▀▀█▄ ██▀·▄█▀▀█ ▐█ ▌▐▌▐█·    ▐█ ▌▐▌▐█·▐▀▀▪▄▄▀▀▀█▄▄▀▀▀█▄▄█▀▀█ ▄█ ▀█▄▐▀▀▪▄▐▀▀▄ 
+            ▐█▄▪▐█▐█▪·•▐█ ▪▐▌██ ██▌▐█▌    ██ ██▌▐█▌▐█▄▄▌▐█▄▪▐█▐█▄▪▐█▐█ ▪▐▌▐█▄▪▐█▐█▄▄▌▐█•█▌
+             ▀▀▀▀ .▀    ▀  ▀ ▀▀  █▪▀▀▀    ▀▀  █▪▀▀▀ ▀▀▀  ▀▀▀▀  ▀▀▀▀  ▀  ▀ ·▀▀▀▀  ▀▀▀ .▀  ▀
 ''')
     
+# ==================[ CONFIG READER ]==================
+
 cpass = configparser.RawConfigParser()
 cpass.read('config.data')
+banner()
 
-# ====================[API DETAILS]=====================
-try:
-    api_id = cpass['cred']['id']
-    api_hash = cpass['cred']['hash']
-    phone = cpass['cred']['phone']
-except KeyError:
-    banner()
-    print("[!] Run python setup.py first !!\n")
-    sys.exit(1)
+# ====================[API DETAILS]====================
+from setup import get_api_details
+details = get_api_details()
 
-
-client = TelegramClient(phone, api_id, api_hash)
+if details:
+    account_name = details['account_name']
+    api_id = details['api_id']
+    api_hash = details['hash']
+    phone = details['phone']
     
+    print(f"Random [{account_name}] choosen\n, API ID: {api_id}\n, Hash: {api_hash}\n, Phone: {phone}\n")
+
+else:
+    print("[!] No account details found or error occurred.")
+    exit(1) 
+
+
+# ====================[PROXY DETAILS]====================
+from auth import display_proxies
+
+
+print("[!] Wanna use some proxies? (y/n)\n")
+proxy_choice = input("Input: ").lower()
+if proxy_choice != 'y':
+    client = TelegramClient('session_name', api_id, api_hash)
+    pass
+
+else:
+    display_proxies()
+    proxy_selection = input("[+] Please inter the section number of the proxy : ")
+    config = configparser.ConfigParser()
+    config.read('proxies.ini')
+    try:
+        chosen_section = config.sections()[int(proxy_selection) - 1]
+        proxy_type = config[chosen_section]['proxy_type']
+        addr = config[chosen_section]['addr']
+        port = config[chosen_section]['port']
+        username = config[chosen_section]['username']
+        password = config[chosen_section]['password']
+        rdns = config[chosen_section]['rdns']
+
+        # Créer le dictionnaire pour le proxy
+        proxy = {
+            'proxy_type': proxy_type,
+            'addr': addr,
+            'port': port,
+            'username': username,
+            'password': password,
+            'rdns': rdns
+        }
+
+        # Connexion à Telegram en utilisant le proxy sélectionné
+        client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+
+    except (ValueError, IndexError, KeyError):
+        print("[!] Bad selection.")
+
 
 # ====================[START CLIENT]====================
 client.connect()
@@ -52,16 +87,18 @@ if not client.is_user_authorized():
     client.send_code_request(phone)
     banner()
     client.sign_in(phone, input('[+] Enter the code sent from Telegram (to connect your account): '))   
-banner()
 
-# ajout gestion des erreurs
+
+
+# ====================[OPEN FILE]====================
+# maybe implement the same system as adder.py
+
 try:
     input_file = sys.argv[1]
 except IndexError:
-    print("[!] Use like => python messagesender.py members.csv")
+    print("[!] Use like => python sender.py members.csv")
     sys.exit(1)
 users = []
-
 
 try:
     with open(input_file, encoding='UTF-8') as f:

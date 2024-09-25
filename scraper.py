@@ -49,7 +49,7 @@ else:
 
 
 # ====================[PROXY DETAILS]====================
-from auth import main, display_proxies
+from auth import display_proxies
 
 
 print("[!] Wanna use some proxies? (y/n)\n")
@@ -86,7 +86,7 @@ else:
         client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
 
     except (ValueError, IndexError, KeyError):
-        print("[!] Bad selection for the proxies.")
+        print("[!] Bad selection.")
 
 
 
