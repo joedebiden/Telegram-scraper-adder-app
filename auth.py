@@ -85,7 +85,7 @@ def test_proxy(proxy):
         time.sleep(2)
 
 
-# ====================[FUNCTION DISPLAY PROXIES DETAILS]====================
+# ====================[FUNCTION DISPLAY & EDIT PROXIES DETAILS]====================
 def display_proxies(proxies_file='proxies.ini'):
     config = configparser.ConfigParser()
     config.read(proxies_file)
@@ -125,6 +125,8 @@ def display_proxies(proxies_file='proxies.ini'):
 
     print(f"[+] Proxy from {chosen_section} updated successfully!")    
 
+
+# ====================[MENU]====================
 def menu():
     print("\n====== Menu ======\n")
     print("[1]. Add Proxy")

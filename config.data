@@ -1,10 +1,5 @@
-[cred]
+[account1]
 id = 12641519
 hash = b1d9376e2825cf869149f6ba6ced114f
 phone = +33772240484
-
-[caca]
-id = caca
-hash = caca
-phone = caca
 
