@@ -16,4 +16,6 @@ cpass.write(setup)
 setup.close()
 print("[+] setup complete !")
 
-#python setup code source
+# ==================[END]====================
+# Code Create by @Joedebiden on github or Baudelaire for the intime ;) 
+# please dont reverse this shit
