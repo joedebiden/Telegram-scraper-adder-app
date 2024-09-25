@@ -120,55 +120,58 @@ def delete_account(config_data='config.data'):
         sleep(0.5)
 
 
-def api_details():
-    #implémenter la logique pour cherche un compte aléatoire dans le fichier config.data
-    #et retourner les détails de ce compte avec des variables utilisables dans les autres scripts
+def get_api_details():
     config = configparser.RawConfigParser()
     config.read('config.data')
 
     if not config.sections():
         print("[!] No accounts found. Please add an account first.\n")
         sleep(1.5)
-        return
+        return None 
+    
     try: 
-        api_details = random.choice(config.sections())
-        api_id = config[api_details]['id']
-        hash = config[api_details]['hash']
-        phone = config[api_details]['phone']
-        print(api_details, api_id, hash, phone)
+        api_detail = random.choice(config.sections())
+        api_id = config[api_detail]['id']
+        api_hash = config[api_detail]['hash']
+        phone = config[api_detail]['phone']
+
+        return {
+            'account_name': api_detail,
+            'api_id': api_id,
+            'hash': api_hash,
+            'phone': phone
+        }
     except KeyError:
-        print("[!] Run python setup.py first !!\n")
+        print("[!] Something went wrong! Please check your configuration.\n")
         sleep(1.5)
-        return
+        return None
 
 
 
 # ====================[MAIN MENU]====================
-while True:
-    banner()
-    api_details()
-    print("\n[*] Telegram Account Manager\n")
-    print("1. Display or Edit Accounts")
-    print("2. Add an Account")
-    print("3. Delete an Account")
-    print("4. Leave")
+if __name__ == "__main__":
+    while True:
+        banner()
+        print("\n[*] Telegram Account Manager\n")
+        print("1. Display or Edit Accounts")
+        print("2. Add an Account")
+        print("3. Delete an Account")
+        print("4. Quit")
 
-    choice = input("Please choose your section (1/2/3/4) : ")
+        choice = input("Please choose your action (1/2/3/4): ")
 
-    if choice == '1':
-        display_accounts()
-    elif choice == '2':
-        add_account()
-    elif choice == '3':
-        delete_account()
-    elif choice == '4':
-        break
-    else:
-        print("[!] Invalid choice !")
-        sleep(0.5)
-        continue
-
-
+        if choice == '1':
+            display_accounts()
+        elif choice == '2':
+            add_account()
+        elif choice == '3':
+            delete_account()
+        elif choice == '4':
+            print("Goodbye!")
+            break
+        else:
+            print("[!] Invalid choice!")
+            sleep(0.5)
 
 
 # ==================[END]====================

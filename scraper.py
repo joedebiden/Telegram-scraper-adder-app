@@ -28,17 +28,31 @@ cpass = configparser.RawConfigParser()
 cpass.read('config.data')
 
 
+
 # ====================[API DETAILS]====================
-# suivre la logique dans setup / lecture aléatoire des comptes telegram
-try:
-    api_id = cpass['account1']['id']
-    api_hash = cpass['account1']['hash']
-    phone = cpass['account1']['phone']
-    client = TelegramClient(phone, api_id, api_hash)
-except KeyError:
-    banner()
-    print("[!] something went wrong with config.data file\n")
-    sys.exit(1)
+from time import sleep
+
+from setup import get_api_details
+print("tu rentres dans setup")
+
+
+details = get_api_details()
+
+if details:
+    account_name = details['account_name']
+    api_id = details['api_id']
+    api_hash = details['hash']
+    phone = details['phone']
+    
+    print(f"Account: {account_name}, API ID: {api_id}, Hash: {api_hash}, Phone: {phone}")
+else:
+    print("[!] No account details found or error occurred.")
+    exit(1) 
+
+sleep(3.5)
+
+
+
 
 
 # ====================[PROXY DETAILS]====================
