@@ -14,3 +14,9 @@
 12. [ ] obfuscate code
 13. [ ] download link on website
 
+Main.py
+
+récupérer les fichiers: import scraper, adder, auth, setup 
+
+global banner() => Telegram Toolbox
+
