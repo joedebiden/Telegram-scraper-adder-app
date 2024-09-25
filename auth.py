@@ -67,6 +67,7 @@ def main():
 def test_proxy(proxy):
     import requests
     import time
+    # Missing dependencies for SOCKS support 
 
     proxies = {
         'http': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
