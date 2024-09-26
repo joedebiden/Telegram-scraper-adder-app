@@ -47,6 +47,7 @@ call :install_python
 python -m ensurepip --default-pip
 python -m pip install --upgrade pip
 
+
 :: Créer et activer l'environnement virtuel
 echo Creating virtual environment...
 python -m venv .venv

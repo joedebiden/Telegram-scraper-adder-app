@@ -24,7 +24,7 @@ cpass.read('config.data')
 banner()
 
 # ====================[API DETAILS]====================
-from setup import get_api_details
+from account import get_api_details
 details = get_api_details()
 
 if details:
