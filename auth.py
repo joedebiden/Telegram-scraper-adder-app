@@ -4,7 +4,7 @@ import sys
 
 def banner():
     os.system('cls')
-    print(f'''
+    print(r'''
                 ._______ .______  ._______   ____   ____.___ ._______.________
                 : ____  |: __   \ : .___  \  \   \_/   /: __|: .____/|    ___/
                 |    :  ||  \____|| :   |  |  \___ ___/ | : || : _/\ |___    \.
@@ -64,15 +64,15 @@ def main():
 
 
 # ====================[FUNCTION TEST PROXY (HTTP REQUESTS)]====================
-def test_proxy(proxy):
+def test_proxy(proxy): 
     import requests
     #pip install requests[socks]
 
-    #error handling to do 
     proxies = {
         'http': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
         'https': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}" 
     }
+    
     try:
         response = requests.get('https://ipinfo.io', proxies=proxies, timeout=5)
         if response.status_code == 200:
@@ -85,6 +85,23 @@ def test_proxy(proxy):
     except requests.exceptions.RequestException as e:
         print(f"\n[-] Proxy test failed: {e}\n")
         input("Press the Enter key to continue...") 
+    
+
+
+# ====================[FUNCTION TEST DIRECT CONNECTION]====================
+def test_direct_connection():
+    import requests
+    try:
+        response = requests.get('https://ipinfo.io', timeout=5)
+        if response.status_code == 200:
+            print("\n[+] Direct connection works! Your IP:", response.json()["ip"])
+        else:
+            print(f"\n[-] Direct connection failed with status code: {response.status_code}\n")
+    except requests.exceptions.RequestException as e:
+        print(f"\n[-] Direct connection test failed: {e}\n")
+# test_direct_connection()
+# input("Press the Enter key to continue...")
+
 
 
 # ====================[FUNCTION DISPLAY & EDIT PROXIES DETAILS]====================
@@ -208,7 +225,7 @@ if __name__ == '__main__':
             sys.exit(0) 
 
         else:
-            print("\n[/!\] Invalid choice, please try again...")
+            print("\n[!] Invalid choice, please try again...")
 
 # ==================[END]====================
 # Code Create by @Joedebiden on github or Baudelaire for the intime ;) 

@@ -1,9 +1,11 @@
 from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
+from telethon.sessions import StringSession
+from telethon.network import ConnectionTcpAbridged
 from tkinter import Tk
 from tkinter.filedialog import asksaveasfilename
-import os, sys
+import os
 import configparser
 import csv
 from time import sleep
@@ -67,23 +69,31 @@ else:
         chosen_section = config.sections()[int(proxy_selection) - 1]
         proxy_type = config[chosen_section]['proxy_type']
         addr = config[chosen_section]['addr']
-        port = config[chosen_section]['port']
+        port = int(config[chosen_section]['port'])
         username = config[chosen_section]['username']
         password = config[chosen_section]['password']
-        rdns = config[chosen_section]['rdns']
+        
 
-        # Créer le dictionnaire pour le proxy
-        proxy = {
-            'proxy_type': proxy_type,
-            'addr': addr,
-            'port': port,
-            'username': username,
-            'password': password,
-            'rdns': rdns
-        }
+        if proxy_type != 'socks5':
+            print("[!] Only socks5 proxy supported.")
+            
+        else:
+            proxy = {
+                'proxy_type': proxy_type,
+                'addr': addr,
+                'port': port,
+                'username': username,
+                'password': password,
+            }
 
-        # Connexion à Telegram en utilisant le proxy sélectionné
-        client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+            # connect client with proxy
+            client = TelegramClient(
+                'session_name',
+                api_id,
+                api_hash,
+                connection=ConnectionTcpAbridged, 
+                proxy=(proxy['addr'], proxy['port'], proxy['username'], proxy['password'])
+            )
 
     except (ValueError, IndexError, KeyError):
         print("[!] Bad selection.")
@@ -91,13 +101,14 @@ else:
 
 
 # ====================[START CLIENT]====================
-client.connect()
-if not client.is_user_authorized():
-    client.send_code_request(phone)
-    banner()
-    client.sign_in(phone, input('[+] Enter the code sent from Telegram (to connect your account): '))   
-
-
+try:
+    client.connect()
+    if not client.is_user_authorized():
+        client.send_code_request(phone)
+        client.sign_in(phone, input('[+] Enter the code sent from Telegram: '))
+    print("[+] Connected successful !")
+except Exception as e:
+    print(f"[!] Error occurred: {e}")
 
 # ==================[ GET GROUPS ]===================
 chats = []
