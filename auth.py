@@ -66,24 +66,27 @@ def main():
 # ====================[FUNCTION TEST PROXY (HTTP REQUESTS)]====================
 def test_proxy(proxy):
     import requests
-    import time
+
+
     # Missing dependencies for SOCKS support 
 
     proxies = {
         'http': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
-        'https': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}"
+        'https': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
+        'socks': f"soks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}", 
     }
     try:
         response = requests.get('https://ipinfo.io', proxies=proxies, timeout=5)
         if response.status_code == 200:
             print("\n[+] Proxy works!")
-            time.sleep(2)
+            input("Press the Enter key to continue...") 
+            
         else:
-            print(f"\n[-] Proxy failed with status code: {response.status_code}")
-            time.sleep(2)
+            print(f"\n[-] Proxy failed with status code: {response.status_code}\n")
+            input("Press the Enter key to continue...") 
     except requests.exceptions.RequestException as e:
-        print(f"\n[-] Proxy test failed: {e}")
-        time.sleep(2)
+        print(f"\n[-] Proxy test failed: {e}\n")
+        input("Press the Enter key to continue...") 
 
 
 # ====================[FUNCTION DISPLAY & EDIT PROXIES DETAILS]====================
@@ -107,7 +110,7 @@ def display_proxies(proxies_file='proxies.ini'):
         print("[!] Invalid choice!")
         return
     
-    print(f"\n[+] Proxy Number: {chosen_section}")
+    print(f"\n[+] Proxy Number: {chosen_section}\n")
     proxy_info = dict(config.items(chosen_section))
     for cle, valeur in proxy_info.items():
         print(f"{cle}: {valeur}")
@@ -168,7 +171,7 @@ if __name__ == '__main__':
                 print("[!] Invalid choice!")
                 quit()
             
-            print(f"\n[+] The proxy you choose to test the connexion: {chosen_section}")
+            print(f"[+] The proxy you choose to test the connexion: {chosen_section}")
 
             try:
                 proxy_type = cpass[chosen_section]['proxy_type']
@@ -190,10 +193,10 @@ if __name__ == '__main__':
             except KeyError:
                 banner()
                 print("\n[!] Bad Proxy config detect in file proxies.ini !!")
-                print("\n[!] Please add again proxy or edit the file (be carefull) !!")
+                print("[!] Please add again proxy or edit the file (be carefull) !!")
                 sys.exit(1)
 
-            print(f"\n[!] Testing the {chosen_section}...")
+            print(f"[!] Testing the {chosen_section}...")
             test_proxy(proxy)  
 
         # ============[choice 3]============

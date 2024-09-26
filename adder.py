@@ -59,7 +59,8 @@ else:
 
 # ====================[PROXY DETAILS]====================
 from auth import display_proxies
-
+    #use for python version >= install python-socks[asyncio]
+    # proxy=("socks5", '127.0.0.1', 4444)
 
 print("[!] Wanna use some proxies? (y/n)\n")
 proxy_choice = input("Input: ").lower()
