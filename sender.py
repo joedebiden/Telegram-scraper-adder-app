@@ -59,47 +59,52 @@ else:
         chosen_section = config.sections()[int(proxy_selection) - 1]
         proxy_type = config[chosen_section]['proxy_type']
         addr = config[chosen_section]['addr']
-        port = config[chosen_section]['port']
+        port = int(config[chosen_section]['port'])
         username = config[chosen_section]['username']
         password = config[chosen_section]['password']
-        rdns = config[chosen_section]['rdns']
 
-        # Créer le dictionnaire pour le proxy
-        proxy = {
-            'proxy_type': proxy_type,
-            'addr': addr,
-            'port': port,
-            'username': username,
-            'password': password,
-            'rdns': rdns
-        }
 
-        # Connexion à Telegram en utilisant le proxy sélectionné
-        client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+        if proxy_type != 'socks5':
+            print("[!] Only socks5 proxy supported.")
+            
+        else:
+            proxy = (proxy_type, addr, port, username, password)
+
+            # connect client with proxy
+            client = TelegramClient(
+                'session_name',
+                api_id,
+                api_hash,
+                #connection=ConnectionTcpAbridged, 
+                proxy=proxy
+            )
 
     except (ValueError, IndexError, KeyError):
         print("[!] Bad selection.")
 
 
+
 # ====================[START CLIENT]====================
-client.connect()
-if not client.is_user_authorized():
-    client.send_code_request(phone)
-    banner()
-    client.sign_in(phone, input('[+] Enter the code sent from Telegram (to connect your account): '))   
+try:
+    client.connect()
+    if not client.is_user_authorized():
+        client.send_code_request(phone)
+        client.sign_in(phone, input('[+] Enter the code sent from Telegram: '))
+    print("[+] Connected successful !")
+except Exception as e:
+    print(f"[!] Error occurred: {e}")
 
-
-
-# ====================[OPEN FILE]====================
-# maybe implement the same system as adder.py
 
 try:
     input_file = sys.argv[1]
 except IndexError:
-    print("[!] Use like => python sender.py members.csv")
+    print("[!] Use like => python adder.py members.csv or members.txt")
     sys.exit(1)
-users = []
 
+
+
+# ====================[OPEN FILE]====================
+users = []
 try:
     with open(input_file, encoding='UTF-8') as f:
         rows = csv.reader(f,delimiter=",",lineterminator="\n")

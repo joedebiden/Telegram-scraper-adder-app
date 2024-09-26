@@ -85,7 +85,7 @@ else:
                 'session_name',
                 api_id,
                 api_hash,
-                #connection=ConnectionTcpAbridged, 
+                #connection=ConnectionTcpAbridged,  // work well without
                 proxy=proxy
             )
 

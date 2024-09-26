@@ -59,8 +59,7 @@ else:
 
 # ====================[PROXY DETAILS]====================
 from auth import display_proxies
-    #use for python version >= install python-socks[asyncio]
-    # proxy=("socks5", '127.0.0.1', 4444)
+
 
 print("[!] Wanna use some proxies? (y/n)\n")
 proxy_choice = input("Input: ").lower()
@@ -77,49 +76,52 @@ else:
         chosen_section = config.sections()[int(proxy_selection) - 1]
         proxy_type = config[chosen_section]['proxy_type']
         addr = config[chosen_section]['addr']
-        port = config[chosen_section]['port']
+        port = int(config[chosen_section]['port'])
         username = config[chosen_section]['username']
         password = config[chosen_section]['password']
-        rdns = config[chosen_section]['rdns']
 
-        # Créer le dictionnaire pour le proxy
-        proxy = {
-            'proxy_type': proxy_type,
-            'addr': addr,
-            'port': port,
-            'username': username,
-            'password': password,
-            'rdns': rdns
-        }
 
-        # Connexion à Telegram en utilisant le proxy sélectionné
-        client = TelegramClient('session_name', api_id, api_hash, proxy=proxy)
+        if proxy_type != 'socks5':
+            print("[!] Only socks5 proxy supported.")
+            
+        else:
+            proxy = (proxy_type, addr, port, username, password)
+
+            # connect client with proxy
+            client = TelegramClient(
+                'session_name',
+                api_id,
+                api_hash,
+                #connection=ConnectionTcpAbridged, 
+                proxy=proxy
+            )
 
     except (ValueError, IndexError, KeyError):
         print("[!] Bad selection.")
 
 
+
 # ====================[START CLIENT]====================
-client.connect()
-if not client.is_user_authorized():
-    client.send_code_request(phone)
-    banner()
-    client.sign_in(phone, input('[+] Enter the code sent from Telegram (to connect your account): '))   
-banner()
+try:
+    client.connect()
+    if not client.is_user_authorized():
+        client.send_code_request(phone)
+        client.sign_in(phone, input('[+] Enter the code sent from Telegram: '))
+    print("[+] Connected successful !")
+except Exception as e:
+    print(f"[!] Error occurred: {e}")
 
 
-# ajout gestion des erreurs
+
 try:
     input_file = sys.argv[1]
 except IndexError:
     print("[!] Use like => python adder.py members.csv or members.txt")
     sys.exit(1)
-users = []
 
 
 # ====================[OPEN FILE]====================
-#new task, check the file before processing
-
+users = []
 try:
     if input_file.endswith('.csv'):
         try:
