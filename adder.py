@@ -22,7 +22,7 @@ import os
 
 def banner():
     os.system('cls')
-    print(f'''
+    print(r'''
 
           ______               __                 ______         __        __                     
          /      \             /  |               /      \       /  |      /  |                    
@@ -37,6 +37,7 @@ def banner():
                                                                      
           ''')
 
+banner()
 cpass = configparser.RawConfigParser()
 cpass.read('config.data')
 
@@ -50,12 +51,38 @@ if details:
     api_hash = details['hash']
     phone = details['phone']
     
-    print(f"Random [{account_name}] choosen\n, API ID: {api_id}\n, Hash: {api_hash}\n, Phone: {phone}\n")
+    print(f"Random account: [{account_name}] \n, API ID: {api_id}\n, Hash: {api_hash}\n, Phone: {phone}\n")
 
 else:
     print("[!] No account details found or error occurred.")
     exit(1) 
 
+
+# ====================[SWAP ACCOUNT]====================
+def swap_account(client, config='config.data'):
+    client.disconnect()
+    details = get_api_details()
+
+    if details:
+        account_name = details['account_name']
+        api_id = details['api_id']
+        api_hash = details['hash']
+        phone = details['phone']
+
+        print(f"[+] Account swapped: [{account_name}]\n, API ID: {api_id}\n, Hash: {api_hash}\n, Phone: {phone}\n")
+
+        new_client = TelegramClient('session_name', api_id, api_hash)
+
+        new_client.connect()
+        if not new_client.is_user_authorized():
+            new_client.send_code_request(phone)
+            new_client.sign_in(phone, input('\n[+] Enter the code sent from Telegram: '))
+
+        print("[*] Successfully connected")
+        return new_client
+    else:
+        print("[!] No account details founds or error occurred during the swap.")
+        return None
 
 # ====================[PROXY DETAILS]====================
 from auth import display_proxies
@@ -241,8 +268,8 @@ mode = int(input("Input : "))
 n = 0
 for user in users:
     n += 1
-    if n % 50 == 0: 
-        print("[!] Waiting for 10 minutes... (every 50 users)...")
+    if n % 48 == 0: 
+        print("[!] Waiting for 10 minutes... (every 48 users)...")
         time.sleep(660) 
     try: 
         if mode == 1:
@@ -265,7 +292,11 @@ for user in users:
     except PeerFloodError as e: 
         print("[!] Too many requests to Telegram. PeerFloodError encountered.")
         print(f"Error details: {e}")
-        time.sleep(600)
+        print("[!] Switching to another account...")
+        client = swap_account(client)
+        if client is None:
+            print("\n[!] Failed to swap.")
+            continue
         continue
     
     except FloodWaitError as e:
