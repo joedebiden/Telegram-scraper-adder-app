@@ -11,7 +11,7 @@
 9. [x] refaire la structure
 10. [x] gestion multi account tg
 11. [x] random account select
-12. [ ] account swapper when PeerFloodError
+12. [x] account swapper when PeerFloodError
 13. [ ] integrate file manager
 14. [ ] Start.bat
 15. [ ] licence key 
