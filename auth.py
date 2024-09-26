@@ -66,14 +66,12 @@ def main():
 # ====================[FUNCTION TEST PROXY (HTTP REQUESTS)]====================
 def test_proxy(proxy):
     import requests
+    #pip install requests[socks]
 
-
-    # Missing dependencies for SOCKS support 
-
+    #error handling to do 
     proxies = {
         'http': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
-        'https': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}",
-        'socks': f"soks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}", 
+        'https': f"socks5://{proxy['username']}:{proxy['password']}@{proxy['addr']}:{proxy['port']}" 
     }
     try:
         response = requests.get('https://ipinfo.io', proxies=proxies, timeout=5)
