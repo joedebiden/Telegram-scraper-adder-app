@@ -72,27 +72,21 @@ else:
         port = int(config[chosen_section]['port'])
         username = config[chosen_section]['username']
         password = config[chosen_section]['password']
-        
+
 
         if proxy_type != 'socks5':
             print("[!] Only socks5 proxy supported.")
             
         else:
-            proxy = {
-                'proxy_type': proxy_type,
-                'addr': addr,
-                'port': port,
-                'username': username,
-                'password': password,
-            }
+            proxy = (proxy_type, addr, port, username, password)
 
             # connect client with proxy
             client = TelegramClient(
                 'session_name',
                 api_id,
                 api_hash,
-                connection=ConnectionTcpAbridged, 
-                proxy=(proxy['addr'], proxy['port'], proxy['username'], proxy['password'])
+                #connection=ConnectionTcpAbridged, 
+                proxy=proxy
             )
 
     except (ValueError, IndexError, KeyError):
