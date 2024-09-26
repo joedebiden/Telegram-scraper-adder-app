@@ -301,7 +301,15 @@ for user in users:
     
     except FloodWaitError as e:
         print(f"[!] FloodWaitError: Telegram is forcing a wait time of {e.seconds} seconds.")
-        time.sleep(e.seconds)
+        if e.seconds > 301:
+            print("[!] Long wait time detected => switching account...")
+            client = swap_account(client)
+            if client is None:
+                print("\n[!] Failed to swap. Continue without swap")
+                continue
+            continue
+        else:
+            time.sleep(e.seconds)
         continue
 
     except UserPrivacyRestrictedError:
@@ -328,6 +336,10 @@ for user in users:
     except ChannelPrivateError:
         print(f"[!] Cannot add user {user['username'] if mode == 1 else user['id']} because the channel is private or restricted.")
         continue
+
+    except ValueError as e:
+        print(f"[!] Unexpected error: {e}")
+        continue 
 
     except Exception as e:
         print(f"[!] Unexpected error: {str(e)}")
