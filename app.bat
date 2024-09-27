@@ -31,9 +31,7 @@ echo                ╠════(3) Telegram-Scraper
 echo                ║
 echo                ╠═════(4) Telegram-Adder
 echo                ║
-echo                ╠══════(5) Telegram-Message-Sender
-echo                ║
-echo                ╚═╦═════(6) Exit
+echo                ╚═╦════(5) Telegram-Message-Sender
 echo                  ║
 set /p input=.%BS%                 ╚════════^>
 if /I %input% EQU 1 python account.py
@@ -41,6 +39,7 @@ if /I %input% EQU 2 python auth.py
 if /I %input% EQU 3 python scraper.py
 if /I %input% EQU 4 python adder.py
 if /I %input% EQU 5 python sender.py
+cls
 goto start
 
 set "colors[1]=%ESC%[38;2;128;0;128m"  rem Violet

@@ -100,7 +100,7 @@ try:
     if not client.is_user_authorized():
         client.send_code_request(phone)
         client.sign_in(phone, input('[+] Enter the code sent from Telegram: '))
-    print("[+] Connected successful !")
+    print("[+] Connected!")
 except Exception as e:
     print(f"[!] Error occurred: {e}")
 
