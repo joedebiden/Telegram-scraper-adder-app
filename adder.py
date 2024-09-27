@@ -143,7 +143,8 @@ except Exception as e:
 try:
     input_file = sys.argv[1]
 except IndexError:
-    print("[!] Use like => python adder.py members.csv or members.txt")
+    print("[!] Please enter the file that contains members list => (members.csv or members.txt)")
+    input("Press the Enter key to continue...") 
     sys.exit(1)
 
 
