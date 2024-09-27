@@ -5,7 +5,7 @@ mode con: cols=175 lines=45
 setlocal EnableDelayedExpansion
 set "ESC="
 
-call :banner
+
 if not exist ".venv\Scripts\activate.bat" (
     echo python virtual environment not found, creating it...
     python -m venv .venv
@@ -19,7 +19,6 @@ if not exist ".venv\Scripts\activate.bat" (
 call :banner
 
 :menu
-call :banner
 for /f %%A in ('"prompt $H &echo on &for %%B in (1) do rem"') do set BS=%%A
 echo.
 echo.
@@ -64,19 +63,19 @@ if /I %input% EQU 1 (
     )
 ) 
 
-cls
 goto start
 
+
+
+
+:banner
+cls
 set "colors[1]=%ESC%[38;2;128;0;128m"  rem Violet
 set "colors[2]=%ESC%[38;2;102;0;153m"
 set "colors[3]=%ESC%[38;2;76;0;179m"
 set "colors[4]=%ESC%[38;2;51;0;204m"
 set "colors[5]=%ESC%[38;2;25;0;230m"
 set "colors[6]=%ESC%[38;2;0;0;255m"   rem Bleu
-
-
-:banner
-cls
 echo.
 echo.
 echo !colors[1]!       ████████╗███████╗██╗     ███████╗ ██████╗ ██████╗  █████╗ ███╗   ███╗   ████████╗ ██████╗  ██████╗ ██╗     ██████╗  ██████╗ ██╗  ██╗
