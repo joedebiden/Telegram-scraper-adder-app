@@ -34,11 +34,36 @@ echo                ║
 echo                ╚═╦════(5) Telegram-Message-Sender
 echo                  ║
 set /p input=.%BS%                 ╚════════^>
-if /I %input% EQU 1 python account.py
-if /I %input% EQU 2 python auth.py
-if /I %input% EQU 3 python scraper.py
-if /I %input% EQU 4 python adder.py
-if /I %input% EQU 5 python sender.py
+
+if /I %input% EQU 1 ( 
+    python account.py
+    goto start 
+) else if  /I %input% EQU 2 (
+    python auth.py
+    goto start
+) else if /I %input% EQU 3 (
+    python scraper.py
+    goto start 
+) else if /I %input% EQU 4 (
+    set /p args="enter the name of the members list (with extension): "
+    if not defined args (
+        echo [Error] Invalid input. Please enter a valide file name with extension.
+        pause 
+    ) else ( 
+        python adder.py .\your_members_list_here\%args% 
+        goto start
+    )
+) else if /I %input% EQU 5 (
+    set /p args="enter the name of the members list (with extension): "
+    if not defined args (
+        echo [Error] Invalid input. Please enter a valide file name with extension.
+        pause 
+    ) else ( 
+        python sender.py .\your_members_list_here\%args% 
+        goto start  
+    )
+) 
+
 cls
 goto start
 

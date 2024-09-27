@@ -14,8 +14,8 @@
 12. [x] account swapper when PeerFloodError
 13. [x] integrate file manager
 14. [x] Start.bat
-15. [ ] Esthetics 
-16. [ ] verif setup.bat
-17. [ ] licence key 
-18. [ ] obfuscate code / change to exe
+15. [x] Esthetics 
+16. [ ] licence key 
+17. [ ] obfuscate code / change to exe
+18. [ ] test unitaire, verif setup
 19. [ ] download link on website
