@@ -1,5 +1,5 @@
 @echo off
-title (setup) Telegram-Telebox - by Baudelaire
+title (app) Telegram-Telebox - by Baudelaire
 chcp 65001 >nul
 
 
@@ -17,7 +17,15 @@ set "colors[4]=%ESC%[38;2;51;0;204m"
 set "colors[5]=%ESC%[38;2;25;0;230m"
 set "colors[6]=%ESC%[38;2;0;0;255m"   rem Bleu
 
+rem Vérifier si l'environnement virtuel existe
+if not exist ".venv\Scripts\activate" (
+    echo [!] L'environnement virtuel n'existe pas. Veuillez le créer d'abord.
+    pause
+    exit /b
+)
+
 :banner
+cls
 echo.
 echo.
 rem Afficher chaque ligne avec une couleur différente du dégradé
@@ -32,75 +40,69 @@ echo.
 rem Réinitialiser les couleurs
 echo %ESC%[0m
 
-pause
-
-:: Start script
-echo Starting setup process...
-
-:: Vérifier et installer wget
-call :install_wget
-
-:: Vérifier et installer Python
-call :install_python
-
-:: Installer pip et les modules nécessaires
-python -m ensurepip --default-pip
-python -m pip install --upgrade pip
-
-
-:: Créer et activer l'environnement virtuel
-echo Creating virtual environment...
-python -m venv .venv
 
 :: Activer l'environnement virtuel
 call .venv\Scripts\activate
 
-:: Installer les dépendances
-echo Installing requirements...
-pip install -r requirements.txt
-
-
-
-:: Subroutine pour l'installation de wget
-:install_wget
-where wget >nul 2>&1
-IF %ERRORLEVEL% NEQ 0 (
-    echo wget is not installed. Installing wget...
-
-    :: Télécharger wget via PowerShell
-    powershell -Command "Invoke-WebRequest -Uri https://eternallybored.org/misc/wget/current/wget.exe -OutFile wget.exe"
-
-    :: Vérifier si wget a été installé correctement
-    where wget >nul 2>&1
-    IF %ERRORLEVEL% NEQ 0 (
-        echo wget installation failed. Exiting...
-        exit /b
-    ) ELSE (
-        echo wget installed successfully.
-    )
+if errorlevel 1 (
+    echo [!] Error while activating virtual environment
+    pause
+    exit /b
 )
-exit /b
 
-:: Subroutine pour l'installation de Python
-:install_python
-where python >nul 2>&1
-IF %ERRORLEVEL% NEQ 0 (
-    echo Python is not installed. Installing Python...
+pause 
+echo Starting app...
+goto menu
 
-    :: Télécharger l'installateur de Python via wget
-    wget -O python-installer.exe https://www.python.org/ftp/python/3.11.5/python-3.11.5-amd64.exe
+:menu
+echo.
+echo Please choose an option:
+echo 1 - manage account 
+echo 2 - manage proxy 
+echo 3 - Start scraper
+echo 4 - Start adder 
+echo 5 - Start message sender
+echo 6 - Exit
+set /p choice="Enter your choice: "
 
-    :: Exécuter l'installateur en mode silencieux
-    python-installer.exe /quiet InstallAllUsers=1 PrependPath=1
+IF "%choice%"=="1" (
+    echo lauching manage account app...
+    python account.py 
+    goto menu
 
-    :: Vérifier si Python a été installé correctement
-    where python >nul 2>&1
-    IF %ERRORLEVEL% NEQ 0 (
-        echo Python installation failed. Exiting...
-        exit /b
-    ) ELSE (
-        echo Python installed successfully.
-        python --version
-    )
+) ELSE IF "%choice%"=="2" (
+    echo launching manage proxy app...
+    python auth.py
+    goto menu
+
+) ELSE IF "%choice%"=="3" (
+    echo starting scraping app...
+    python scraper.py
+    goto menu
+
+) ELSE IF "%choice%"=="4" (
+    rem give the name of members list (with extension) for the adder 
+    set /p args="Enter the name of the members list (with extension): " 
+    echo starting adder app...
+    python adder.py \your_members_list_here\%args%
+    rem missing the path of the members list
+
+) ELSE IF "%choice%"=="5" (
+    rem give the name of members list (with extension) for the message sender 
+    echo starting message sender app...
+    python sender.py
+    goto menu
+
+) ELSE IF "%choice%"=="6" (
+    goto end
+
+) ELSE (
+    echo Invalid choice, please try again.
+    pause
+    goto menu
 )
-exit /b
+
+:end
+echo Hope all is doing well. Please reach me if there are any problems on my Discord: Baudelaire
+exit
+

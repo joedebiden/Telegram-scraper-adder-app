@@ -12,8 +12,10 @@
 10. [x] gestion multi account tg
 11. [x] random account select
 12. [x] account swapper when PeerFloodError
-13. [ ] integrate file manager
-14. [ ] Start.bat
-15. [ ] licence key 
-16. [ ] obfuscate code
-17. [ ] download link on website
+13. [x] integrate file manager
+14. [x] Start.bat
+15. [ ] Esthetics 
+16. [ ] verif setup.bat
+17. [ ] licence key 
+18. [ ] obfuscate code / change to exe
+19. [ ] download link on website
