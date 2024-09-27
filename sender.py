@@ -107,23 +107,40 @@ except IndexError:
 # ====================[OPEN FILE]====================
 users = []
 try:
-    with open(input_file, encoding='UTF-8') as f:
-        rows = csv.reader(f,delimiter=",",lineterminator="\n")
-        next(rows, None)
-        for row in rows:
-            user = {}
-            user['username'] = row[0]
-            user['id'] = int(row[1])
-            user['access_hash'] = int(row[2])
-            user['name'] = row[3]
-            users.append(user)
+    if input_file .endswith('.csv'):
+        try:
+            with open(input_file, encoding='UTF-8') as f:
+                rows = csv.reader(f,delimiter=",",lineterminator="\n")
+                next(rows, None)
+                for row in rows:
+                    user = {}
+                    user['username'] = row[0]
+                    user['id'] = int(row[1])
+                    user['access_hash'] = int(row[2])
+                    user['name'] = row[3]
+                    users.append(user)
+        except FileNotFoundError:
+            print("[!] File not found")
+            sys.exit(1)
+        except Exception as e:
+            print(e)
+            sys.exit(1)
+    elif input_file.endswith('.txt'):
+        with open(input_file, encoding='UTF-8') as f:
+            for line in f:
+                user = {}
+                username = line.strip()
+                user['username'] = username
+                users.append(user)
+    else:
+        print("[!] Unsupported file format. Please use a CSV or TXT file.")
+        sys.exit(1)
 except FileNotFoundError:
     print("[!] File not found")
     sys.exit(1)
 except Exception as e:
-    print(e)
+    print(f"An error occurred: {e}")
     sys.exit(1)
-        
 
 # ===================[SPEED MODES]===============
 def presentation():
