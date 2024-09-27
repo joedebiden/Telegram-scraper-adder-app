@@ -17,12 +17,6 @@ set "colors[4]=%ESC%[38;2;51;0;204m"
 set "colors[5]=%ESC%[38;2;25;0;230m"
 set "colors[6]=%ESC%[38;2;0;0;255m"   rem Bleu
 
-rem Vérifier si l'environnement virtuel existe
-if not exist ".venv\Scripts\activate" (
-    echo [!] L'environnement virtuel n'existe pas. Veuillez le créer d'abord.
-    pause
-    exit /b
-)
 
 :banner
 cls
@@ -41,14 +35,20 @@ rem Réinitialiser les couleurs
 echo %ESC%[0m
 
 
+
+rem Vérifier si l'environnement virtuel existe
+if not exist ".venv\Scripts\activate" (
+    echo [!] L'environnement virtuel n'existe pas. Veuillez le créer d'abord.
+    echo Creating virtual environment...
+	python -m venv .venv
+	call .venv\Scripts\activate
+	pause
+    
+)
+
 :: Activer l'environnement virtuel
 call .venv\Scripts\activate
 
-if errorlevel 1 (
-    echo [!] Error while activating virtual environment
-    pause
-    exit /b
-)
 
 pause 
 echo Starting app...
