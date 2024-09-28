@@ -134,6 +134,8 @@ try:
                 users.append(user)
     else:
         print("[!] Unsupported file format. Please use a CSV or TXT file.")
+        print("[!] Check the file extension and try again (its a commun bug on windows).")
+        input("Press the Enter key to continue...")
         sys.exit(1)
 except FileNotFoundError:
     print("[!] File not found")
