@@ -165,9 +165,11 @@ try:
                     users.append(user)
         except FileNotFoundError:
             print("[!] File not found")
+            input("Press the Enter key to continue...")
             sys.exit(1)
         except Exception as e:
             print(e)
+            input("Press the Enter key to continue...")
             sys.exit(1)
 
     elif input_file.endswith('.txt'):
@@ -185,9 +187,11 @@ try:
         sys.exit(1)
 except FileNotFoundError:
     print("[!] File not found")
+    input("Press the Enter key to continue...")
     sys.exit(1)
 except Exception as e:
     print(f"An error occurred: {e}")
+    input("Press the Enter key to continue...")
     sys.exit(1)
 
 
