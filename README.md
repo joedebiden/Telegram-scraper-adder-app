@@ -15,7 +15,7 @@
 13. [x] integrate file manager
 14. [x] Start.bat
 15. [x] Esthetics 
-16. [ ] licence key 
-17. [ ] obfuscate code / change to exe
+16. [x] licence key 
+17. [x] obfuscate code + change to exe
 18. [ ] test unitaire, verif setup
 19. [ ] download link on website
