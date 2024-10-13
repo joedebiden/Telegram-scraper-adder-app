@@ -2,6 +2,10 @@ import configparser
 import os
 import sys
 
+from license_check import check_license
+if not check_license():
+    exit(1) 
+
 def banner():
     os.system('cls')
     print(r'''

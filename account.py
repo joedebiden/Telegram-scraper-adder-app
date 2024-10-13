@@ -14,6 +14,11 @@ def banner():
                     ██      ███        █████  ██████      ███  ███████
                                                                                                                                             
 ''')
+    
+from license_check import check_license
+if not check_license():
+    exit(1)       
+
 
 cpass = configparser.RawConfigParser()
 if not os.path.exists('config.data'):

@@ -37,8 +37,14 @@ pause
 :: Start script
 echo Starting setup process...
 
-:: Vérifier et installer wget
-call :install_wget
+:: Create License File
+echo Please enter your license key:
+set /p license_key=
+
+:: Enregistrer la clé de licence dans un fichier license.txt
+echo %license_key% > license.key
+
+echo License key saved successfully!
 
 :: Vérifier et installer Python
 call :install_python
@@ -61,34 +67,14 @@ pip install -r requirements.txt
 
 
 
-:: Subroutine pour l'installation de wget
-:install_wget
-where wget >nul 2>&1
-IF %ERRORLEVEL% NEQ 0 (
-    echo wget is not installed. Installing wget...
-
-    :: Télécharger wget via PowerShell
-    powershell -Command "Invoke-WebRequest -Uri https://eternallybored.org/misc/wget/current/wget.exe -OutFile wget.exe"
-
-    :: Vérifier si wget a été installé correctement
-    where wget >nul 2>&1
-    IF %ERRORLEVEL% NEQ 0 (
-        echo wget installation failed. Exiting...
-        exit /b
-    ) ELSE (
-        echo wget installed successfully.
-    )
-)
-exit /b
-
 :: Subroutine pour l'installation de Python
 :install_python
 where python >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     echo Python is not installed. Installing Python...
 
-    :: Télécharger l'installateur de Python via wget
-    wget -O python-installer.exe https://www.python.org/ftp/python/3.11.5/python-3.11.5-amd64.exe
+    :: Télécharger l'installateur de Python via Curl
+    curl -o python-installer.exe https://www.python.org/ftp/python/3.11.5/python-3.11.5-amd64.exe
 
     :: Exécuter l'installateur en mode silencieux
     python-installer.exe /quiet InstallAllUsers=1 PrependPath=1
