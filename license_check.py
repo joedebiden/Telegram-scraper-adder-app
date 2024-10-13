@@ -1,7 +1,4 @@
-#renommer le fichier
 import requests
-import sys
-
 
 LICENSE_SERVER_URL = "http://93.127.202.5:5000/check-license"
 
@@ -31,9 +28,4 @@ def check_license():
 
 if not check_license():
     exit(1)       
-
-
-
-
-
 
