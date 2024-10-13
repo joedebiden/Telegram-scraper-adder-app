@@ -37,6 +37,15 @@ pause
 :: Start script
 echo Starting setup process...
 
+:: Create License File
+echo Please enter your license key:
+set /p license_key=
+
+:: Enregistrer la clé de licence dans un fichier license.txt
+echo %license_key% > license.key
+
+echo License key saved successfully!
+
 :: Vérifier et installer wget
 call :install_wget
 
