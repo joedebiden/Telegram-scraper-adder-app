@@ -205,18 +205,18 @@ groups = []
 def presentation():
         print("Before choosing the group, you need to select a mode to add members.\n")
         print("There are 3 modes available: \n")
-        print("[1] -> Night Mode (Perfect to take all the night to add members)")
-        print("[2] -> Normal Mode")
-        print("[3] -> Aggressive Mode (Really not recommended)\n")
-        print("[4] -> Idiot Mode (You're a real idiot if you choose this mode)\n")
+        print("[1] -> Night Mode (add every 150-180 secondes)\n")
+        print("[2] -> Normal Mode (add every 60-80 secondes)\n")
+        print("[3] -> Fast Mode (add every 20-35)\n")
+        print("[4] -> Aggressive Mode (add every 2-6 secondes)\n")
 
 def power():
     #dictionnaire
     modes = {
         1: {'name': 'Night Mode', 'SLEEP_TIME_1': 150, 'SLEEP_TIME_2': 180},
         2: {'name': 'Normal Mode', 'SLEEP_TIME_1': 60, 'SLEEP_TIME_2': 80},
-        3: {'name': 'Aggressive Mode', 'SLEEP_TIME_1': 20, 'SLEEP_TIME_2': 35},
-        4: {'name': 'Idiot Mode', 'SLEEP_TIME_1': 1, 'SLEEP_TIME_2': 5}
+        3: {'name': 'Fast Mode', 'SLEEP_TIME_1': 20, 'SLEEP_TIME_2': 35},
+        4: {'name': 'Aggressive Mode', 'SLEEP_TIME_1': 1, 'SLEEP_TIME_2': 5}
     }
     presentation()
     while True:
