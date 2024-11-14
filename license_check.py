@@ -1,6 +1,8 @@
+# Logique lecture licence in app
 import requests
+import time
 
-LICENSE_SERVER_URL = "http://93.127.202.5:5000/check-license"
+LICENSE_SERVER_URL = "http://93.127.202.5:5002/license/check"
 
 
 def check_license():
@@ -14,18 +16,22 @@ def check_license():
             return True
         
         else:
-            print("Invalid license key. Please contact support.")
+            print("Invalid license key. Please contact support: https://telegram-toolbox.online/software/contact-support")
+            time.sleep(2)
             return False
         
     except FileNotFoundError:
         print("License file not found. Please run the setup.app again or create a file named 'license.key'...")
+        time.sleep(2)
         return False
     
     except requests.exceptions.RequestException as e:
         print(f"Error connecting to the license server: {e}")
+        time.sleep(2)
         return False
 
 
 if not check_license():
+    time.sleep(2)
     exit(1)       
 

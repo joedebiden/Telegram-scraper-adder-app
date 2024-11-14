@@ -1,9 +1,11 @@
 import configparser
 import os
 import sys
+from time import sleep
 
 from license_check import check_license
 if not check_license():
+    sleep(2)
     exit(1) 
 
 def banner():

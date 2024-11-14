@@ -12,6 +12,7 @@ from time import sleep
 
 from license_check import check_license
 if not check_license():
+    sleep(5)
     exit(1) 
 
 def banner():
@@ -50,6 +51,7 @@ if details:
 
 else:
     print("[!] No account details found or error occurred.")
+    sleep(2)
     exit(1) 
 
 
