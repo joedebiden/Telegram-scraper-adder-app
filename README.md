@@ -17,5 +17,6 @@
 15. [x] Esthetics 
 16. [x] licence key 
 17. [x] obfuscate code + change to exe
-18. [ ] test unitaire, verif setup
-19. [ ] download link on website
+18. [x] test unitaire, verif setup
+19. [x] download link on website
+20. [ ] clean code, oriented object
