@@ -158,7 +158,7 @@ def presentation():
         print("There are 3 modes available: \n")
         print("[1] -> Night Mode (Perfect to take all the night to message members)")
         print("[2] -> Normal Mode")
-        print("[3] -> Aggressive Mode (Really not recommended)\n")
+        print("[3] -> Fast Mode\n")
 
 def power():
     modes = {
