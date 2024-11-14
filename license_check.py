@@ -2,7 +2,7 @@
 import requests
 import time
 
-LICENSE_SERVER_URL = "http://93.127.202.5:5002/license/check"
+LICENSE_SERVER_URL = "https://telegram-toolbox.online/license/check"
 
 
 def check_license():
