@@ -15,8 +15,8 @@
   "CTkButton": {
     "corner_radius": 6,
     "border_width": 0,
-    "fg_color": ["#FF6B6B", "#B74177"],
-    "hover_color": ["#FF4E4E", "#A01E5C"],
+    "fg_color": ["#FF8C42", "#FF6505"],
+    "hover_color": ["#E67320", "#CC5500"],
     "border_color": ["#3E454A", "#949A9F"],
     "text_color": ["#DCE4EE", "#DCE4EE"],
     "text_color_disabled": ["gray74", "gray60"]
@@ -29,7 +29,7 @@
   "CTkEntry": {
     "corner_radius": 6,
     "border_width": 2,
-    "fg_color": ["#FF99C8", "#692A84"],
+    "fg_color": ["#F9F9FA", "#343638"],
     "border_color": ["#979DA2", "#565B5E"],
     "text_color":["gray10", "#DCE4EE"],
     "placeholder_text_color": ["gray52", "gray62"]
@@ -37,9 +37,9 @@
   "CTkCheckBox": {
     "corner_radius": 6,
     "border_width": 3,
-    "fg_color": ["#FF6B6B", "#B74177"],
+    "fg_color": ["#FF8C42", "#FF6505"],
     "border_color": ["#3E454A", "#949A9F"],
-    "hover_color": ["#FF6B6B", "#B74177"],
+    "hover_color": ["#FF8C42", "#FF6505"],
     "checkmark_color": ["#DCE4EE", "gray90"],
     "text_color": ["gray10", "#DCE4EE"],
     "text_color_disabled": ["gray60", "gray45"]
@@ -49,7 +49,7 @@
     "border_width": 3,
     "button_length": 0,
     "fg_color": ["#939BA2", "#4A4D50"],
-    "progress_color": ["#FF6B6B", "#B74177"],
+    "progress_color": ["#FF8C42", "#FF6505"],
     "button_color": ["gray36", "#D5D9DE"],
     "button_hover_color": ["gray20", "gray100"],
     "text_color": ["gray10", "#DCE4EE"],
@@ -59,9 +59,9 @@
     "corner_radius": 1000,
     "border_width_checked": 6,
     "border_width_unchecked": 3,
-    "fg_color": ["#FF6B6B", "#B74177"],
+    "fg_color": ["#FF8C42", "#FF6505"],
     "border_color": ["#3E454A", "#949A9F"],
-    "hover_color": ["#FF4E4E", "#A01E5C"],
+    "hover_color": ["#E67320", "#CC5500"],
     "text_color": ["gray10", "#DCE4EE"],
     "text_color_disabled": ["gray60", "gray45"]
   },
@@ -69,7 +69,7 @@
     "corner_radius": 1000,
     "border_width": 0,
     "fg_color": ["#939BA2", "#4A4D50"],
-    "progress_color": ["#FF6B6B", "#B74177"],
+    "progress_color": ["#FF8C42", "#FF6505"],
     "border_color": ["gray", "gray"]
   },
   "CTkSlider": {
@@ -79,21 +79,21 @@
     "button_length": 0,
     "fg_color": ["#939BA2", "#4A4D50"],
     "progress_color": ["gray40", "#AAB0B5"],
-    "button_color": ["#FF6B6B", "#B74177"],
-    "button_hover_color": ["#FF4E4E", "#A01E5C"]
+    "button_color": ["#FF8C42", "#FF6505"],
+    "button_hover_color": ["#E67320", "#CC5500"]
   },
   "CTkOptionMenu": {
     "corner_radius": 6,
-    "fg_color": ["#FF6B6B", "#B74177"],
-    "button_color": ["#FF4E4E", "#A01E5C"],
-    "button_hover_color": ["#FF354E", "#7D144F"],
+    "fg_color": ["#FF8C42", "#FF6505"],
+    "button_color": ["#E67320", "#CC5500"],
+    "button_hover_color": ["#CC5500", "#994411"],
     "text_color": ["#DCE4EE", "#DCE4EE"],
     "text_color_disabled": ["gray74", "gray60"]
   },
   "CTkComboBox": {
     "corner_radius": 6,
     "border_width": 2,
-    "fg_color": ["#FF99C8", "#692A84"],
+    "fg_color": ["#F9F9FA", "#343638"],
     "border_color": ["#979DA2", "#565B5E"],
     "button_color": ["#979DA2", "#565B5E"],
     "button_hover_color": ["#6E7174", "#7A848D"],
@@ -110,10 +110,10 @@
   "CTkSegmentedButton": {
     "corner_radius": 6,
     "border_width": 2,
-    "fg_color": ["#FF99C8", "#C13D98"],
-    "selected_color": ["#FF6B6B", "#B74177"],
-    "selected_hover_color": ["#FF4E4E", "#A01E5C"],
-    "unselected_color": ["#FF99C8", "#C13D98"],
+    "fg_color": ["#979DA2", "gray29"],
+    "selected_color": ["#FF8C42", "#FF6505"],
+    "selected_hover_color": ["#E67320", "#CC5500"],
+    "unselected_color": ["#979DA2", "gray29"],
     "unselected_hover_color": ["gray70", "gray41"],
     "text_color": ["#DCE4EE", "#DCE4EE"],
     "text_color_disabled": ["gray74", "gray60"]
@@ -121,7 +121,7 @@
   "CTkTextbox": {
     "corner_radius": 6,
     "border_width": 0,
-    "fg_color": ["#FF99C8", "#1D1E1E"],
+    "fg_color": ["#F9F9FA", "#1D1E1E"],
     "border_color": ["#979DA2", "#565B5E"],
     "text_color":["gray10", "#DCE4EE"],
     "scrollbar_button_color": ["gray55", "gray41"],

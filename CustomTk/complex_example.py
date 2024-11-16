@@ -2,8 +2,8 @@ import tkinter
 import tkinter.messagebox
 import customtkinter
 
-customtkinter.set_appearance_mode("light")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("themes/rose.json") # Themes: "blue" (standard), "green", "dark-blue"
+customtkinter.set_appearance_mode("system")  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_default_color_theme("themes/lavender.json") # Themes: "blue" (standard), "green", "dark-blue"
 
 
 class App(customtkinter.CTk):
