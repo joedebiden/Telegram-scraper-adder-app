@@ -18,7 +18,7 @@ import time
 import random
 import configparser
 import os
-from license_check import check_license
+from codes.old_license_check import check_license
 if not check_license():
     exit(1) 
 def banner():

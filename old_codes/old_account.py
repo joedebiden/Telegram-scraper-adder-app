@@ -15,7 +15,7 @@ def banner():
                                                                                                                                             
 ''')
     
-from license_check import check_license
+from codes.old_license_check import check_license
 if not check_license():
     sleep(2)
     exit(1)       
