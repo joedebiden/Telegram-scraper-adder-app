@@ -1,3 +1,6 @@
+"""
+Work very in terminal to use AccountManager class
+"""
 from ..managers.telegram_account_manager import AccountManager
 from __init__ import sleep
 
