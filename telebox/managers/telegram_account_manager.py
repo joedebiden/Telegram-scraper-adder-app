@@ -1,7 +1,7 @@
 from __init__ import configparser, os, random
 
 class AccountManager:
-    def __init__(self, config_file='config.data'):
+    def __init__(self, config_file='account.data'):
         self.config_file = config_file
         self.config = configparser.RawConfigParser()
         

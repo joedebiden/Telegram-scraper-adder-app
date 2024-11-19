@@ -5,9 +5,6 @@ $ python -m telebox.tests.test_telegram_account_manager
 from ..managers.telegram_account_manager import AccountManager
 from __init__ import sleep
 
-
-
-
 # ======================[TEST DE LA CLASSE]==========================
 if __name__ == "__main__":
     manager = AccountManager()

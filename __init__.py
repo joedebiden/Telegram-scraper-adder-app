@@ -1,3 +1,4 @@
+from telethon import TelegramClient
 from telethon.tl.functions.channels import InviteToChannelRequest
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser
@@ -22,4 +23,8 @@ import random
 import configparser
 import os
 import uuid
+from tkinter import Tk
+from tkinter.filedialog import asksaveasfilename
 from time import sleep
+from abc import ABC, abstractmethod
+
