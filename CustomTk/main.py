@@ -1,7 +1,7 @@
 import customtkinter 
 
 customtkinter.set_appearance_mode("light")
-customtkinter.set_default_color_theme("themes/rose.json")
+customtkinter.set_default_color_theme("dark-blue")
 
 root = customtkinter.CTk()
 root.title("Telebox")

@@ -1,19 +1,35 @@
-from telebox.managers.telegram_account_manager import TelegramAccountManager
-from telebox.features.scraper import Scraper
-from telebox.features.adder import Adder
+from telebox.managers.telegram_account_manager import AccountManager
+# from telebox.features.scraper import Scraper
+# from telebox.features.adder import Adder
 
 
 
 
 
 if __name__ == "__main__":
-    account_manager = TelegramAccountManager(session_name="my_session", proxy={"host": "proxy_host", "port": 1234})
-    account_manager.connect_account()
+    manager = AccountManager()
 
-    scraper = Scraper(account_manager)
-    members = scraper.scrape_members("target_group")
+    # test erreur display accounts
+    """
+    accounts = manager.display_accounts()
+    if accounts:
+        print("\n[+] Existing Accounts:")
+        for name, details in accounts.items():
+            print(f"{name}: {details}")
+    else:
+        print("[!] No accounts found.")
+    """
 
-    adder = Adder(account_manager)
-    adder.add_members("destination_group", members)
+    section_name = manager.add_account(12641519, "b1d9376e2825cf869149f6ba6ced114f", +33772240484)
+    print(f"[+] Account '{section_name}' added successfully!")
 
-    account_manager.disconnect_account()
+    # test affichage compte 
+    """
+    accounts = manager.display_accounts()
+    if accounts:
+        print("\n[+] Existing Accounts:")
+        for name, details in accounts.items():
+            print(f"{name}: {details}")
+    else:
+        print("[!] No accounts found.")
+    """

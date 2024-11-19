@@ -12,6 +12,7 @@ __pycache__/
 *.data
 *.csv
 *.ini
+.idea
 
 # Distribution / packaging
 .Python

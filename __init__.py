@@ -11,6 +11,9 @@ from telethon.errors import (
     InputUserDeactivatedError,
     UserKickedError, 
     ChannelPrivateError)
+from telethon.sessions import StringSession
+from telethon.network import ConnectionTcpAbridged
+
 import sys
 import csv
 import traceback
