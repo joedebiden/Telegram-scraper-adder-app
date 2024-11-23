@@ -2,8 +2,8 @@
 Work very in terminal to use AccountManager class
 $ python -m telebox.tests.test_scraper
 """
-from features.scraper import Scraper
-from features.telegram_base import TelegramBase
+from ..features.scraper import Scraper
+from ..features.telegram_base import TelegramBase
 
 # ======================[TEST DE LA CLASSE]==========================
 if __name__ == "__main__":
