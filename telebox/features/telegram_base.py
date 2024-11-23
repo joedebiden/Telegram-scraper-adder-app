@@ -74,11 +74,3 @@ class TelegramBase(ABC):
         except Exception as e:
             print(f"[!] Error while fetching groups: {e}")
         return groups
-
-
-
-    @abstractmethod
-    def perform_task(self):
-        """Méthode à implémenter dans les classes dérivées pour exécuter une tâche spécifique."""
-        pass
-

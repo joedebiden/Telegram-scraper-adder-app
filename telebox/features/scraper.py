@@ -1,9 +1,9 @@
 from __init__ import csv, Tk, asksaveasfilename
-from telegram_base import TelegramBase
+from .telegram_base import TelegramBase
 
 class Scraper(TelegramBase):
-    def __init__(self, session_name, api_id, api_hash, phone, proxy=None):
-        super().__init__(session_name, api_id, api_hash, phone, proxy)
+    def __init__(self, session_name, api_id, api_hash, phone, proxy=None, config_file='account.data'):
+        super().__init__(session_name, api_id, api_hash, phone, proxy, config_file)
 
 
 
@@ -50,9 +50,22 @@ class Scraper(TelegramBase):
 
 
 
+    def get_account_info(self):
+        """
+        Affiche les informations du compte connecté.
+        """
+        if self.client and self.client.is_user_authorized():
+            me = self.client.get_me()
+            print(f"[+] Account Info: Username = {me.username}, Phone = {me.phone}, Name = {me.first_name} {me.last_name}")
+        else:
+            print("[!] Client is not authorized.")
+
+
+
     def perform_task(self):
         """Implémente la logique de scraping pour la méthode abstraite."""
         self.connect()
+        # self.get_account_info()  # Afficher les informations du compte
         groups = self.get_groups()
         if not groups:
             print("[!] No groups found.")
