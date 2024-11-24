@@ -94,3 +94,12 @@ class TelegramBase(ABC):
             print("[+] Disconnected.")
 
 
+    def get_account_info(self):
+        """
+        Affiche les informations du compte actuellement connecté.
+        """
+        if self.client and self.client.is_user_authorized():
+            me = self.client.get_me()
+            print(f"[+] Account Info: Username = {me.username}, Phone = {me.phone}, Name = {me.first_name} {me.last_name}")
+        else:
+            print("[!] Client is not authorized.")

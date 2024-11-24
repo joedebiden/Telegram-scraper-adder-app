@@ -112,15 +112,3 @@ class Scraper(TelegramBase):
             print(f"[+] Members saved to {save_path}")
         except Exception as e:
             print(f"[!] Error while saving members: {e}")
-
-
-
-    def get_account_info(self):
-        """
-        Affiche les informations du compte actuellement connecté.
-        """
-        if self.client and self.client.is_user_authorized():
-            me = self.client.get_me()
-            print(f"[+] Account Info: Username = {me.username}, Phone = {me.phone}, Name = {me.first_name} {me.last_name}")
-        else:
-            print("[!] Client is not authorized.")
