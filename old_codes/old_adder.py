@@ -247,6 +247,7 @@ for user in users:
             user_to_add = client.get_entity(InputPeerUser(user['id'], user['access_hash']))
         else:
             sys.exit("[!] Invalid Mode Selected. Please Try Again.")
+            
         client(InviteToChannelRequest(target_group_entity, [user_to_add]))
         print(f"Successfully added {user['username'] if mode == 1 else user['id']} to the group.")
         time.sleep(random.randrange(SLEEP_TIME_1, SLEEP_TIME_2))

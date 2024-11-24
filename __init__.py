@@ -19,7 +19,7 @@ import sys
 import csv
 import traceback
 import time
-import random
+import random 
 import configparser
 import os
 import uuid
@@ -27,4 +27,4 @@ from tkinter import Tk
 from tkinter.filedialog import asksaveasfilename
 from time import sleep
 from abc import ABC, abstractmethod
-
+from random import randint
