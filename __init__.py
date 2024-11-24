@@ -24,7 +24,7 @@ import configparser
 import os
 import uuid
 from tkinter import Tk
-from tkinter.filedialog import asksaveasfilename
+from tkinter.filedialog import asksaveasfilename, askopenfilename
 from time import sleep
 from abc import ABC, abstractmethod
 from random import randint

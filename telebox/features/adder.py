@@ -1,4 +1,4 @@
-from __init__ import csv, sleep, randint, GetDialogsRequest, InputPeerEmpty, InviteToChannelRequest, InputPeerUser, PeerFloodError, FloodWaitError
+from __init__ import csv, os, Tk, sleep, askopenfilename, randint, GetDialogsRequest, InputPeerEmpty, InviteToChannelRequest, InputPeerUser, PeerFloodError, FloodWaitError
 from .telegram_base import TelegramBase
 
 class Adder(TelegramBase):
@@ -17,10 +17,20 @@ class Adder(TelegramBase):
     """
 
 
-    def open_file(self, input_file=None):
+    def open_file(self):
         """
-        Ouvre un fichier CSV contenant les utilisateurs à ajouter.
+        Ouvre un fichier CSV ou TXT contenant les utilisateurs à ajouter.
         """
+        Tk().withdraw()
+        input_file = askopenfilename(
+            title = "Select file",
+            filetype = [("CSV files", "*.csv"), ("Text files", "*.txt"), ("All files", "*.*")]
+        )
+        
+        if not input_file:
+            print("[!] No file selected.")
+            return None
+        
         users = []
         try:
             if input_file.endswith('.csv'):
@@ -44,7 +54,7 @@ class Adder(TelegramBase):
                     print(f"[!] Error reading file: {e}")
                     return None
                 
-            elif input_file.endwith('.txt'):
+            elif input_file.endswith('.txt'):
                 try:
                     with open(input_file, 'r') as f:
                         for line in f:
@@ -120,7 +130,7 @@ class Adder(TelegramBase):
             return None
         
 
-
+    # a changer 
     def choose_method(self):
         """
         Choisissez la méthode pour ajouter les utilisateurs.
@@ -151,7 +161,7 @@ class Adder(TelegramBase):
 
 
 
-    def add_users(self, target_group, users, choice):
+    def add_users(self, target_group, users, choice, mode):
         """
         Ajoute les utilisateurs à un groupe.
         """

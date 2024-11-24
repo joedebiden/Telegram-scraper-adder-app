@@ -23,7 +23,6 @@ class TelegramBase(ABC):
         """
         Affiche la liste des sections disponibles dans le fichier de configuration.
         """
-        print("coucou")
         config = configparser.RawConfigParser()
         config.read(self.config_file)
         sections = config.sections()
