@@ -6,23 +6,25 @@ from ..features.scraper import Scraper
 from ..features.telegram_base import TelegramBase
 
 # ======================[TEST DE LA CLASSE]==========================
+"""test process in order :
+    list telegram account in 'account.data'
+    select an account 
+    connect client
+    get groups
+    select group
+    scraping process
+    save file path"""
+
 if __name__ == "__main__":
-    try:
-        # Demander à l'utilisateur de fournir la section du compte à utiliser
-        section_name = input("[+] Enter the section name for the account: ").strip()
+    
+    scraper = Scraper(session_name='session_name', config_file='account.data')
+    available_accounts = scraper.list_accounts()
 
-        # Initialiser la classe Scraper avec les informations fournies
-        scraper = Scraper(session_name="session", config_file="account.data", section_name=section_name)
 
-        print("\n[+] Attempting to connect to Telegram...")
-        scraper.connect()  # Connecter le compte Telegram
-
-        # Afficher les informations du compte connecté
-        scraper.get_account_info()
-
-    except Exception as e:
-        print(f"[!] An error occurred during testing: {e}")
-    finally:
-        # Déconnexion en fin de processus
-        scraper.disconnect()
-        print("[+] Disconnected from Telegram.")
+    section_name = input("[+] Enter the account name to use: ")
+    if section_name not in available_accounts:
+        print("[!] Account not found.")
+    else:
+        scraper.section_name = section_name
+        scraper.read_account_details()
+        

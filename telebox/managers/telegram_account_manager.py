@@ -17,8 +17,8 @@ class AccountManager:
         Ajoute un compte Telegram au fichier de configuration. 
         """
         self.config[section_name] = {
-            'id': api_id,
-            'hash': api_hash,
+            'api_id': api_id,
+            'api_hash': api_hash,
             'phone': phone
         }
         self.save_config()

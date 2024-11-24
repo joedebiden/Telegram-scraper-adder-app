@@ -2,9 +2,8 @@ from __init__ import csv, Tk, asksaveasfilename, GetDialogsRequest, InputPeerEmp
 from .telegram_base import TelegramBase
 
 class Scraper(TelegramBase):
-
     def __init__(self, session_name='session_name', api_id=None, api_hash=None, phone=None, proxy=None, config_file='account.data', section_name='default'):
-        super().__init__(session_name, api_id, api_hash, phone, proxy, config_file, section_name)
+        super().__init__(session_name=session_name, api_id=api_id, api_hash=api_hash, phone=phone, proxy=proxy, config_file=config_file, section_name=section_name)
 
     """Scraping in order :
     connect client

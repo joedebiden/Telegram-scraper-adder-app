@@ -6,7 +6,7 @@ Abstract base class for Telegram clients.
 
 class TelegramBase(ABC):
 
-    def __init__(self, session_name='session_name', api_id=None, api_hash=None, phone=None, proxy=None, config_file='account.data', section_name='account1'):
+    def __init__(self, session_name='session_name', api_id=None, api_hash=None, phone=None, proxy=None, config_file='account.data', section_name=None):
         self.session_name = session_name
         self.api_id = api_id
         self.api_hash = api_hash
@@ -15,7 +15,7 @@ class TelegramBase(ABC):
         self.client = None
         self.config_file = config_file
         self.section_name = section_name
-        self.read_account_details()
+        # self.read_account_details()
 
 
 
@@ -23,6 +23,7 @@ class TelegramBase(ABC):
         """
         Affiche la liste des sections disponibles dans le fichier de configuration.
         """
+        print("coucou")
         config = configparser.RawConfigParser()
         config.read(self.config_file)
         sections = config.sections()
@@ -33,23 +34,30 @@ class TelegramBase(ABC):
 
 
 
-    def read_account_details(self, config_file, section_name):
+    def read_account_details(self):
         """
         Lit les détails de l'API (api_id, api_hash, phone) depuis le fichier de config.
         """
         config = configparser.RawConfigParser()
         try: 
             config.read(self.config_file)
+
             if self.section_name not in config:
-                raise KeyError(f"Section '{section_name}' not found...")
+                raise KeyError(f"Section '{self.section_name}' not found...")
             
-            self.api_id = config[section_name]['api_id']
-            self.api_hash = config[section_name]['api_hash']
-            self.phone = config[section_name]['phone']
-            print(f"[+] Account details loaded from section '{section_name}' : Phone = {self.phone}")
+            print(f"[DEBUG] Keys in section '{self.section_name}': {config[self.section_name].keys()}")
+
+            self.api_id = config[self.section_name]['api_id']
+            self.api_hash = config[self.section_name]['api_hash']
+            self.phone = config[self.section_name]['phone']
+
+            print(f"[+] Account details loaded from section '{self.section_name}':")
+            print(f"    api_id: {self.api_id}")
+            print(f"    api_hash: {self.api_hash}")
+            print(f"    phone: {self.phone}")
 
         except KeyError as e:
-            print(f"[!] Error reading config file '{config_file}' section '{section_name}': {e}")
+            print(f"[!] Error reading config file '{self.config_file}' section '{self.section_name}': {e}")
             raise
         except Exception as e:
             print(f"[!] Unexpected error: {e}")
@@ -72,7 +80,7 @@ class TelegramBase(ABC):
                 self.client.sign_in(self.phone, code)
 
             print("[+] Connected successfully.")
-            
+
         except Exception as e:
             print(f"[!] Connection error: {e}")
             raise
