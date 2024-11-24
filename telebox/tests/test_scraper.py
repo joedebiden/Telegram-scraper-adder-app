@@ -27,4 +27,28 @@ if __name__ == "__main__":
     else:
         scraper.section_name = section_name
         scraper.read_account_details()
-        
+
+    scraper.connect()
+    scraper.get_account_info()
+
+    groups = scraper.get_groups()
+    if not groups: 
+        print("[!] No groups available.")
+        scraper.disconnect()
+        exit()
+
+    target_group = scraper.select_group(groups)
+    if not target_group:
+        print("[!] No group selected.")
+        scraper.disconnect()
+        exit()
+
+    members = scraper.scrape_group_members(target_group)
+    if not members:
+        print("[!] No members found.")
+        scraper.disconnect()
+        exit()
+    
+    scraper.save_members_to_file(members, target_group.title)
+
+    scraper.disconnect()

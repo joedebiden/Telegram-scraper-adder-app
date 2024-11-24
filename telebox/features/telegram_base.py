@@ -89,7 +89,7 @@ class TelegramBase(ABC):
 
     def disconnect(self):
         """Déconnecte le client de Telegram"""
-        if self.client():
+        if self.client:
             self.client.disconnect()
             print("[+] Disconnected.")
 
