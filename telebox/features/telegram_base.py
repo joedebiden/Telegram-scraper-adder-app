@@ -1,33 +1,58 @@
-from __init__ import ABC, abstractmethod, TelegramClient, GetDialogsRequest, InputPeerEmpty, configparser
+from __init__ import ABC, abstractmethod, TelegramClient, configparser
 
 """
 Abstract base class for Telegram clients.
 """
+
 class TelegramBase(ABC):
-    def __init__(self, session_name, api_id, api_hash, phone=None, proxy=None, config_file='account.data'):
+
+    def __init__(self, session_name='session_name', api_id=None, api_hash=None, phone=None, proxy=None, config_file='account.data', section_name='account1'):
         self.session_name = session_name
         self.api_id = api_id
         self.api_hash = api_hash
         self.phone = phone
         self.proxy = proxy
         self.client = None
-        self.read_account_details(config_file)
+        self.config_file = config_file
+        self.section_name = section_name
+        self.read_account_details()
 
 
-    # Méthode incorecte ! Utiliser les méthodes dans la telegram_account_manager 
-    def read_account_details(self, config_file):
+
+    def list_accounts(self):
         """
-        Lit les détails de l'API (api_id, api_hash, phone) depuis un fichier de configuration.
+        Affiche la liste des sections disponibles dans le fichier de configuration.
         """
         config = configparser.RawConfigParser()
-        try:
-            config.read(config_file)
-            self.api_id = int(config['default']['api_id'])
-            self.api_hash = config['default']['api_hash']
-            self.phone = config['default']['phone']
-            print(f"[+] Account details loaded: Phone = {self.phone}")
+        config.read(self.config_file)
+        sections = config.sections()
+        print("[+] Available accounts:")
+        for section in sections:
+            print(f" - {section}")
+        return sections
+
+
+
+    def read_account_details(self, config_file, section_name):
+        """
+        Lit les détails de l'API (api_id, api_hash, phone) depuis le fichier de config.
+        """
+        config = configparser.RawConfigParser()
+        try: 
+            config.read(self.config_file)
+            if self.section_name not in config:
+                raise KeyError(f"Section '{section_name}' not found...")
+            
+            self.api_id = config[section_name]['api_id']
+            self.api_hash = config[section_name]['api_hash']
+            self.phone = config[section_name]['phone']
+            print(f"[+] Account details loaded from section '{section_name}' : Phone = {self.phone}")
+
+        except KeyError as e:
+            print(f"[!] Error reading config file '{config_file}' section '{section_name}': {e}")
+            raise
         except Exception as e:
-            print(f"[!] Error reading config file '{config_file}': {e}")
+            print(f"[!] Unexpected error: {e}")
             raise
 
 
@@ -39,9 +64,15 @@ class TelegramBase(ABC):
         try:
             self.client = TelegramClient(self.session_name, self.api_id, self.api_hash, proxy=self.proxy)
             self.client.connect()
+
             if not self.client.is_user_authorized():
+                print("[!] Client not authorized. Requesting code...")
                 self.client.send_code_request(self.phone)
-                self.client.sign_in(self.phone, input('[+] Enter the code sent from Telegram: '))
+                code = input('[+] Enter the code sent from Telegram: ')
+                self.client.sign_in(self.phone, code)
+
+            print("[+] Connected successfully.")
+            
         except Exception as e:
             print(f"[!] Connection error: {e}")
             raise
@@ -49,28 +80,9 @@ class TelegramBase(ABC):
 
 
     def disconnect(self):
-        """Déconnecte le client Telegram."""
-        if self.client:
+        """Déconnecte le client de Telegram"""
+        if self.client():
             self.client.disconnect()
+            print("[+] Disconnected.")
 
 
-
-    def get_groups(self):
-        """
-        Retourne une liste de groupes et de chaînes disponibles dans les dialogues de l'utilisateur.
-        """
-        groups = []
-        try:
-            result = self.client(GetDialogsRequest(
-                offset_date=None,
-                offset_id=0,
-                offset_peer=InputPeerEmpty(),
-                limit=200,
-                hash=0
-            ))
-            for chat in result.chats:
-                if getattr(chat, 'megagroup', False) or getattr(chat, 'broadcast', False):
-                    groups.append(chat)
-        except Exception as e:
-            print(f"[!] Error while fetching groups: {e}")
-        return groups
