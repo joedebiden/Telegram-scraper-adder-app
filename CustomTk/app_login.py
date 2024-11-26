@@ -35,13 +35,13 @@ class LoginApp(customtkinter.CTk):
             return
         try:
             response = requests.post(
-                "http://93.127.202.5:5002",
+                "http://93.127.202.5:5002/auth/app",
                 json={"email": email, "password": password}
             )
             if response.status_code == 200:
                 self.response_label.configure(text="Login successful!", fg_color="green")
                 data = response.json()
-                user_mail = data.get("email", "Utilisateur")
+                user_mail = data.get("email")
                 self.open_dashboard(user_mail)
 
                 # Proceed to the main application
