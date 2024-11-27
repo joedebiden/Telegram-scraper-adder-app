@@ -1,5 +1,5 @@
-from app_login import LoginApp
-from app_dashboard import DashboardApp
+from gui.app_login import LoginApp
+
 
 
 

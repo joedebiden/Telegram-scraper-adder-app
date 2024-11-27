@@ -1,27 +1,27 @@
-import requests
-import customtkinter
 from app_dashboard import DashboardApp
+from __init__ import requests
+import customtkinter as ctk
 
-class LoginApp(customtkinter.CTk):
+class LoginApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Login")
         self.geometry("400x300")
 
-        self.email_label = customtkinter.CTkLabel(self, text="Email")
+        self.email_label = ctk.CTkLabel(self, text="Email")
         self.email_label.pack(pady=10)
-        self.email_entry = customtkinter.CTkEntry(self)
+        self.email_entry = ctk.CTkEntry(self)
         self.email_entry.pack(pady=10)
 
-        self.password_label = customtkinter.CTkLabel(self, text="Password")
+        self.password_label = ctk.CTkLabel(self, text="Password")
         self.password_label.pack(pady=10)
-        self.password_entry = customtkinter.CTkEntry(self, show="*")
+        self.password_entry = ctk.CTkEntry(self, show="*")
         self.password_entry.pack(pady=10)
 
-        self.login_button = customtkinter.CTkButton(self, text="Login", command=self.login)
+        self.login_button = ctk.CTkButton(self, text="Login", command=self.login)
         self.login_button.pack(pady=20)
 
-        self.response_label = customtkinter.CTkLabel(self, text="")
+        self.response_label = ctk.CTkLabel(self, text="")
         self.response_label.pack()
 
 
