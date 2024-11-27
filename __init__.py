@@ -28,3 +28,4 @@ from tkinter.filedialog import asksaveasfilename, askopenfilename
 from time import sleep
 from abc import ABC, abstractmethod
 from random import randint
+import traceback

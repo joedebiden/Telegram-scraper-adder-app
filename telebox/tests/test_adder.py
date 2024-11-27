@@ -50,12 +50,6 @@ if __name__ == "__main__":
         adder.disconnect()
         exit()
 
-    # by id or username 
-    method = adder.choose_method()
-    if not method:
-        print("[!] Invalid method.")
-        adder.disconnect()
-        exit()
     
     # speed mode (1-5)
     speed = adder.set_speed_mode(mode=3)
@@ -64,10 +58,8 @@ if __name__ == "__main__":
         adder.disconnect()
         exit()
 
-    add_members = adder.add_users(target_group, method, speed)
-    if not add_members:
-        print("[!] Error while adding members.")
-        adder.disconnect()
-        exit()
+    # en parametre: le groupe cible, les utilisateurs, la méthode et la vitesse
+    adder.add_users(target_group, users, speed)
+    adder.disconnect()
 
 
