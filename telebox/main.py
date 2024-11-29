@@ -1,5 +1,8 @@
 from gui.app_login import LoginApp
-
+"""
+endpoint of the application
+$ python main.py
+"""
 
 
 

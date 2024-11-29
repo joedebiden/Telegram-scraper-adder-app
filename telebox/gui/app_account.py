@@ -1,11 +1,11 @@
 import customtkinter as ctk
-from ..managers.telegram_account_manager import AccountManager
+from managers.telegram_account_manager import AccountManager
 
 class AccountManagerUI(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Telebox - Account Manager")
-        self.geometry("800x600")
+        self.geometry("1200x600")
 
         self.AccountManager = AccountManager()
 
@@ -63,6 +63,7 @@ class AccountManagerUI(ctk.CTk):
     # ======= Méthodes liées aux Boutons =======
     def add_account(self):
         """Ajoute un compte via l'interface graphique."""
+        manager = AccountManager() # edit cause no attribute manager
         section = self.entry_section.get()
         api_id = self.entry_api_id.get()
         api_hash = self.entry_api_hash.get()
@@ -70,7 +71,7 @@ class AccountManagerUI(ctk.CTk):
 
         if section and api_id and api_hash and phone:
             try:
-                self.manager.add_account(section, api_id, api_hash, phone)
+                manager.add_account(section, api_id, api_hash, phone) # edit applied
                 self.show_message(f"Compte {section} ajouté avec succès.")
                 self.clear_entries()
             except Exception as e:
@@ -80,7 +81,8 @@ class AccountManagerUI(ctk.CTk):
 
     def display_accounts(self):
         """Affiche les comptes dans la zone de texte."""
-        accounts = self.manager.display_accounts()
+        manager = AccountManager() # edit cause no attribute manager
+        accounts = manager.display_accounts()
         self.accounts_list.delete("1.0", "end")
         if accounts:
             for section, details in accounts.items():
@@ -94,9 +96,10 @@ class AccountManagerUI(ctk.CTk):
 
     def delete_account(self):
         """Supprime un compte via l'interface graphique."""
+        manager = AccountManager()
         section = self.entry_delete.get()
         if section:
-            success = self.manager.delete_account(section)
+            success = manager.delete_account(section)
             if success:
                 self.show_message(f"Compte {section} supprimé avec succès.")
                 self.display_accounts()
@@ -107,8 +110,17 @@ class AccountManagerUI(ctk.CTk):
             self.show_message("Veuillez entrer le nom du compte à supprimer.")
 
     def show_message(self, message):
-        """Affiche un message d'information."""
-        ctk.CTkMessagebox.show_info(title="Message", message=message)
+        """Crée une boîte de dialogue avec CustomTkinter."""
+        messagebox = ctk.CTkToplevel(self)
+        messagebox.geometry("400x200")
+        messagebox.grab_set()  # Empêche l'utilisateur d'interagir avec la fenêtre principale.
+
+        label = ctk.CTkLabel(messagebox, text=message, wraplength=350, justify="center")
+        label.pack(pady=20, padx=20)
+
+        button = ctk.CTkButton(messagebox, text="OK", command=messagebox.destroy)
+        button.pack(pady=10)
+
 
     def clear_entries(self):
         """Efface les champs d'entrée après un ajout."""

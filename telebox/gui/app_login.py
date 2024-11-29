@@ -1,5 +1,5 @@
-from app_dashboard import DashboardApp
-from __init__ import requests
+from .app_dashboard import DashboardApp
+import requests
 import customtkinter as ctk
 
 class LoginApp(ctk.CTk):

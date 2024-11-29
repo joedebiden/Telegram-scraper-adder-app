@@ -1,12 +1,13 @@
 import customtkinter as ctk
-from app_account import AccountManagerUI
+from gui.app_account import AccountManagerUI
 
 class DashboardApp(ctk.CTk):
-    def __init__(self):
+    def __init__(self, user_email):
         super().__init__()
 
         self.title("Telebox Dashboard")
         self.geometry("900x600")
+        self.user_email = user_email
 
         ctk.set_appearance_mode("Dark") 
         ctk.set_default_color_theme("blue") 
