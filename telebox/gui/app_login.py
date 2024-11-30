@@ -23,7 +23,10 @@ class LoginApp(ctk.CTk):
 
         self.response_label = ctk.CTkLabel(self, text="")
         self.response_label.pack()
-
+        
+        # only for dev (remove in production)
+        self.godmode_button = ctk.CTkButton(self, text="Godmode", command=self.open_dashboard(user_email="dev"))
+        self.godmode_button.pack(pady=5)
 
 
     def login(self):

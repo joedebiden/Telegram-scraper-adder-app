@@ -40,12 +40,8 @@ class DashboardApp(ctk.CTk):
         self.message_sender_button.pack(pady=10)
 
         # Account Manager
-        self.account_manager_button = ctk.CTkButton(
-            self, 
-            text="Gérer les Comptes", 
-            command=self.open_account_manager
-        )
-        self.account_manager_button.pack(pady=20)
+        self.account_manager_button = ctk.CTkButton(self.sidebar_frame, text="Telegram accounts", command=self.open_account_manager)
+        self.account_manager_button.pack(pady=10)
 
         # Proxies Manager
         self.proxy_button = ctk.CTkButton(self.sidebar_frame, text="Proxies Manager", command=self.open_proxy_manager)
@@ -64,7 +60,7 @@ class DashboardApp(ctk.CTk):
         self.main_frame = ctk.CTkFrame(self, corner_radius=10)
         self.main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        self.main_label = ctk.CTkLabel(self.main_frame, text="Bienvenue sur Telebox !", font=("Arial", 18))
+        self.main_label = ctk.CTkLabel(self.main_frame, text="Welcome on Telebox app !", font=("Arial", 18))
         self.main_label.pack(pady=20)
 
 
