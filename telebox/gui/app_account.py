@@ -43,37 +43,29 @@ class AccountManagerUI(ctk.CTk):
         self.accounts_frame = ctk.CTkFrame(self, corner_radius=10)
         self.accounts_frame.pack(pady=20, padx=20, fill="both", expand=True)
 
-        self.accounts_list_frame = ctk.CTkFrame(self.accounts_frame)
+        # cadre défilant pour la liste des comptes
+        self.accounts_list_frame = ctk.CTkScrollableFrame(self.accounts_frame)
         self.accounts_list_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        self.select_all_button = ctk.CTkButton(self.accounts_frame, text="Tout Sélectionner", command=self.select_all)
+        # cadre pour les boutons d'action
+        self.footer_frame = ctk.CTkFrame(self, corner_radius=10)
+        self.footer_frame.pack(side="bottom", fill="x", padx=20, pady=10)
+
+        self.select_all_button = ctk.CTkButton(self.footer_frame, text="Tout Sélectionner", command=self.select_all)
         self.select_all_button.pack(side="left", padx=10)
 
-        self.delete_selected_button = ctk.CTkButton(
-            self.accounts_frame, text="Supprimer Sélectionnés", command=self.delete_selected_accounts
-        )
+        self.refresh_button = ctk.CTkButton(self.footer_frame, text="Rafraîchir", command=self.display_accounts)
+        self.refresh_button.pack(side='left', pady=10)
+
+        self.delete_selected_button = ctk.CTkButton(self.footer_frame, text="Supprimer Sélectionnés", command=self.delete_selected_accounts)
         self.delete_selected_button.pack(side="right", padx=10)
 
-        # Charger les comptes au démarrage
         self.display_accounts()
 
-        """ Cadre pour la suppression des comptes
-        self.delete_frame = ctk.CTkFrame(self, corner_radius=10)
-        self.delete_frame.pack(pady=20, padx=20, fill="x")
-
-        self.label_delete = ctk.CTkLabel(self.delete_frame, text="Nom du compte à supprimer:")
-        self.label_delete.pack(side="left", padx=10)
-        self.entry_delete = ctk.CTkEntry(self.delete_frame, placeholder_text="Nom du compte")
-        self.entry_delete.pack(side="left", padx=10)
-
-        self.delete_button = ctk.CTkButton(self.delete_frame, text="Supprimer Compte", command=self.delete_account)
-        self.delete_button.pack(side="left", padx=10)
-        """
 
     # ======= Méthodes liées aux Boutons =======
     def add_account(self):
         """Ajoute un compte via l'interface graphique."""
-        manager = AccountManager() 
         section = self.entry_section.get()
         api_id = self.entry_api_id.get()
         api_hash = self.entry_api_hash.get()
@@ -81,7 +73,7 @@ class AccountManagerUI(ctk.CTk):
 
         if section and api_id and api_hash and phone:
             try:
-                manager.add_account(section, api_id, api_hash, phone) 
+                self.AccountManager.add_account(section, api_id, api_hash, phone) 
                 self.show_message(f"Account {section}added successfull.")
                 self.clear_entries()
                 self.display_accounts()
@@ -92,22 +84,26 @@ class AccountManagerUI(ctk.CTk):
 
 
 
+    def validate_inputs(self, section, api_id, api_hash, phone):
+        """Valide les entrées de l'utilisateur."""
+        return all([section.strip(), api_id.strip(), api_hash.strip(), phone.strip()])
+
+
+
     def display_accounts(self):
         """Affiche les comptes et leurs détails dans une zone formatée."""
-        for widget in self.accounts_list_frame.winfo_children():
-            widget.destroy()  # Réinitialise le contenu
+        accounts = self.AccountManager.display_accounts()
 
-        manager = AccountManager()
-        accounts = manager.display_accounts()
+        for widget in self.accounts_list_frame.winfo_children():
+            widget.destroy()
+        self.checkboxes.clear()
 
         if accounts:
             for section, details in accounts.items():
-                # Cadre pour chaque compte
                 account_frame = ctk.CTkFrame(self.accounts_list_frame, corner_radius=10, fg_color="transparent")
                 account_frame.pack(fill="x", padx=10, pady=5)
 
-                # Titre : Nom du compte avec checkbox
-                var = ctk.IntVar()  # Variable pour la checkbox
+                var = ctk.IntVar()  
                 checkbox = ctk.CTkCheckBox(account_frame, text=section, variable=var)
                 checkbox.grid(row=0, column=0, sticky="w", padx=10)
                 self.checkboxes[section] = var
@@ -115,12 +111,17 @@ class AccountManagerUI(ctk.CTk):
                 # Détails : API ID, API Hash, Téléphone
                 row = 1
                 for key, value in details.items():
-                    label = ctk.CTkLabel(account_frame, text=f"{key}: {value}")
-                    label.grid(row=row, column=0, sticky="w", padx=20, pady=2)
+                    label_key = ctk.CTkLabel(account_frame, text=f"{key}:")
+                    label_key.grid(row=row, column=0, sticky="w", padx=20, pady=2)
+                    entry_value = ctk.CTkEntry(account_frame, width=200)
+                    entry_value.insert(0, value)
+                    entry_value.configure(state="readonly") # a changer pour avoir la modification
+                    entry_value.grid(row=row, column=1, sticky="w", padx=20, pady=2)
                     row += 1
         else:
             label = ctk.CTkLabel(self.accounts_list_frame, text="No account found.")
             label.pack(anchor="center", padx=10, pady=10)
+
 
 
     def select_all(self):
@@ -140,25 +141,16 @@ class AccountManagerUI(ctk.CTk):
         # Confirmation
         confirm = messagebox.askyesno("Confirm", f"Do you want to remove {len(selected_accounts)} account(s) ?")
         if confirm:
-            manager = AccountManager()
             for account in selected_accounts:
-                manager.delete_account(account)  
+                self.AccountManager.delete_account(account)  
             self.show_message(f"{len(selected_accounts)} successfully deleted account(s).")
             self.display_accounts() 
 
 
 
     def show_message(self, message):
-        """Crée une boîte de dialogue avec CustomTkinter."""
-        messagebox = ctk.CTkToplevel(self)
-        messagebox.geometry("300x200")
-        messagebox.grab_set()  # Empêche l'utilisateur d'interagir avec la fenêtre principale.
-
-        label = ctk.CTkLabel(messagebox, text=message, wraplength=350, justify="center")
-        label.pack(pady=20, padx=20)
-
-        button = ctk.CTkButton(messagebox, text="OK", command=messagebox.destroy)
-        button.pack(pady=10)
+        """Affiche une boîte de dialogue avec CustomTkinter."""
+        messagebox.showinfo("Message ", message)
 
 
 
