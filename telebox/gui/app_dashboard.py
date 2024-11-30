@@ -5,13 +5,16 @@ class DashboardApp(ctk.CTk):
     def __init__(self, user_email):
         super().__init__()
 
-        self.title("Telebox Dashboard")
-        self.geometry("900x600")
         self.user_email = user_email
+        self.account_manager_window = None
 
         ctk.set_appearance_mode("Dark") 
         ctk.set_default_color_theme("blue") 
 
+
+        # ======= Zone principale =======
+        self.title("Telebox Dashboard")
+        self.geometry("900x600")
 
         # ======= Menu latéral =======
         self.sidebar_frame = ctk.CTkFrame(self, width=200, corner_radius=10)
@@ -77,10 +80,21 @@ class DashboardApp(ctk.CTk):
 
     def open_account_manager(self):
         """
-        Ouvre une nouvelle fenêtre pour gérer les comptes.
+        Ouvre une seule unique fenêtre pour gérer les comptes.
         """
-        account_manager_ui = AccountManagerUI()  # Instancie la classe UI du gestionnaire de comptes
-        account_manager_ui.mainloop()
+        if self.account_manager_window is None or not self.account_manager_window.winfo_exists():
+            self.account_manager_window = AccountManagerUI()  # Instancie la classe UI du gestionnaire de comptes
+            self.account_manager_window.protocol("WM_DELETE_WINDOW", self.on_account_manager_close)
+            self.account_manager_window.mainloop()
+        else:
+            self.account_manager_window.lift()
+
+    def on_account_manager_close(self):
+        """
+        Gère la fermeture de la fenêtre de gestion des comptes.
+        """
+        self.account_manager_window.destroy()
+        self.account_manager_window = None
 
     def open_proxy_manager(self):
         self.update_main_frame("Proxies Manager Coming Soon!")
