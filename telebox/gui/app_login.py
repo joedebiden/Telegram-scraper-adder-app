@@ -38,7 +38,7 @@ class LoginApp(ctk.CTk):
             return
         try:
             response = requests.post(
-                "http://93.127.202.5:5002/auth/app",
+                "https://telegram-toolbox.online/auth/app",
                 json={"email": email, "password": password}
             )
             if response.status_code == 200:

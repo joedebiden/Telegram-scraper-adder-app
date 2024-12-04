@@ -74,7 +74,7 @@ class AccountManagerUI(ctk.CTk):
         if section and api_id and api_hash and phone:
             try:
                 self.AccountManager.add_account(section, api_id, api_hash, phone) 
-                self.show_message(f"Account {section}added successfull.")
+                # self.show_message(f"Account {section}added successfull.")
                 self.clear_entries()
                 self.display_accounts()
             except Exception as e:
