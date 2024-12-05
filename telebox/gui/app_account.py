@@ -15,29 +15,25 @@ class AccountManagerUI(ctk.CTk):
         # section ajout de compte
         self.add_frame = ctk.CTkFrame(self, corner_radius=10)
         self.add_frame.pack(pady=20, padx=20, fill="x")
-
         self.label_section = ctk.CTkLabel(self.add_frame, text="Name account:")
         self.label_section.pack(side="left", padx=10)
         self.entry_section = ctk.CTkEntry(self.add_frame, placeholder_text="Choose unique name")
         self.entry_section.pack(side="left", padx=10)
-
         self.label_api_id = ctk.CTkLabel(self.add_frame, text="API ID:")
         self.label_api_id.pack(side="left", padx=10)
         self.entry_api_id = ctk.CTkEntry(self.add_frame, placeholder_text="API ID")
         self.entry_api_id.pack(side="left", padx=10)
-
         self.label_api_hash = ctk.CTkLabel(self.add_frame, text="API Hash:")
         self.label_api_hash.pack(side="left", padx=10)
         self.entry_api_hash = ctk.CTkEntry(self.add_frame, placeholder_text="API Hash")
         self.entry_api_hash.pack(side="left", padx=10)
-
         self.label_phone = ctk.CTkLabel(self.add_frame, text="Phone:")
         self.label_phone.pack(side="left", padx=10)
         self.entry_phone = ctk.CTkEntry(self.add_frame, placeholder_text="phone number")
         self.entry_phone.pack(side="left", padx=10)
-
         self.add_button = ctk.CTkButton(self.add_frame, text="Add account", command=self.add_account)
         self.add_button.pack(side="left", padx=10)
+
 
         # Cadre pour l'affichage des comptes
         self.accounts_frame = ctk.CTkFrame(self, corner_radius=10)
@@ -50,13 +46,10 @@ class AccountManagerUI(ctk.CTk):
         # cadre pour les boutons d'action
         self.footer_frame = ctk.CTkFrame(self, corner_radius=10)
         self.footer_frame.pack(side="bottom", fill="x", padx=20, pady=10)
-
         self.select_all_button = ctk.CTkButton(self.footer_frame, text="Select all", command=self.select_all)
         self.select_all_button.pack(side="left", padx=10)
-
         self.refresh_button = ctk.CTkButton(self.footer_frame, text="Refresh", command=self.display_accounts)
         self.refresh_button.pack(side='left', pady=10)
-
         self.delete_selected_button = ctk.CTkButton(self.footer_frame, text="Remove Selected", command=self.delete_selected_accounts)
         self.delete_selected_button.pack(side="right", padx=10)
 

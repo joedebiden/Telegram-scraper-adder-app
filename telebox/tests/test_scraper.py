@@ -1,9 +1,9 @@
 """
 Work very in terminal to use scraper class
-$ python.exe -m telebox.tests.test_scraper
+$ python.exe -m tests.test_scraper
 """
-from ..features.scraper import Scraper
-from ..features.telegram_base import TelegramBase
+from features.scraper import Scraper
+
 
 # ======================[TEST DE LA CLASSE]==========================
 """test process in order :

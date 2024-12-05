@@ -15,7 +15,6 @@ class TelegramBase(ABC):
         self.client = None
         self.config_file = config_file
         self.section_name = section_name
-        # self.read_account_details()
 
 
 
