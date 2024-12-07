@@ -62,7 +62,7 @@ class AdderUI(ctk.CTk):
         self.speed_combobox = ctk.CTkComboBox(self.left_frame, values=["Very slow", "Normal", "Fast", "Very fast"], width=100, state="disabled")
         self.speed_combobox.pack(pady=(0, 10))
 
-        self.add_members_button = ctk.CTkButton(self.left_frame, text="Add Members", command=self.start_add_members_thread, state="disabled")
+        self.add_members_button = ctk.CTkButton(self.left_frame, text="Add Members", command=self.add_members, state="disabled")
         self.add_members_button.pack(pady=20)
 
 
@@ -143,13 +143,6 @@ class AdderUI(ctk.CTk):
             self.add_members_button.configure(state="normal")
         else:
             self.log_message("[ERROR] No groups available.")
-
-
-
-    def start_add_members_thread(self):
-        """Démarre un thread pour ajouter les membres."""
-        thread = threading.Thread(target=self.add_members, daemon=True)
-        thread.start()
 
 
 
