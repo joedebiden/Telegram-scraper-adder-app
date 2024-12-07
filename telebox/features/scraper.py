@@ -108,7 +108,7 @@ class Scraper(TelegramBase):
                     first_name = user.first_name or ""
                     last_name = user.last_name or ""
                     name = (first_name + ' ' + last_name).strip()
-                    writer.writerow([username, user.id, user.access_hash, name, group_title, target_group.id])
+                    writer.writerow([username, user.id, user.access_hash, name, group_title])
             print(f"[+] Members saved to {save_path}")
         except Exception as e:
             print(f"[!] Error while saving members: {e}")
