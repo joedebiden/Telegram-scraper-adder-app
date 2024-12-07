@@ -73,6 +73,7 @@ class DashboardApp(ctk.CTk):
         Fonction pour ouvrir la fenêtre de gestion des comptes.
         """
         if self.account_manager_window is None or not self.account_manager_window.winfo_exists():
+            self.withdraw()
             self.account_manager_window = AccountManagerUI()  
             self.account_manager_window.protocol("WM_DELETE_WINDOW", self.on_account_manager_close)
             self.account_manager_window.mainloop()
@@ -86,6 +87,7 @@ class DashboardApp(ctk.CTk):
         Ouvre une seule unique fenêtre pour scraper.
         """
         if self.scraper_window is None or not self.scraper_window.winfo_exists():
+            self.withdraw()
             self.scraper_window = ScraperUI()  
             self.scraper_window.protocol("WM_DELETE_WINDOW", self.on_scraper_close)
             self.scraper_window.mainloop()
@@ -106,9 +108,11 @@ class DashboardApp(ctk.CTk):
     def on_account_manager_close(self):
         self.account_manager_window.destroy()
         self.account_manager_window = None
+        self.deiconify()
     def on_scraper_close(self):
         self.scraper_window.destroy()
         self.scraper_window = None
+        self.deiconify()
 
     def update_main_frame(self, message):
         """Met à jour la zone principale avec un message."""
