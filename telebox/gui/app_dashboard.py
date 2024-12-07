@@ -2,7 +2,7 @@ import customtkinter as ctk
 from gui.app_account import AccountManagerUI
 from gui.app_scraper import ScraperUI
 
-from telebox.gui.app_adder import AdderUI
+from gui.app_adder import AdderUI
 
 
 class DashboardApp(ctk.CTk):
@@ -22,7 +22,7 @@ class DashboardApp(ctk.CTk):
 
         # ======= Zone principale =======
         self.title("Telebox Dashboard")
-        self.geometry("900x600")
+        self.geometry("1200x600")
 
         # ======= Menu latéral =======
         self.sidebar_frame = ctk.CTkFrame(self, width=200, corner_radius=10)

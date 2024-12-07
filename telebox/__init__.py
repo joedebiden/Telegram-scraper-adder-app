@@ -31,3 +31,4 @@ from random import randint
 import traceback
 import requests
 from tkinter import filedialog, messagebox
+import asyncio

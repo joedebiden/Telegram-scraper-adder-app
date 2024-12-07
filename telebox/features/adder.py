@@ -2,6 +2,7 @@ from __init__ import (
     csv, 
     Tk, 
     sleep, 
+    asyncio,
     askopenfilename, 
     randint, 
     GetDialogsRequest, 
@@ -36,15 +37,16 @@ class Adder(TelegramBase):
     """
 
 
-    def open_file(self):
+    def open_file(self, input_file):
         """
         Ouvre un fichier CSV ou TXT contenant les utilisateurs à ajouter.
         """
-        Tk().withdraw()
-        input_file = askopenfilename(
-            title = "Select file",
-            filetype = [("CSV files", "*.csv"), ("Text files", "*.txt"), ("All files", "*.*")]
-        )
+        if not input_file:
+            Tk().withdraw()
+            input_file = askopenfilename(
+                title = "Select file",
+                filetype = [("CSV files", "*.csv"), ("Text files", "*.txt"), ("All files", "*.*")]
+            )
         
         if not input_file:
             print("[!] No file selected.")
@@ -158,10 +160,10 @@ class Adder(TelegramBase):
 
     def set_speed_mode(self, mode):
             speed_modes = {
-                1: (150, 180),  # Night Mode
-                2: (60, 80),    # Normal Mode
-                3: (20, 35),    # Fast Mode
-                4: (1, 5)       # Aggressive Mode
+                "Very slow": (150, 180),
+                "Normal": (60, 80),
+                "Fast": (20, 35),
+                "Very fast": (1, 5) 
             }
             if mode in speed_modes:
                 sleep_time = speed_modes[mode]
@@ -213,7 +215,7 @@ class Adder(TelegramBase):
 
                 try:
                     self.client(InviteToChannelRequest(target_group, [user_to_add]))
-                    print(f"Successfully added {user['username'] if method == 2 else user['id']} to the group.")
+                    print(f"Successfully added {user['id']} to the group.")
                     sleep(randint(sleep_time[0], sleep_time[1]))
 
                 except PeerFloodError:
