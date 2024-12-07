@@ -2,6 +2,9 @@ import customtkinter as ctk
 from gui.app_account import AccountManagerUI
 from gui.app_scraper import ScraperUI
 
+from telebox.gui.app_adder import AdderUI
+
+
 class DashboardApp(ctk.CTk):
     
     def __init__(self, user_email):
@@ -10,9 +13,11 @@ class DashboardApp(ctk.CTk):
         self.user_email = user_email
         self.account_manager_window = None
         self.scraper_window = None
+        self.adder_window = None
 
         ctk.set_appearance_mode("Dark") 
         ctk.set_default_color_theme("blue") 
+
 
 
         # ======= Zone principale =======
@@ -34,7 +39,7 @@ class DashboardApp(ctk.CTk):
         self.account_manager_button = ctk.CTkButton(self.sidebar_frame, text="Telegram accounts", command=self.open_account_manager)
         self.account_manager_button.pack(pady=10)
 
-        # Proxies Manager
+        # Proxies Manager - TO DO -
         self.proxy_button = ctk.CTkButton(self.sidebar_frame, text="Proxies Manager", command=self.open_proxy_manager)
         self.proxy_button.pack(pady=10)
 
@@ -46,7 +51,7 @@ class DashboardApp(ctk.CTk):
         self.adder_button = ctk.CTkButton(self.sidebar_frame, text="Adder", command=self.open_adder)
         self.adder_button.pack(pady=10)
 
-        # Message Sender
+        # Message Sender - TO DO -
         self.message_sender_button = ctk.CTkButton(self.sidebar_frame, text="Message Sender", command=self.open_message_sender)
         self.message_sender_button.pack(pady=10)
 
@@ -62,8 +67,8 @@ class DashboardApp(ctk.CTk):
         # ======= Zone principale =======
         self.main_frame = ctk.CTkFrame(self, corner_radius=10)
         self.main_frame.pack(fill="both", expand=True, padx=10, pady=10)
-
-        self.main_label = ctk.CTkLabel(self.main_frame, text="Welcome on Telebox app !", font=("Arial", 18))
+                                                                                                            # /!\
+        self.main_label = ctk.CTkLabel(self.main_frame, text="Welcome on Telebox app !", font=("Arial", 18), corner_radius=15)
         self.main_label.pack(pady=20)
 
 
@@ -97,7 +102,16 @@ class DashboardApp(ctk.CTk):
 
 
     def open_adder(self):
-        self.update_main_frame("Adder Interface Coming Soon!")
+        """
+        Ouvre une seule et unique fenêtre pour adder.
+        """
+        if self.adder_window is None or not self.adder_button.winfo_exists():
+            self.withdraw()
+            self.adder_window = AdderUI()
+            self.adder_window.protocol("WM_DELETE_WINDOW", self.on_adder_close)
+            self.adder_window.mainloop()
+        else:
+            self.adder_window.lift()
 
     def open_message_sender(self):
         self.update_main_frame("Message Sender Interface Coming Soon!")
@@ -112,6 +126,10 @@ class DashboardApp(ctk.CTk):
     def on_scraper_close(self):
         self.scraper_window.destroy()
         self.scraper_window = None
+        self.deiconify()
+    def on_adder_close(self):
+        self.adder_window.destroy()
+        self.adder_window = None
         self.deiconify()
 
     def update_main_frame(self, message):
