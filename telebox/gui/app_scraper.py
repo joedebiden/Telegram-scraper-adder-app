@@ -5,161 +5,117 @@ from features.scraper import Scraper
 class ScraperUI(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Telegram Scraper")
-        self.geometry("1200x600")
+        self.title("Telebox - Scraper")
+        self.geometry("600x500")
 
-        # Scraper instance
-        self.scraper = Scraper()
+        # Initialisation de la classe Scraper
+        self.scraper = Scraper(config_file="account.data")
 
-        # Dictionaries for checkboxes
-        self.account_vars = {}  # Checkboxes for accounts
-        self.group_vars = {}    # Checkboxes for groups
+        # Variables pour stocker les choix utilisateur
+        self.selected_account = None
+        self.selected_group = None
 
-        # Frames
-        self.account_frame = ctk.CTkFrame(self, corner_radius=10)
-        self.account_frame.pack(fill="x", padx=20, pady=10)
-
-        self.group_frame = ctk.CTkFrame(self, corner_radius=10)
-        self.group_frame.pack(fill="both", expand=True, padx=20, pady=10)
-
-        self.action_frame = ctk.CTkFrame(self, corner_radius=10)
-        self.action_frame.pack(fill="x", padx=20, pady=10)
-
-        # UI Elements
+        # Interface utilisateur
         self.create_account_ui()
         self.create_group_ui()
-        self.create_action_ui()
-
-        # Load accounts initially
         self.display_accounts()
 
 
 
     def create_account_ui(self):
-        """UI for managing accounts."""
-        account_label = ctk.CTkLabel(self.account_frame, text="Available Accounts")
-        account_label.pack(anchor="w", padx=10)
+        """Création de l'UI pour gérer les comptes Telegram."""
+        frame = ctk.CTkFrame(self)
+        frame.pack(fill="x", padx=10, pady=10)
 
-        self.account_list_frame = ctk.CTkFrame(self.account_frame, fg_color="transparent")
-        self.account_list_frame.pack(fill="x", pady=5)
+        label = ctk.CTkLabel(frame, text="Available Accounts:", font=("Arial", 16))
+        label.pack(anchor="w", padx=5, pady=5)
 
-        self.connect_button = ctk.CTkButton(self.account_frame, text="Connect", command=self.connect_account)
-        self.connect_button.pack(side="left", padx=10, pady=5)
+        self.account_listbox = ctk.CTkComboBox(frame, values=[], command=self.select_account)
+        self.account_listbox.pack(fill="x", padx=5, pady=5)
+
+        connect_button = ctk.CTkButton(frame, text="Connect to Account", command=self.connect_account)
+        connect_button.pack(fill="x", padx=5, pady=5)
 
 
 
     def create_group_ui(self):
-        """UI for displaying and selecting groups."""
-        group_label = ctk.CTkLabel(self.group_frame, text="Available Groups/Channels")
-        group_label.pack(anchor="w", padx=10)
+        """Création de l'UI pour afficher et sélectionner les groupes."""
+        frame = ctk.CTkFrame(self)
+        frame.pack(fill="x", padx=10, pady=10)
 
-        self.group_list_frame = ctk.CTkFrame(self.group_frame, fg_color="transparent")
-        self.group_list_frame.pack(fill="both", expand=True, pady=5)
+        label = ctk.CTkLabel(frame, text="Available Groups:", font=("Arial", 16))
+        label.pack(anchor="w", padx=5, pady=5)
 
+        self.group_listbox = ctk.CTkComboBox(frame, values=[], command=self.select_group)
+        self.group_listbox.pack(fill="x", padx=5, pady=5)
 
-
-    def create_action_ui(self):
-        """UI for actions like scraping and saving."""
-        self.scrape_button = ctk.CTkButton(self.action_frame, text="Scrape Selected Groups", command=self.scrape_selected_groups)
-        self.scrape_button.pack(side="left", padx=10, pady=5)
-
-        self.save_button = ctk.CTkButton(self.action_frame, text="Save to File", command=self.save_to_file)
-        self.save_button.pack(side="left", padx=10, pady=5)
-
-
+        scrape_button = ctk.CTkButton(frame, text="Scrape Group", command=self.scrape_group)
+        scrape_button.pack(fill="x", padx=5, pady=5)
 
     def display_accounts(self):
-        """Display available accounts."""
-        accounts = self.scraper.list_accounts()
+        """Charge et affiche les comptes disponibles."""
+        try:
+            available_accounts = self.scraper.list_accounts()
+            if available_accounts:
+                self.account_listbox.configure(values=available_accounts)
+            else:
+                messagebox.showerror("Error", "No accounts found in 'account.data'.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load accounts: {e}")
 
-        for widget in self.account_list_frame.winfo_children():
-            widget.destroy()
-
-        self.account_vars.clear()
-        for account in accounts:
-            var = ctk.IntVar()
-            checkbox = ctk.CTkCheckBox(self.account_list_frame, text=account, variable=var)
-            checkbox.pack(anchor="w", padx=10)
-            self.account_vars[account] = var
-
-
+    def select_account(self, account_name):
+        """Met à jour le compte sélectionné."""
+        self.selected_account = account_name
 
     def connect_account(self):
-        """Connect to the selected Telegram account."""
-        selected_account = [account for account, var in self.account_vars.items() if var.get() == 1]
-
-        if len(selected_account) != 1:
-            messagebox.showerror("Error", "Please select exactly one account to connect.")
+        """Se connecte au compte sélectionné."""
+        if not self.selected_account:
+            messagebox.showerror("Error", "Please select an account to connect.")
             return
 
-        account_name = selected_account[0]
         try:
-            # self.scraper.load_account(account_name)
+            self.scraper.section_name = self.selected_account
+            self.scraper.read_account_details()
             self.scraper.connect()
-            messagebox.showinfo("Success", f"Connected to account: {account_name}")
-            # self.get_groups()
+            self.scraper.get_account_info()
+
+            messagebox.showinfo("Success", f"Connected to {self.selected_account}")
+            self.display_groups()
         except Exception as e:
             messagebox.showerror("Error", f"Failed to connect: {e}")
 
-
-
     def display_groups(self):
-        """Display available groups/channels."""
+        """Charge et affiche les groupes disponibles du compte connecté."""
+        try:
+            groups = self.scraper.get_groups()
+            if groups:
+                self.group_listbox.configure(values=[group.title for group in groups])
+            else:
+                messagebox.showinfo("Info", "No groups found for this account.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load groups: {e}")
+
+
+
+    def select_group(self, group_name):
+        """Met à jour le groupe sélectionné."""
         groups = self.scraper.get_groups()
-
-        for widget in self.group_list_frame.winfo_children():
-            widget.destroy()
-
-        self.group_vars.clear()
-        for group in groups:
-            var = ctk.IntVar()
-            checkbox = ctk.CTkCheckBox(self.group_list_frame, text=group.title, variable=var)
-            checkbox.pack(anchor="w", padx=10)
-            self.group_vars[group] = var
+        self.selected_group = next((group for group in groups if group.title == group_name), None)
 
 
 
-    def scrape_selected_groups(self):
-        """Scrape selected groups."""
-        selected_groups = [group for group, var in self.group_vars.items() if var.get() == 1]
-
-        if not selected_groups:
-            messagebox.showerror("Error", "Please select at least one group to scrape.")
+    def scrape_group(self):
+        """Lance le scraping du groupe sélectionné."""
+        if not self.selected_group:
+            messagebox.showerror("Error", "Please select a group to scrape.")
             return
 
         try:
-            self.scraped_data = {}
-            for group in selected_groups:
-                members = self.scraper.scrape_group_members(group)
-                self.scraped_data[group.title] = members
-            messagebox.showinfo("Success", "Scraping completed.")
+            members = self.scraper.scrape_group_members(self.selected_group)
+            if members:
+                messagebox.showinfo("Success", f"Scraping completed. {len(members)} members found.")
+                self.scraper.save_members_to_file(members, self.selected_group.title)
+            else:
+                messagebox.showinfo("Info", "No members found in the selected group.")
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to scrape groups: {e}")
-
-
-
-    def save_to_file(self):
-        """Save scraped data to a file."""
-        if not hasattr(self, 'scraped_data') or not self.scraped_data:
-            messagebox.showerror("Error", "No data to save. Scrape groups first.")
-            return
-
-        save_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
-
-        if not save_path:
-            return
-
-        try:
-            with open(save_path, "w", encoding="utf-8") as file:
-                writer = csv.writer(file)
-                writer.writerow(["Group", "Username", "User ID", "Name"])
-                for group, members in self.scraped_data.items():
-                    for member in members:
-                        username = member.username or ""
-                        name = f"{member.first_name or ''} {member.last_name or ''}".strip()
-                        writer.writerow([group, username, member.id, name])
-            messagebox.showinfo("Success", f"Data saved to {save_path}")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to save data: {e}")
-
-
+            messagebox.showerror("Error", f"Failed to scrape group: {e}")

@@ -21,16 +21,17 @@ if __name__ == "__main__":
     available_accounts = scraper.list_accounts()
 
 
-    section_name = input("[+] Enter the account name to use: ")
+    section_name = input("[+] Enter the account name to use: ") # ducoup le choix se fait en cochant la case pour sélectionner le compte
     if section_name not in available_accounts:
         print("[!] Account not found.")
     else:
         scraper.section_name = section_name
         scraper.read_account_details()
 
-    scraper.connect()
+    scraper.connect() # on se connecte avec le compte choisi
     scraper.get_account_info()
 
+    # et on fait afficher les groups sur notre page avec une interface moderne
     groups = scraper.get_groups()
     if not groups: 
         print("[!] No groups available.")
