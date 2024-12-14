@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from tkinter import messagebox
-from managers.telegram_account_manager import AccountManager
+from features.telegram_account_manager import AccountManager
 
 class AccountManagerUI(ctk.CTk):
     def __init__(self):

@@ -2,7 +2,7 @@
 Work very in terminal to use AccountManager class
 $ python -m telebox.tests.test_telegram_account_manager
 """
-from ..managers.telegram_account_manager import AccountManager
+from telebox.features.telegram_account_manager import AccountManager
 from __init__ import sleep
 
 # ======================[TEST DE LA CLASSE]==========================

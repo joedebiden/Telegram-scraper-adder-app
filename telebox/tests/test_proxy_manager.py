@@ -2,7 +2,7 @@
 Work very in terminal to use ProxyManager class
 $ .venv/Scripts/python.exe -m telebox.tests.test_proxy_manager
 """
-from ..managers.proxy_manager import ProxyManager
+from telebox.features.proxy_manager import ProxyManager
 from __init__ import sleep
 
 # ======================[TEST DE LA CLASSE]==========================
