@@ -1,3 +1,5 @@
+import os 
+import json
 import customtkinter as ctk
 from gui.app_account import AccountManagerUI
 from gui.app_scraper import ScraperUI
@@ -19,15 +21,13 @@ class DashboardApp(ctk.CTk):
 
         # ======= Apparence globale ======
 
-        ctk.set_appearance_mode("Dark") 
-        ctk.set_default_color_theme("blue") 
-
         self.title("Telebox Dashboard")
         self.geometry("800x550")
-        
+        ctk.set_appearance_mode("Dark") 
+        ctk.set_default_color_theme("blue")
 
         # ======= Menu latéral =======
-        self.sidebar_frame = ctk.CTkFrame(self, width=200, corner_radius=20)
+        self.sidebar_frame = ctk.CTkFrame(self, width=180, corner_radius=20)
         self.sidebar_frame.pack(side="left", fill="y", padx=10, pady=10)
 
         # Titre Telebox
@@ -101,10 +101,10 @@ class DashboardApp(ctk.CTk):
 
         self.mode_switch = ctk.CTkOptionMenu(
             self.sidebar_frame, 
-            values=["Dark", "Light"], 
+            values=["Dark", "Ligh"], 
             command=self.change_mode)
         
-        self.mode_switch.set("Dark")
+        self.mode_switch.set("Select a theme")
         self.mode_switch.pack(pady=(0, 20))
 
 
@@ -186,12 +186,16 @@ class DashboardApp(ctk.CTk):
         self.update_main_frame("Proxies Manager Coming Soon!")
 
 
-    # ====== Méthode pour changer le mode d'apparence ======
+
+    """ Méthode pour changer le mode d'apparence """
     def change_mode(self, mode):
         ctk.set_appearance_mode(mode)
 
+    
 
-    # ====== Méthodes pour la mise à jour de la main zone ======
+
+
+    """ Méthodes pour la mise à jour de la main zone """
     def update_main_frame(self, message):
         """Met à jour la zone principale avec un message."""
         for widget in self.main_frame.winfo_children():
