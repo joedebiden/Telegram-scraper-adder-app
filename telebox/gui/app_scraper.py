@@ -6,7 +6,7 @@ class ScraperUI(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Telebox - Scraper")
-        self.geometry("600x500")
+        self.geometry("800x550")
 
         # Initialisation de la classe Scraper
         self.scraper = Scraper(config_file="account.data")
@@ -24,8 +24,8 @@ class ScraperUI(ctk.CTk):
 
     def create_account_ui(self):
         """Création de l'UI pour gérer les comptes Telegram."""
-        frame = ctk.CTkFrame(self)
-        frame.pack(fill="x", padx=10, pady=10)
+        frame = ctk.CTkFrame(self, width=180, corner_radius=20)
+        frame.pack(side="left", fill="y", padx=10, pady=10)
 
         label = ctk.CTkLabel(frame, text="Available Accounts:", font=("Arial", 16))
         label.pack(anchor="w", padx=5, pady=5)
@@ -40,11 +40,12 @@ class ScraperUI(ctk.CTk):
 
     def create_group_ui(self):
         """Création de l'UI pour afficher et sélectionner les groupes."""
-        frame = ctk.CTkFrame(self)
-        frame.pack(fill="x", padx=10, pady=10)
+        frame = ctk.CTkFrame(self, width=400, height=130, corner_radius=17)
+        frame.pack(pady=10)
+        frame.pack_propagate(False)
 
         label = ctk.CTkLabel(frame, text="Available Groups:", font=("Arial", 16))
-        label.pack(anchor="w", padx=5, pady=5)
+        label.pack(anchor="center", pady=10)
 
         self.group_listbox = ctk.CTkComboBox(frame, values=[], command=self.select_group)
         self.group_listbox.pack(fill="x", padx=5, pady=5)

@@ -24,7 +24,7 @@ class DashboardApp(ctk.CTk):
         self.title("Telebox Dashboard")
         self.geometry("800x550")
         ctk.set_appearance_mode("Dark") 
-        ctk.set_default_color_theme("blue")
+        ctk.set_default_color_theme("dark-blue") 
 
         # ======= Menu latéral =======
         self.sidebar_frame = ctk.CTkFrame(self, width=180, corner_radius=20)
@@ -101,7 +101,7 @@ class DashboardApp(ctk.CTk):
 
         self.mode_switch = ctk.CTkOptionMenu(
             self.sidebar_frame, 
-            values=["Dark", "Ligh"], 
+            values=["Dark", "Light"], 
             command=self.change_mode)
         
         self.mode_switch.set("Select a theme")
