@@ -1,12 +1,18 @@
 from .app_dashboard import DashboardApp
+from features.checker import DeviceChecker
 import requests
 import customtkinter as ctk
+
 
 class LoginApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Login")
         self.geometry("400x300")
+
+        # Récupère l'identifiant unique de l'appareil
+        self.device_checker = DeviceChecker()
+        self.device_id = self.device_checker.get_device_fingerprint()
 
         self.email_label = ctk.CTkLabel(self, text="Email")
         self.email_label.pack(pady=10)
@@ -25,10 +31,10 @@ class LoginApp(ctk.CTk):
         self.response_label.pack()
         
         # only for dev (remove in production)
-        self.godmode_button = ctk.CTkButton(self, text="Godmode", command=self.open_dashboard(user_email="dev"))
-        self.godmode_button.pack(pady=5)
+        # self.godmode_button = ctk.CTkButton(self, text="Godmode", command=self.open_dashboard(user_email="dev"))
+        # self.godmode_button.pack(pady=5)
 
-
+    # code coté client (de l'application)
     def login(self):
         email = self.email_entry.get()
         password = self.password_entry.get()
@@ -38,8 +44,12 @@ class LoginApp(ctk.CTk):
             return
         try:
             response = requests.post(
-                "https://telegram-toolbox.online/auth/app",
-                json={"email": email, "password": password}
+                "http://93.127.202.5:5002/auth/app",
+                json={
+                        "email": email, 
+                        "password": password,
+                        "device_id": self.device_id
+                      }
             )
             if response.status_code == 200:
                 self.response_label.configure(text="Login successful!", fg_color="green")
@@ -47,7 +57,9 @@ class LoginApp(ctk.CTk):
                 user_mail = data.get("email")
                 self.open_dashboard(user_mail)
 
-                # Proceed to the main application
+            elif response.status_code == 403:
+                self.response_label.configure(text="Device not recognized. Contact support.", fg_color="red")
+
             else:
                 self.response_label.configure(text="Invalid credentials", fg_color="red")
                 
@@ -58,6 +70,6 @@ class LoginApp(ctk.CTk):
 
     def open_dashboard(self, user_email):
         """Ouvre le dashboard après authentification réussie."""
-        self.destroy()  # Ferme la fenêtre de login
+        self.destroy()
         dashboard = DashboardApp(user_email)
         dashboard.mainloop()

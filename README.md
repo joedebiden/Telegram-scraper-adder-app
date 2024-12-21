@@ -23,7 +23,7 @@
 
 - update ideas
 
-1. [ ] editing accounts directly
-2. [ ] multiple themes 
+1. [x] editing accounts directly
+2. [x] multiple themes 
 3. [ ] better pop ups  
 4. [ ] save login informations

@@ -11,8 +11,6 @@ class DeviceChecker:
     Hachez les données avec une fonction comme SHA256 pour éviter de stocker des informations en clair.
     """
 
-
-
     def get_device_id(self):
         """Retourne un identifiant unique pour l'appareil"""
         return uuid.getnode()
@@ -28,7 +26,6 @@ class DeviceChecker:
             "processor": platform.processor(),
             "hostname": platform.node(),
         }
-
         # Numéro de série du disque dur (Windows/Linux/Mac)
         try:
             if system_info["os"] == "Windows":
@@ -46,3 +43,4 @@ class DeviceChecker:
         return hashlib.sha256(unique_data).hexdigest()
 
 
+    
