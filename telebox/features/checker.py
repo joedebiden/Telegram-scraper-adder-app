@@ -4,6 +4,8 @@ import hashlib
 import os
 from datetime import datetime
 import pytz
+import time
+from functools import wraps
 
 class DeviceChecker:
     """
@@ -51,3 +53,27 @@ class DeviceChecker:
         Fr_current_date = datetime.now(paris_tz)
 
         return Fr_current_date.isoformat() # permet de le rendre serializable en JSON
+    
+
+
+class RateLimiter():
+    
+    def rate_limited(max_per_minute):
+        """
+        Cette méthode permet de limiter le nombre de requêtes 
+        par minute elle s'implémente en utilisant un décorateur    
+        """
+        min_interval = 60.0 / float(max_per_minute)
+        def decorator(func):
+            last_time_called = [0.0]
+            @wraps(func)
+            def rate_limited_function(*args, **kwargs):
+                elapsed = time.time() - last_time_called[0]
+                left_to_wait = min_interval - elapsed
+                if left_to_wait > 0:
+                    time.sleep(left_to_wait)
+                last_time_called[0] = time.time()
+                return func(*args, **kwargs)
+            return rate_limited_function
+        return decorator
+    
