@@ -2,6 +2,8 @@ import uuid
 import platform
 import hashlib
 import os
+from datetime import datetime
+import pytz
 
 class DeviceChecker:
     """
@@ -43,4 +45,9 @@ class DeviceChecker:
         return hashlib.sha256(unique_data).hexdigest()
 
 
-    
+    def get_date(self):
+        """Retourne la date en France"""
+        paris_tz = pytz.timezone('Europe/Paris') 
+        Fr_current_date = datetime.now(paris_tz)
+
+        return Fr_current_date.isoformat() # permet de le rendre serializable en JSON

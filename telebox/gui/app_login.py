@@ -13,6 +13,7 @@ class LoginApp(ctk.CTk):
         # Récupère l'identifiant unique de l'appareil
         self.device_checker = DeviceChecker()
         self.device_id = self.device_checker.get_device_fingerprint()
+        self.last_login = self.device_checker.get_date()
 
         self.email_label = ctk.CTkLabel(self, text="Email")
         self.email_label.pack(pady=10)
@@ -31,8 +32,8 @@ class LoginApp(ctk.CTk):
         self.response_label.pack()
         
         # only for dev (remove in production)
-        # self.godmode_button = ctk.CTkButton(self, text="Godmode", command=self.open_dashboard(user_email="dev"))
-        # self.godmode_button.pack(pady=5)
+        self.godmode_button = ctk.CTkButton(self, text="Godmode", command=self.open_dashboard(user_email="dev"))
+        self.godmode_button.pack(pady=5)
 
     # code coté client (de l'application)
     def login(self):
@@ -42,13 +43,14 @@ class LoginApp(ctk.CTk):
         if not email or not password:
             self.response_label.configure(text="Please fill in all fields", fg_color="red")
             return
-        try:
+        try: # mettre cooldown
             response = requests.post(
                 "http://93.127.202.5:5002/auth/app",
                 json={
                         "email": email, 
                         "password": password,
-                        "device_id": self.device_id
+                        "device_id": self.device_id,
+                        "last_login": self.last_login
                       }
             )
             if response.status_code == 200:
