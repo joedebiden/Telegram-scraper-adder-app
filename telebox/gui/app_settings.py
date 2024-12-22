@@ -37,6 +37,7 @@ class UserSettings(ctk.CTk):
         self.about_button = ctk.CTkButton(self.left_frame, text="Contact Support", command=self.open_website)
         self.about_button.grid(row=4, column=0, padx=20, pady=10)
 
+
         self.show_user_info()
 
     # appel du décorateur définit dans checker - 10 requetes par minute max
