@@ -22,7 +22,7 @@ class DashboardApp(ctk.CTk):
         # ======= Apparence globale ======
 
         self.title("Telebox Dashboard")
-        self.geometry("800x550")
+        self.geometry("1000x650")
         ctk.set_appearance_mode("Dark") 
         ctk.set_default_color_theme("dark-blue") 
 
@@ -34,14 +34,13 @@ class DashboardApp(ctk.CTk):
         self.logo_label = ctk.CTkLabel(
             self.sidebar_frame, 
             text="Telebox", 
-            font=("Helvetica Neue", 26, "bold"), 
-            text_color="white"
-            )
-        self.logo_label.pack(pady=(20, 40))
+            font=("Helvetica", 30, "bold"), 
+            text_color="#FFFFFF")
+        self.logo_label.pack(pady=(40, 20))
 
 
         # ====== Boutons du menu (les apps) ======
-        button_font = ("Helvetica Neue", 16)
+        button_font = ("Helvetica Neue", 18)
 
 
         # Account Manager
@@ -49,12 +48,23 @@ class DashboardApp(ctk.CTk):
             self.sidebar_frame,
             text="Telegram accounts",
             font=button_font,
-            command=self.open_account_manager)
+            command=self.open_account_manager,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.account_manager_button.pack(pady=10)
 
 
         # Proxies Manager - TO DO -
-        self.proxy_button = ctk.CTkButton(self.sidebar_frame, text="Proxies Manager", font=button_font, command=self.open_proxy_manager)
+        self.proxy_button = ctk.CTkButton(
+            self.sidebar_frame, 
+            text="Proxies Manager", 
+            font=button_font, 
+            command=self.open_proxy_manager,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af")
         self.proxy_button.pack(pady=10)
 
 
@@ -63,7 +73,10 @@ class DashboardApp(ctk.CTk):
             self.sidebar_frame, 
             text="Scraper", 
             font=button_font, 
-            command=self.open_scraper)
+            command=self.open_scraper,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af")
         self.scraper_button.pack(pady=10)
 
 
@@ -72,12 +85,22 @@ class DashboardApp(ctk.CTk):
             self.sidebar_frame,
             text="Adder", 
             font=button_font, 
-            command=self.open_adder)
+            command=self.open_adder,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af")
         self.adder_button.pack(pady=10)
 
 
         # Message Sender - TO DO -
-        self.message_sender_button = ctk.CTkButton(self.sidebar_frame, text="Message Sender", font=button_font, command=self.open_message_sender)
+        self.message_sender_button = ctk.CTkButton(
+            self.sidebar_frame, 
+            text="Message Sender", 
+            font=button_font, 
+            command=self.open_message_sender,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af")
         self.message_sender_button.pack(pady=10)
 
 
@@ -88,7 +111,9 @@ class DashboardApp(ctk.CTk):
             font=button_font,
             fg_color="#757575",
             text_color="white",
-            command=lambda: self.open_user_settings(self.user_email))
+            command=lambda: self.open_user_settings(self.user_email),
+            width=320, height=45, corner_radius=12, 
+            hover_color="#1e40af")
         self.settings_button.pack(pady=(50,10), padx=10)
 
 
@@ -102,7 +127,10 @@ class DashboardApp(ctk.CTk):
         self.mode_switch = ctk.CTkOptionMenu(
             self.sidebar_frame, 
             values=["Dark", "Light"], 
-            command=self.change_mode)
+            command=self.change_mode,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6", 
+            )
         
         self.mode_switch.set("Select a theme")
         self.mode_switch.pack(pady=(0, 20))
@@ -115,7 +143,7 @@ class DashboardApp(ctk.CTk):
         self.main_label = ctk.CTkLabel(
             self.main_frame, 
             text="Welcome on Telebox app !", 
-            font=("Helvetica Neue", 20, "bold"),
+            font=("Helvetica Neue", 30, "bold"),
             corner_radius=15,
             text_color="#ffffff")
         self.main_label.pack(pady=20)
