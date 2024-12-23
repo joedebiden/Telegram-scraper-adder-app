@@ -88,7 +88,7 @@ class DashboardApp(ctk.CTk):
             font=button_font,
             fg_color="#757575",
             text_color="white",
-            command=self.open_user_settings)
+            command=lambda: self.open_user_settings(self.user_email))
         self.settings_button.pack(pady=(50,10), padx=10)
 
 
@@ -165,13 +165,13 @@ class DashboardApp(ctk.CTk):
 
 
 
-    def open_user_settings(self):
+    def open_user_settings(self, user_email):
         """
         Ouvre les paramètres de l'utilisateur et affiche ses infos
         """
         if self.settings_window is None or not self.settings_window.winfo_exists():
             self.withdraw()
-            self.settings_window = UserSettings()
+            self.settings_window = UserSettings(user_email)
             self.settings_window.protocol("WM_DELETE_WINDOW", self.on_settings_close)
             self.settings_window.mainloop()
         else:

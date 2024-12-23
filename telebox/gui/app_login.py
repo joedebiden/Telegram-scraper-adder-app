@@ -32,10 +32,10 @@ class LoginApp(ctk.CTk):
         self.response_label.pack()
         
         # only for dev (remove in production)
-        self.godmode_button = ctk.CTkButton(self, text="Godmode", command=self.open_dashboard(user_email="dev"))
-        self.godmode_button.pack(pady=5)
+        # self.godmode_button = ctk.CTkButton(self, text="Godmode", command=self.open_dashboard(user_email="dev"))
+        # self.godmode_button.pack(pady=5)
 
-    # code coté client (de l'application)
+
     def login(self):
         email = self.email_entry.get()
         password = self.password_entry.get()
@@ -43,9 +43,9 @@ class LoginApp(ctk.CTk):
         if not email or not password:
             self.response_label.configure(text="Please fill in all fields", fg_color="red")
             return
-        try: # mettre cooldown
+        try:
             response = requests.post(
-                "http://93.127.202.5:5002/auth/app",
+                "http://93.127.202.5:5002/auth/app_login",
                 json={
                         "email": email, 
                         "password": password,

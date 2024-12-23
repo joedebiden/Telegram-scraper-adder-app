@@ -5,11 +5,11 @@ from features.checker import RateLimiter
 
 
 class UserSettings(ctk.CTk):
-    def __init__(self):
+    def __init__(self, user_email):
         super().__init__()
         self.title("Settings")
         self.geometry("800x550")
-       
+        self.user_email = user_email
         
         # ====== Interface principale ======
         # Conteneurs pour layout
@@ -40,8 +40,7 @@ class UserSettings(ctk.CTk):
 
         self.show_user_info()
 
-    # appel du décorateur définit dans checker - 10 requetes par minute max
-    @RateLimiter.rate_limited(10)
+
     def show_user_info(self):
         self.clear_main_frame()
 
@@ -51,30 +50,28 @@ class UserSettings(ctk.CTk):
 
         ctk.CTkLabel(self.right_frame, text="Your informations", font=ctk.CTkFont(size=20, weight="bold")).grid(row=0, column=1, pady=20)
 
-        try: # mettre cooldown
+        try: 
             response = requests.post(
                 "http://93.127.202.5:5002/auth/your_infos",
                 json={
-                    "user_id": "1" # Remplacer par l'ID de l'utilisateur
+                    "user_email": self.user_email 
                     })
             if response.status_code == 200:
                 user_data = response.json()
                 email = user_data.get("email", "N/A")
-                phone = user_data.get("phone", "N/A")
                 license_key = user_data.get("license_key", "N/A")
                 transaction_amount = user_data.get("total_transaction_amount", "N/A")
                 subscription_plan = user_data.get("subscription_plan", "N/A")
 
                 self.create_copiable_entry("Your email:", email, 1)
-                self.create_copiable_entry("Your phone:", phone, 2)
-                self.create_copiable_entry("License key:", license_key, 3)
-                self.create_copiable_entry("Transaction amount:", f"{transaction_amount} €", 4)
-                self.create_copiable_entry("Subscription plan:", subscription_plan, 5)
+                self.create_copiable_entry("License key:", license_key, 2)
+                self.create_copiable_entry("Transaction amount:", f"{transaction_amount} €", 3)
+                self.create_copiable_entry("Subscription plan:", subscription_plan, 4)
             else:
-                ctk.CTkLabel(self.right_frame, text="Failed to display your information").grid(row=6, column=1, pady=10)
+                ctk.CTkLabel(self.right_frame, text="Failed to display your information").grid(row=5, column=1, pady=10)
 
         except Exception as e:
-            ctk.CTkLabel(self.right_frame, text=f"Error: {e}").grid(row=6, column=1, pady=10)
+            ctk.CTkLabel(self.right_frame, text="Error with server connection...").grid(row=5, column=1, pady=10)
 
 
 
@@ -90,8 +87,72 @@ class UserSettings(ctk.CTk):
 
 
     def show_password_page(self):
-        import webbrowser
-        webbrowser.open("https://telegram-toolbox.online/auth/reset_request")
+        """Méthode pour changer son mot de passe"""
+        self.clear_main_frame()
+
+        self.right_frame.grid_columnconfigure(0, weight=1)
+        self.right_frame.grid_columnconfigure(1, weight=0)
+        self.right_frame.grid_columnconfigure(2, weight=1)
+
+        ctk.CTkLabel(
+            self.right_frame, 
+            text="Change Your Password", 
+            font=ctk.CTkFont(size=20, weight="bold")
+        ).grid(row=0, column=1, pady=20)
+
+        # Champs pour valider l'ancien mot de passe
+        ctk.CTkLabel(self.right_frame, text="Current Password:").grid(row=1, column=0, pady=10, sticky="e")
+        self.current_password_entry = ctk.CTkEntry(self.right_frame, show="*")
+        self.current_password_entry.grid(row=1, column=1, pady=10, padx=10, sticky="w")
+
+        # Champs pour entrer le nouveau mot de passe
+        ctk.CTkLabel(self.right_frame, text="New Password:").grid(row=2, column=0, pady=10, sticky="e")
+        self.new_password_entry = ctk.CTkEntry(self.right_frame, show="*")
+        self.new_password_entry.grid(row=2, column=1, pady=10, padx=10, sticky="w")
+
+        ctk.CTkLabel(self.right_frame, text="Confirm New Password:").grid(row=3, column=0, pady=10, sticky="e")
+        self.confirm_password_entry = ctk.CTkEntry(self.right_frame, show="*")
+        self.confirm_password_entry.grid(row=3, column=1, pady=10, padx=10, sticky="w")
+
+        # Bouton pour valider le changement
+        ctk.CTkButton(
+            self.right_frame, 
+            text="Update Password", 
+            command=self.change_password
+        ).grid(row=4, column=1, pady=20)
+
+
+
+    def change_password(self):
+        """Valider l'ancien mot de passe et changer le mot de passe"""
+        email = self.user_email
+        current_password = self.current_password_entry.get()
+        new_password = self.new_password_entry.get()
+        confirm_password = self.confirm_password_entry.get()
+
+        if new_password != confirm_password:
+            messagebox.showerror("Error", "New passwords do not match!")
+            return
+
+        # Étape 1 : Valider le mot de passe actuel
+        response = requests.post(
+            "http://93.127.202.5:5002/auth/validate_password",
+            json={"user_email": email, "current_password": current_password}
+        )
+        if response.status_code != 200:
+            messagebox.showerror("Error", "Invalid current password!")
+            return
+
+        # Étape 2 : Mettre à jour le mot de passe
+        response = requests.post(
+            "http://93.127.202.5:5002/auth/update_password",
+            json={"user_email": email, "new_password": new_password}
+        )
+        if response.status_code == 200:
+            messagebox.showinfo("Success", "Password updated successfully!")
+        else:
+            messagebox.showerror("Error", f"Failed to update password: {response.json().get('error', 'Unknown error')}")
+
 
 
     def clear_main_frame(self):
