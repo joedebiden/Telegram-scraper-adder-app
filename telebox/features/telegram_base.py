@@ -1,5 +1,5 @@
-from __init__ import ABC, abstractmethod, TelegramClient, configparser
-
+from __init__ import ABC, TelegramClient, configparser
+from tkinter import simpledialog
 """
 Abstract base class for Telegram clients.
 """
@@ -74,9 +74,12 @@ class TelegramBase(ABC):
             if not self.client.is_user_authorized():
                 print("[!] Client not authorized. Requesting code...")
                 self.client.send_code_request(self.phone)
-                code = input('[+] Enter the code sent from Telegram: ')
-                self.client.sign_in(self.phone, code)
-
+                code = simpledialog.askstring("Verification Code", "Enter the code sent to your Telegram account:")
+                if code:
+                    self.client.sign_in(self.phone, code)   
+                else:
+                    raise Exception("No code entered.")
+                
             print("[+] Connected successfully.")
 
         except Exception as e:

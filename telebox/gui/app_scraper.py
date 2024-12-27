@@ -27,7 +27,7 @@ class ScraperUI(ctk.CTk):
         frame = ctk.CTkFrame(self, width=180, corner_radius=20)
         frame.pack(side="left", fill="y", padx=10, pady=10)
 
-        label = ctk.CTkLabel(frame, text="Available Accounts:", font=("Arial", 16))
+        label = ctk.CTkLabel(frame, text="Available Accounts:", font=("Helvetica", 18))
         label.pack(anchor="w", padx=5, pady=5)
 
         self.account_listbox = ctk.CTkComboBox(frame, values=[], command=self.select_account)
@@ -47,10 +47,22 @@ class ScraperUI(ctk.CTk):
         label = ctk.CTkLabel(frame, text="Available Groups:", font=("Arial", 16))
         label.pack(anchor="center", pady=10)
 
-        self.group_listbox = ctk.CTkComboBox(frame, values=[], command=self.select_group)
+        self.group_listbox = ctk.CTkComboBox(
+            frame, 
+            values=[], 
+            command=self.select_group,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6"
+            )
         self.group_listbox.pack(fill="x", padx=5, pady=5)
 
-        scrape_button = ctk.CTkButton(frame, text="Scrape Group", command=self.scrape_group)
+        scrape_button = ctk.CTkButton(
+            frame, 
+            text="Scrape Group", 
+            command=self.scrape_group,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6"
+            )
         scrape_button.pack(fill="x", padx=5, pady=5)
 
     def display_accounts(self):
