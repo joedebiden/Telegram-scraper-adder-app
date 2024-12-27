@@ -137,7 +137,7 @@ class DashboardApp(ctk.CTk):
         # Zone principale
         self.main_frame = ctk.CTkFrame(self, corner_radius=20)
         self.main_frame.pack(fill="both", expand=True, padx=15, pady=15)
-                                                                                                            # /!\
+
         self.main_label = ctk.CTkLabel(
             self.main_frame, 
             text="Welcome on Telebox app !", 

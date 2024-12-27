@@ -24,16 +24,30 @@ class ScraperUI(ctk.CTk):
 
     def create_account_ui(self):
         """Création de l'UI pour gérer les comptes Telegram."""
-        frame = ctk.CTkFrame(self, width=180, corner_radius=20)
+        frame = ctk.CTkFrame(self, width=210, corner_radius=20)
         frame.pack(side="left", fill="y", padx=10, pady=10)
 
-        label = ctk.CTkLabel(frame, text="Available Accounts:", font=("Helvetica", 18))
+        label = ctk.CTkLabel(frame, text="Available Accounts:", font=("Helvetica", 16))
         label.pack(anchor="w", padx=5, pady=5)
 
-        self.account_listbox = ctk.CTkComboBox(frame, values=[], command=self.select_account)
+        self.account_listbox = ctk.CTkComboBox(
+            frame, 
+            values=[], 
+            command=self.select_account,
+            font=("Helvetica", 16),
+            width=160, height=35, corner_radius=12,
+            )
+        self.account_listbox.set("Select an account")
         self.account_listbox.pack(fill="x", padx=5, pady=5)
 
-        connect_button = ctk.CTkButton(frame, text="Connect to Account", command=self.connect_account)
+        connect_button = ctk.CTkButton(
+            frame, 
+            text="Connect to Account", 
+            command=self.connect_account,
+            width=160, height=35, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         connect_button.pack(fill="x", padx=5, pady=5)
 
 
@@ -51,17 +65,16 @@ class ScraperUI(ctk.CTk):
             frame, 
             values=[], 
             command=self.select_group,
-            width=320, height=45, corner_radius=12, 
-            fg_color="#3b82f6"
+            width=320, height=35, corner_radius=12, 
             )
+        self.group_listbox.set("Select a group")
         self.group_listbox.pack(fill="x", padx=5, pady=5)
 
         scrape_button = ctk.CTkButton(
             frame, 
             text="Scrape Group", 
             command=self.scrape_group,
-            width=320, height=45, corner_radius=12, 
-            fg_color="#3b82f6"
+            width=320, height=35, corner_radius=12, 
             )
         scrape_button.pack(fill="x", padx=5, pady=5)
 
