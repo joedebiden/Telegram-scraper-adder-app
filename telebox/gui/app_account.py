@@ -15,23 +15,33 @@ class AccountManagerUI(ctk.CTk):
         # section ajout de compte
         self.add_frame = ctk.CTkFrame(self, corner_radius=10)
         self.add_frame.pack(pady=20, padx=20, fill="x")
-        self.label_section = ctk.CTkLabel(self.add_frame, text="Name account:")
+
+        self.label_section = ctk.CTkLabel(self.add_frame, text="Name account:",font=("Helvetica Neue", 12))
         self.label_section.pack(side="left", padx=10)
-        self.entry_section = ctk.CTkEntry(self.add_frame, placeholder_text="Choose unique name")
+        self.entry_section = ctk.CTkEntry(self.add_frame, placeholder_text="Choose unique name",font=("Helvetica Neue", 12))
         self.entry_section.pack(side="left", padx=10)
-        self.label_api_id = ctk.CTkLabel(self.add_frame, text="API ID:")
+        self.label_api_id = ctk.CTkLabel(self.add_frame, text="API ID:",font=("Helvetica Neue", 12))
         self.label_api_id.pack(side="left", padx=10)
-        self.entry_api_id = ctk.CTkEntry(self.add_frame, placeholder_text="API ID")
+        self.entry_api_id = ctk.CTkEntry(self.add_frame, placeholder_text="API ID",font=("Helvetica Neue", 12))
         self.entry_api_id.pack(side="left", padx=10)
-        self.label_api_hash = ctk.CTkLabel(self.add_frame, text="API Hash:")
+        self.label_api_hash = ctk.CTkLabel(self.add_frame, text="API Hash:",font=("Helvetica Neue", 12))
         self.label_api_hash.pack(side="left", padx=10)
-        self.entry_api_hash = ctk.CTkEntry(self.add_frame, placeholder_text="API Hash")
+        self.entry_api_hash = ctk.CTkEntry(self.add_frame, placeholder_text="API Hash",font=("Helvetica Neue", 12))
         self.entry_api_hash.pack(side="left", padx=10)
-        self.label_phone = ctk.CTkLabel(self.add_frame, text="Phone:")
+        self.label_phone = ctk.CTkLabel(self.add_frame, text="Phone:",font=("Helvetica Neue", 12))
         self.label_phone.pack(side="left", padx=10)
-        self.entry_phone = ctk.CTkEntry(self.add_frame, placeholder_text="phone number")
+        self.entry_phone = ctk.CTkEntry(self.add_frame, placeholder_text="phone number",font=("Helvetica Neue", 12))
         self.entry_phone.pack(side="left", padx=10)
-        self.add_button = ctk.CTkButton(self.add_frame, text="Add account", command=self.add_account)
+
+        self.add_button = ctk.CTkButton(
+            self.add_frame, 
+            text="Add account", 
+            font=("Helvetica Neue", 12),
+            command=self.add_account,
+            width=300, height=40, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.add_button.pack(side="left", padx=10)
 
 
@@ -46,11 +56,36 @@ class AccountManagerUI(ctk.CTk):
         # cadre pour les boutons d'action
         self.footer_frame = ctk.CTkFrame(self, corner_radius=10)
         self.footer_frame.pack(side="bottom", fill="x", padx=20, pady=10)
-        self.select_all_button = ctk.CTkButton(self.footer_frame, text="Select all", command=self.select_all)
+
+        self.select_all_button = ctk.CTkButton(
+            self.footer_frame, 
+            text="Select all",
+            font=("Helvetica Neue", 12), 
+            command=self.select_all,
+            width=300, height=40, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.select_all_button.pack(side="left", padx=10)
-        self.refresh_button = ctk.CTkButton(self.footer_frame, text="Refresh", command=self.display_accounts)
+        self.refresh_button = ctk.CTkButton(
+            self.footer_frame, 
+            text="Refresh", 
+            font=("Helvetica Neue", 12),
+            command=self.display_accounts,
+            width=300, height=40, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.refresh_button.pack(side='left', pady=10)
-        self.delete_selected_button = ctk.CTkButton(self.footer_frame, text="Remove Selected", command=self.delete_selected_accounts)
+        self.delete_selected_button = ctk.CTkButton(
+            self.footer_frame, 
+            text="Remove Selected",
+            font=("Helvetica Neue", 12),
+            command=self.delete_selected_accounts,
+            width=300, height=40, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.delete_selected_button.pack(side="right", padx=10)
 
         self.display_accounts()
@@ -104,7 +139,7 @@ class AccountManagerUI(ctk.CTk):
                 # Détails : API ID, API Hash, Téléphone
                 row = 1
                 for key, value in details.items():
-                    label_key = ctk.CTkLabel(account_frame, text=f"{key}:")
+                    label_key = ctk.CTkLabel(account_frame, text=f"{key}:",font=("Helvetica Neue", 12))
                     label_key.grid(row=row, column=0, sticky="w", padx=20, pady=2)
                     entry_value = ctk.CTkEntry(account_frame, width=200)
                     entry_value.insert(0, value)
@@ -112,7 +147,7 @@ class AccountManagerUI(ctk.CTk):
                     entry_value.grid(row=row, column=1, sticky="w", padx=20, pady=2)
                     row += 1
         else:
-            label = ctk.CTkLabel(self.accounts_list_frame, text="No account found.")
+            label = ctk.CTkLabel(self.accounts_list_frame, text="No account found.",font=("Helvetica Neue", 12))
             label.pack(anchor="center", padx=10, pady=10)
 
 

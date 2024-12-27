@@ -7,7 +7,7 @@ import customtkinter as ctk
 class LoginApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Login")
+        self.title("Telebox - Login")
         self.geometry("400x500")
         self.configure(bg="#1e1e2f")  # Fond sombre moderne
 

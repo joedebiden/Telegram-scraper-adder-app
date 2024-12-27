@@ -1,5 +1,3 @@
-import os 
-import json
 import customtkinter as ctk
 from gui.app_account import AccountManagerUI
 from gui.app_scraper import ScraperUI
