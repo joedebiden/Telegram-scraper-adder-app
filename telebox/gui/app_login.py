@@ -8,7 +8,7 @@ class LoginApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Login")
-        self.geometry("400x450")
+        self.geometry("400x500")
         self.configure(bg="#1e1e2f")  # Fond sombre moderne
 
         # Récupère l'identifiant unique de l'appareil
@@ -36,6 +36,7 @@ class LoginApp(ctk.CTk):
         self.login_button = ctk.CTkButton(self, text="Login", command=self.login, width=280, height=40, corner_radius=10, fg_color="#3b82f6", hover_color="#1e40af")
         self.login_button.pack(pady=(20, 10))
 
+
         # Message de Réponse
         self.response_label = ctk.CTkLabel(self, text="", font=("Helvetica", 14), text_color="#ff4b5c")
         self.response_label.pack()
@@ -44,6 +45,11 @@ class LoginApp(ctk.CTk):
         self.help_label = ctk.CTkLabel(self, text="Forgot Password?", font=("Helvetica", 14, "underline"), text_color="#3b82f6", cursor="hand2")
         self.help_label.pack(pady=(20, 10))
         self.help_label.bind("<Button-1>", lambda e: self.open_website())
+
+        # Lien direction création de compte
+        self.register_label = ctk.CTkLabel(self, text="Don't have an account?", font=("Helvetica", 14), text_color="#3b82f6", cursor="hand2")
+        self.register_label.pack(pady=(20, 10))
+        self.register_label.bind("<Button-1>", lambda e: self.register_link())
 
     def login(self):
         email = self.email_entry.get()
@@ -80,6 +86,10 @@ class LoginApp(ctk.CTk):
     def open_website(self):
         import webbrowser
         webbrowser.open("https://telegram-toolbox.online/auth/reset_request")
+
+    def register_link(self):
+        import webbrowser
+        webbrowser.open("https://telegram-toolbox.online/auth/register")
 
     def open_dashboard(self, user_email):
         """Ouvre le dashboard après authentification réussie."""
