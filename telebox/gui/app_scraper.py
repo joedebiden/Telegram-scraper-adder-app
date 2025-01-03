@@ -145,3 +145,6 @@ class ScraperUI(ctk.CTk):
                 messagebox.showinfo("Info", "No members found in the selected group.")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to scrape group: {e}")
+            
+        self.scraper.disconnect()
+        
