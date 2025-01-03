@@ -3,6 +3,9 @@ from __init__ import (
     Tk, 
     sleep, 
     asyncio,
+    io,
+    askopenfilename,
+    aiofiles,
     askopenfilename, 
     randint, 
     GetDialogsRequest, 
@@ -26,6 +29,8 @@ class Adder(TelegramBase):
     def __init__(self, session_name='session_name', api_id=None, api_hash=None, phone=None, proxy=None, config_file='account.data', section_name='default'):
         super().__init__(session_name=session_name, api_id=api_id, api_hash=api_hash, phone=phone, proxy=proxy, config_file=config_file, section_name=section_name)
 
+
+
     async def open_file(self, input_file):
         if not input_file:
             Tk().withdraw()
@@ -39,13 +44,16 @@ class Adder(TelegramBase):
             return None
 
         users = []
+
         try:
             if input_file.endswith('.csv'):
                 try:
-                    async with asyncio.to_thread(open, input_file, encoding='UTF-8') as f:
-                        rows = csv.reader(f, delimiter=",", lineterminator="\n")
-                        next(rows, None)
-                        for row in rows:
+                    async with aiofiles.open(input_file, mode='r', encoding='UTF-8') as f:
+                        content = await f.read()
+                        # Utiliser io.StringIO pour simuler un fichier en mémoire
+                        reader = csv.reader(io.StringIO(content), delimiter=",", lineterminator="\n")
+                        next(reader, None)  # Skip header
+                        for row in reader:
                             try:
                                 user = {
                                     'username': row[0],
@@ -66,8 +74,8 @@ class Adder(TelegramBase):
 
             elif input_file.endswith('.txt'):
                 try:
-                    async with asyncio.to_thread(open, input_file, 'r', encoding='UTF-8') as f:
-                        for line in f:
+                    async with aiofiles.open(input_file, mode='r', encoding='UTF-8') as f:
+                        async for line in f:
                             user = {'username': line.strip()}
                             users.append(user)
 
@@ -88,6 +96,8 @@ class Adder(TelegramBase):
 
         return users
 
+
+
     async def get_groups(self):
         if not await self.client.is_user_authorized():
             print("[!] Client not authorized. Connect first.")
@@ -95,7 +105,7 @@ class Adder(TelegramBase):
 
         groups = []
         try:
-            result = await self.client(GetDialogsRequest(
+            result = self.client(GetDialogsRequest(
                 offset_date=None,
                 offset_id=0,
                 offset_peer=InputPeerEmpty(),
@@ -110,6 +120,8 @@ class Adder(TelegramBase):
         except Exception as e:
             print(f"[!] Error while fetching groups: {e}")
         return groups
+
+
 
     async def add_users(self, target_group, users, sleep_time):
         if not users:

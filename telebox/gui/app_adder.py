@@ -14,7 +14,7 @@ class AdderUI(ctk.CTk):
 
         # Initialisation de l'instance Adder
         self.adder = Adder(session_name='session_name', config_file='account.data')
-
+        
         # Variables
         self.users = []
         self.selected_account = None
@@ -32,23 +32,30 @@ class AdderUI(ctk.CTk):
         # ====== Frame gauche (Commandes) ======
         self.accounts_label = ctk.CTkLabel(self.left_frame, text="Select Telegram Account:", font=("Arial", 16))
         self.accounts_label.pack(pady=(20, 5))
+
+        # Appel après l'initialisation de log_textbox
         self.accounts_combobox = ctk.CTkComboBox(self.left_frame, values=self.get_available_accounts(), width=300, command=self.on_account_select)
         self.accounts_combobox.pack(pady=(0, 10))
 
         self.connect_button = ctk.CTkButton(self.left_frame, text="Connect", command=self.connect_account)
         self.connect_button.pack(pady=10)
 
-        self.load_users_button = ctk.CTkButton(self.left_frame, text="Load Users (CSV)", command=self.load_users, state="disabled")
+        self.load_users_button = ctk.CTkButton(self.left_frame, text="Load Users (CSV)", command=self.load_users_sync, state="disabled")
         self.load_users_button.pack(pady=10)
 
-        self.load_groups_button = ctk.CTkButton(self.left_frame, text="Load Groups", command=self.load_groups, state="disabled")
-        self.load_groups_button.pack(pady=10)
 
-        self.groups_label = ctk.CTkLabel(self.left_frame, text="Select Group/Channel:", font=("Arial", 16))
+        self.groups_label = ctk.CTkLabel(self.left_frame, text="Select where you want to add members:", font=("Arial", 16))
         self.groups_label.pack(pady=(20, 5))
 
-        self.groups_combobox = ctk.CTkComboBox(self.left_frame, values=[], width=300, state="disabled")
-        self.groups_combobox.pack(pady=(0, 10))
+        self.groups_combobox = ctk.CTkComboBox(
+            self.left_frame, 
+            values=[], 
+            width=300, height=35, corner_radius=12,
+            command=self.select_group,
+            )
+        self.groups_combobox.set("Select a group/channel")
+        self.groups_combobox.pack(pady=(5, 5))
+        
 
         self.speed_label = ctk.CTkLabel(self.left_frame, text="Select Speed Mode (1-4):", font=("Arial", 16))
         self.speed_label.pack(pady=(20, 5))
@@ -67,10 +74,15 @@ class AdderUI(ctk.CTk):
         self.progress_bar.set(0)
 
     def log_message(self, message):
-        self.log_textbox.insert("end", message + "\n")
-        self.log_textbox.yview("end")
+        if hasattr(self, 'log_textbox'):
+            self.log_textbox.insert("end", message + "\n")
+            self.log_textbox.yview("end")
+        else:
+            print(message)
 
+    # fonctionne bien
     def get_available_accounts(self):
+        # print(self.adder.list_accounts())
         try:
             accounts = self.adder.list_accounts()
             if accounts:
@@ -85,6 +97,7 @@ class AdderUI(ctk.CTk):
     def on_account_select(self, account_name):
         self.selected_account = account_name
 
+    # fonctionne bien
     def connect_account(self):
         if not self.selected_account:
             messagebox.showerror("Error", "Please select an account to connect.")
@@ -94,33 +107,51 @@ class AdderUI(ctk.CTk):
             self.log_message(f"[INFO] Connecting to account: {self.selected_account}...")
             self.adder.read_account_details()
             self.adder.connect()
-            self.adder.get_account_info()
+            # self.adder.get_account_info()
             self.log_message("[SUCCESS] Connected successfully.")
             self.load_users_button.configure(state="normal")
-            self.load_groups_button.configure(state="normal")
+            self.display_groups()
         except Exception as e:
-            self.log_message("[ERROR] Connection failed...")
+            self.log_message("[ERROR ] Connection failed...")
             messagebox.showerror("Error", f"Failed to connect: {e}")
 
+    # fonctionne bien 
     async def load_users(self):
         file_path = filedialog.askopenfilename(filetypes=[("CSV Files", "*.csv")])
         if file_path:
             self.users = await self.adder.open_file(file_path)
-            self.log_message(f"[INFO] Loaded {len(self.users)} users from {file_path}.")
-            self.speed_combobox.configure(state="normal")
+            if self.users is not None: 
+                self.log_message(f"[INFO] Loaded {len(self.users)} users from {file_path}.")
+                self.groups_combobox.configure(state="normal")
+                self.speed_combobox.configure(state="normal")
+            else:
+                self.log_message("[ERROR] Failed to load users. The file might be empty or invalid.")
         else:
             self.log_message("[ERROR] No file selected.")
 
-    def load_groups(self):
-        self.log_message("[INFO] Loading groups/channels...")
-        groups = self.adder.get_groups()
-        if groups:
-            group_names = [group.title for group in groups]
-            self.groups_combobox.configure(values=group_names, state="normal")
-            self.log_message("[SUCCESS] Groups loaded successfully.")
-            self.add_members_button.configure(state="normal")
-        else:
-            self.log_message("[ERROR] No groups available.")
+    def load_users_sync(self):
+        asyncio.run(self.load_users())
+
+
+    # ne fonctionne pas avec le bouton pour afficher les groupes
+    def display_groups(self):
+        """Charge et affiche les groupes disponibles du compte connecté."""
+        try:
+            groups = self.adder.get_groups()
+            if groups:
+                self.log_message(f"[INFO] Found {len(groups)} groups.")
+                self.groups_combobox.configure(values=[group.title for group in groups])
+            else:
+                self.log_message("[INFO] No groups found for this account.")
+        except Exception as e:
+            self.log_message(f"[ERROR] Failed to load groups: {e}")
+
+    def select_group(self, group_name):
+        """Met à jour le groupe sélectionné."""
+        groups = asyncio.run(self.adder.get_groups())
+        self.selected_group = next((group for group in groups if group.title == group_name), None)
+
+
 
     def start_adding_thread(self):
         self.add_members_button.configure(state="disabled")

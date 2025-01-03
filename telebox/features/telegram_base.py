@@ -43,16 +43,16 @@ class TelegramBase(ABC):
             if self.section_name not in config:
                 raise KeyError(f"Section '{self.section_name}' not found...")
             
-            print(f"[DEBUG] Keys in section '{self.section_name}': {config[self.section_name].keys()}")
+            # print(f"[DEBUG] Keys in section '{self.section_name}': {config[self.section_name].keys()}")
 
             self.api_id = config[self.section_name]['api_id']
             self.api_hash = config[self.section_name]['api_hash']
             self.phone = config[self.section_name]['phone']
 
             print(f"[+] Account details loaded from section '{self.section_name}':")
-            print(f"    api_id: {self.api_id}")
-            print(f"    api_hash: {self.api_hash}")
-            print(f"    phone: {self.phone}")
+            # print(f"    api_id: {self.api_id}")
+            # print(f"    api_hash: {self.api_hash}")
+            # print(f"    phone: {self.phone}")
 
         except KeyError as e:
             print(f"[!] Error reading config file '{self.config_file}' section '{self.section_name}': {e}")

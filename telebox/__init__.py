@@ -32,3 +32,5 @@ import traceback
 import requests
 from tkinter import filedialog, messagebox
 import asyncio
+import aiofiles
+import io
