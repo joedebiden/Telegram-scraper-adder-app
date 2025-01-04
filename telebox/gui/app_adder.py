@@ -147,7 +147,7 @@ class AdderUI(ctk.CTk):
 
 
     def add_members(self):
-        """Ajoute les membres au groupe sélectionné."""
+        """Ajoute les membres au groupe sélectionné.""" 
         try:
             group_name = self.groups_combobox.get()
             if not group_name:

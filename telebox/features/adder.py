@@ -180,7 +180,6 @@ class Adder(TelegramBase):
         Ajoute les utilisateurs à un groupe.
         :param target_group: Groupe cible (entité Telegram)
         :param users: Liste des utilisateurs à ajouter
-        :param method: Méthode utilisée (1 pour ID, 2 pour username)
         :param sleep_time: Tuple pour le délai entre chaque ajout
         """
         if not users:
