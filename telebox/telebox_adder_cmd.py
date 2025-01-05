@@ -1,5 +1,5 @@
 from features.adder import Adder
-
+from tkinter import filedialog
 
 if __name__ == "__main__":
 
@@ -19,13 +19,12 @@ if __name__ == "__main__":
     adder.connect()
     adder.get_account_info()
 
-    # doit choisir un fichier CSV ou TXT contenant les utilisateurs à ajouter
-    users = adder.open_file(input_file='users/demo.csv')
-    if users:
-        for user in users:
-            print(user)
+    
+    file_path = filedialog.askopenfilename(filetypes=[("CSV Files", "*.csv")])
+    if file_path:
+        users = adder.open_file(file_path)
 
-
+    
     groups = adder.get_groups()
     if not groups:
         print("[!] No groups available.")
@@ -38,8 +37,10 @@ if __name__ == "__main__":
         adder.disconnect()
         exit()
 
-    # doit pouvoir choisir la vitesse d'ajout
-    speed = adder.set_speed_mode(mode="Fast")
+    
+    print(["Very slow", "Normal", "Fast", "Very fast"])
+    inputspeed = input("Select your speed :")
+    speed = adder.set_speed_mode(inputspeed)
     if not speed:
         print("[!] Invalid speed.")
         adder.disconnect()

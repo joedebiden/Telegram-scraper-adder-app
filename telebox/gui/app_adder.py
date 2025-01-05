@@ -1,8 +1,7 @@
-import threading
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from features.adder import Adder  
-
+import subprocess
 
 class AdderUI(ctk.CTk):
     def __init__(self):
@@ -69,6 +68,12 @@ class AdderUI(ctk.CTk):
         # ====== Frame droite (Terminal/Log) ======
         self.log_textbox = ctk.CTkTextbox(self.right_frame, width=400, height=500)
         self.log_textbox.pack(pady=10, padx=10)
+
+
+        # bouton ouvrir terminal
+        self.terminal_button = ctk.CTkButton(self.right_frame, text="Open Terminal", command=self.open_terminal)
+        self.terminal_button.pack(pady=20, padx=20)
+
 
     def log_message(self, message):
         """Ajoute un message à la zone de log."""
@@ -180,3 +185,11 @@ class AdderUI(ctk.CTk):
         finally:
             self.adder.disconnect()
             self.log_message("[INFO] Disconnected.")
+
+
+    def open_terminal(self):
+        try: 
+            subprocess.run("start cmd", shell=True)
+            self.log_message("[INFO] Terminal launched successfully.")
+        except Exception as e:
+            self.log_message(f"[ERROR] Failed to open terminal: {e}")
