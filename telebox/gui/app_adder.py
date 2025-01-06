@@ -31,48 +31,115 @@ class AdderUI(ctk.CTk):
 
         # ====== Frame gauche (Commandes) ======
         # Liste des comptes disponibles
-        self.accounts_label = ctk.CTkLabel(self.left_frame, text="Select Telegram Account:", font=("Arial", 16))
+        self.accounts_label = ctk.CTkLabel(self.left_frame, text="Select Telegram Account:", font=("Helvetica Neue", 18))
         self.accounts_label.pack(pady=(20, 5))
-        self.accounts_combobox = ctk.CTkComboBox(self.left_frame, values=self.get_available_accounts(), width=300, command=self.on_account_select)
+
+        self.accounts_combobox = ctk.CTkComboBox(
+            self.left_frame, 
+            values=self.get_available_accounts(), 
+            font=("Helvetica Neue", 16),
+            width=160, height=35, corner_radius=12, 
+            command=self.on_account_select
+            )
         self.accounts_combobox.pack(pady=(0, 10))
 
         # Bouton pour se connecter
-        self.connect_button = ctk.CTkButton(self.left_frame, text="Connect", command=self.connect_account)
+        self.connect_button = ctk.CTkButton(
+            self.left_frame, 
+            text="Connect", 
+            font=("Helvetica Neue", 16),
+            command=self.connect_account,
+            width=320, height=45, corner_radius=12, 
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.connect_button.pack(pady=10)
 
         # Chargement des utilisateurs (CSV)
-        self.load_users_button = ctk.CTkButton(self.left_frame, text="Load Users (CSV)", command=self.load_users,
-                                               state="disabled")
+        self.load_users_button = ctk.CTkButton(
+            self.left_frame, 
+            text="Load Users (CSV)", 
+            command=self.load_users,
+            state="disabled",
+            width=320, height=45, corner_radius=12, 
+            font=("Helvetica Neue", 16),
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.load_users_button.pack(pady=10)
 
         # Afficher les groupes/channels
-        self.groups_label = ctk.CTkLabel(self.left_frame, text="Select Group/Channel:", font=("Arial", 16))
+        self.groups_label = ctk.CTkLabel(
+            self.left_frame, 
+            text="Select Group/Channel:", 
+            font=("Helvetica Neue", 18))
         self.groups_label.pack(pady=(20, 5))
 
-        self.load_groups_button = ctk.CTkButton(self.left_frame, text="Load Groups", command=self.load_groups,state="disabled")
+        self.load_groups_button = ctk.CTkButton(
+            self.left_frame, 
+            text="Load Groups", 
+            command=self.load_groups,
+            state="disabled",
+            width=320, height=45, corner_radius=12, 
+            font=("Helvetica Neue", 16),
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.load_groups_button.pack(pady=10)
 
-        self.groups_combobox = ctk.CTkComboBox(self.left_frame, values=[], width=300, state="disabled")
+        self.groups_combobox = ctk.CTkComboBox(
+            self.left_frame, 
+            values=[], 
+            state="disabled",
+            width=160, height=45, corner_radius=12, 
+            font=("Helvetica Neue", 16)
+            )
         self.groups_combobox.pack(pady=(0, 10))
 
 
         # Ajouter les membres
-        self.speed_label = ctk.CTkLabel(self.left_frame, text="Select Speed Mode (1-4):", font=("Arial", 16))
+        self.speed_label = ctk.CTkLabel(self.left_frame, text="Select Speed Mode (1-4):", font=("Helvetica Neue", 18))
         self.speed_label.pack(pady=(20, 5))
-        self.speed_combobox = ctk.CTkComboBox(self.left_frame, values=["Very slow", "Normal", "Fast", "Very fast"], width=100, state="disabled")
+
+        self.speed_combobox = ctk.CTkComboBox(
+            self.left_frame, 
+            values=["Very slow", "Normal", "Fast", "Very fast"], 
+            width=320, height=35, corner_radius=12,  
+            font=("Helvetica Neue", 16),
+            state="disabled"
+            )
+        self.speed_combobox.set("Set a speed delay between adds")
         self.speed_combobox.pack(pady=(0, 10))
 
-        self.add_members_button = ctk.CTkButton(self.left_frame, text="Add Members", command=self.add_members, state="disabled")
+        # Bouton ajout des membres
+        self.add_members_button = ctk.CTkButton(
+            self.left_frame, 
+            text="Add Members", 
+            command=self.add_members, 
+            state="disabled",
+            width=320, height=45, corner_radius=12, 
+            font=("Helvetica Neue", 16),
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.add_members_button.pack(pady=20)
 
 
         # ====== Frame droite (Terminal/Log) ======
-        self.log_textbox = ctk.CTkTextbox(self.right_frame, width=400, height=500)
+        self.log_textbox = ctk.CTkTextbox(self.right_frame, width=390, height=420)
         self.log_textbox.pack(pady=10, padx=10)
 
-
+        self.terminal_label = ctk.CTkLabel(self.right_frame, text="For a better use of adder, please click on button bellow.", font=("Helvetica Neue", 16))
         # bouton ouvrir terminal
-        self.terminal_button = ctk.CTkButton(self.right_frame, text="Open Terminal", command=self.open_telebox_adder)
+        self.terminal_button = ctk.CTkButton(
+            self.right_frame, 
+            text="Open Terminal", 
+            command=self.open_telebox_adder,
+            width=320, height=45, corner_radius=12, 
+            font=("Helvetica Neue", 16),
+            fg_color="#3b82f6", 
+            hover_color="#1e40af"
+            )
         self.terminal_button.pack(pady=20, padx=20)
 
 
