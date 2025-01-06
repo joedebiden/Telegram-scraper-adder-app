@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
-from features.adder import Adder  
-import subprocess
+from features.adder import Adder
+from features.terminal_process import OpenTerminal
 
 class AdderUI(ctk.CTk):
     def __init__(self):
@@ -11,8 +11,9 @@ class AdderUI(ctk.CTk):
         self.geometry("1200x600")
 
 
-        # Initialisation de l'instance Adder
+        # Initialisation de l'instance Adder 
         self.adder = Adder(session_name='session_name', config_file='account.data')
+        self.oterminal = OpenTerminal()
 
         # Variables
         self.users = []
@@ -45,11 +46,11 @@ class AdderUI(ctk.CTk):
         self.load_users_button.pack(pady=10)
 
         # Afficher les groupes/channels
-        self.load_groups_button = ctk.CTkButton(self.left_frame, text="Load Groups", command=self.load_groups,state="disabled")
-        self.load_groups_button.pack(pady=10)
-
         self.groups_label = ctk.CTkLabel(self.left_frame, text="Select Group/Channel:", font=("Arial", 16))
         self.groups_label.pack(pady=(20, 5))
+
+        self.load_groups_button = ctk.CTkButton(self.left_frame, text="Load Groups", command=self.load_groups,state="disabled")
+        self.load_groups_button.pack(pady=10)
 
         self.groups_combobox = ctk.CTkComboBox(self.left_frame, values=[], width=300, state="disabled")
         self.groups_combobox.pack(pady=(0, 10))
@@ -71,7 +72,7 @@ class AdderUI(ctk.CTk):
 
 
         # bouton ouvrir terminal
-        self.terminal_button = ctk.CTkButton(self.right_frame, text="Open Terminal", command=self.open_terminal)
+        self.terminal_button = ctk.CTkButton(self.right_frame, text="Open Terminal", command=self.open_telebox_adder)
         self.terminal_button.pack(pady=20, padx=20)
 
 
@@ -187,9 +188,10 @@ class AdderUI(ctk.CTk):
             self.log_message("[INFO] Disconnected.")
 
 
-    def open_terminal(self):
-        try: 
-            subprocess.run("start cmd", shell=True)
-            self.log_message("[INFO] Terminal launched successfully.")
+
+    def open_telebox_adder(self):
+        try:
+            self.oterminal.launch_telebox_adder()
+            self.log_message("[INFO] Telebox Adder launched successfully.")
         except Exception as e:
-            self.log_message(f"[ERROR] Failed to open terminal: {e}")
+            self.log_message(f"[ERROR] Failed to launch Telebox Adder: {e}")
