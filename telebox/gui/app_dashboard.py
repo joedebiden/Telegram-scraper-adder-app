@@ -151,6 +151,7 @@ class DashboardApp(ctk.CTk):
             text_color="#ffffff")
         self.main_label.pack(pady=20)
 
+        self.display_license_message()
         self.check_adder_license()
 
     # ======= Méthodes pour ouvrir les fenêtres =======
@@ -279,3 +280,28 @@ class DashboardApp(ctk.CTk):
             self.proxy_button.configure(state="disabled")
             self.message_sender_button.configure(state="disabled")
             print("License cannot be checked")
+
+
+
+    def display_license_message(self):
+        message_label = ctk.CTkLabel(
+            self.main_frame,
+            text="Not license bought yet?",
+            font=("Helvetica Neue", 20),
+            text_color="#FF4C4C")
+        message_label.pack(pady=(30, 5))
+
+        link_button = ctk.CTkButton(
+            self.main_frame,
+            text="Go to buy your first one",
+            font=("Helvetica Neue", 18, "underline"),
+            fg_color="transparent",
+            hover_color="#1e40af",
+            text_color="#3b82f6",
+            cursor="hand2",
+            command=lambda: self.open_url("https://telegram-toolbox.online/payment/command"))
+        link_button.pack(pady=(0, 20))
+
+    def open_url(self, url):
+        import webbrowser
+        webbrowser.open(url)

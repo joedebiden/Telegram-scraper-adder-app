@@ -76,7 +76,7 @@ class UserSettings(ctk.CTk):
 
         try: 
             response = requests.post(
-                "http://93.127.202.5:5002/auth/your_infos",
+                "https://telegram-toolbox.online/auth/your_infos",
                 json={
                     "user_email": self.user_email 
                     })
@@ -164,7 +164,7 @@ class UserSettings(ctk.CTk):
 
         # Étape 1 : Valider le mot de passe actuel
         response = requests.post(
-            "http://93.127.202.5:5002/auth/validate_password",
+            "https://telegram-toolbox.online/auth/validate_password",
             json={"user_email": email, "current_password": current_password}
         )
         if response.status_code != 200:
@@ -173,7 +173,7 @@ class UserSettings(ctk.CTk):
 
         # Étape 2 : Mettre à jour le mot de passe
         response = requests.post(
-            "http://93.127.202.5:5002/auth/update_password",
+            "https://telegram-toolbox.online/auth/update_password",
             json={"user_email": email, "new_password": new_password}
         )
         if response.status_code == 200:

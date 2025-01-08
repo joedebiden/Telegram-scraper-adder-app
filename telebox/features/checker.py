@@ -64,7 +64,7 @@ class DeviceChecker:
 
     def check_lisense_inapp(self):
         """Vérifie si la licence est valide dans l'application"""
-        response = requests.post("http://93.127.202.5:5002/license/check-inapp", json={
+        response = requests.post("https://telegram-toolbox.online/license/check-inapp", json={
             "device_id": self.get_device_fingerprint(),
         })
         if response.status_code == 200:
