@@ -19,4 +19,11 @@
 17. [x] obfuscate code + change to exe
 18. [x] test unitaire, verif setup
 19. [x] download link on website
-20. [ ] clean code, oriented object
+20. [x] clean code, oriented object
+
+- update ideas
+
+1. [x] editing accounts directly
+2. [x] multiple themes 
+3. [ ] better pop ups  
+4. [ ] save login informations
