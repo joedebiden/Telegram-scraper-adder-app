@@ -20,7 +20,7 @@ class DashboardApp(ctk.CTk):
         # ======= Apparence globale ======
 
         self.title("Telebox Dashboard")
-        self.geometry("1000x650")
+        self.geometry("1000x700")
         ctk.set_appearance_mode("Dark") 
         ctk.set_default_color_theme("dark-blue") 
 
@@ -126,7 +126,7 @@ class DashboardApp(ctk.CTk):
             self.sidebar_frame, 
             values=["Dark", "Light"], 
             command=self.change_mode,
-            width=320, height=45, corner_radius=12, 
+            width=320, height=30, corner_radius=12, 
             fg_color="#3b82f6", 
             )
         

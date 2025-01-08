@@ -1,5 +1,6 @@
 import uuid
 import platform
+import requests
 import hashlib
 import os
 from datetime import datetime
@@ -39,10 +40,15 @@ class DeviceChecker:
             elif system_info["os"] == "Darwin":  # macOS
                 serial = os.popen("system_profiler SPHardwareDataType | grep Serial").read().strip()
             else:
-                serial = "unknown"
+                try:
+                    serial = os.popen("sudo dmidecode -s system-serial-number").read().strip()
+                    if not serial:
+                        serial = os.popen("cat /sys/class/dmi/id/product_serial").read().strip()
+                except Exception:
+                    serial = "unknown"
         except Exception:
             serial = "unknown"
-
+        
         unique_data = f"{system_info}|{serial}".encode("utf-8")
         return hashlib.sha256(unique_data).hexdigest()
 
@@ -54,6 +60,20 @@ class DeviceChecker:
 
         return Fr_current_date.isoformat() # permet de le rendre serializable en JSON
     
+
+
+    def check_lisense_inapp(self):
+        """Vérifie si la licence est valide dans l'application"""
+        response = requests.post("http://93.127.202.5:5002/license/check-inapp", json={
+            "device_id": self.get_device_fingerprint(),
+        })
+        print(self.get_device_fingerprint())
+        if response.status_code == 200:
+            return True
+        else:
+            return False
+    
+
 
 
 class RateLimiter():
@@ -76,4 +96,5 @@ class RateLimiter():
                 return func(*args, **kwargs)
             return rate_limited_function
         return decorator
-    
+
+
