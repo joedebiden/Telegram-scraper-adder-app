@@ -3,7 +3,7 @@ from gui.app_account import AccountManagerUI
 from gui.app_scraper import ScraperUI
 from gui.app_adder import AdderUI
 from gui.app_settings import UserSettings
-
+from features.checker import DeviceChecker
 
 class DashboardApp(ctk.CTk):
     
@@ -15,6 +15,8 @@ class DashboardApp(ctk.CTk):
         self.scraper_window = None
         self.adder_window = None
         self.settings_window = None
+
+        self.checker = DeviceChecker()
 
 
         # ======= Apparence globale ======
@@ -62,7 +64,8 @@ class DashboardApp(ctk.CTk):
             command=self.open_proxy_manager,
             width=320, height=45, corner_radius=12, 
             fg_color="#3b82f6", 
-            hover_color="#1e40af")
+            hover_color="#1e40af",
+            state="disabled")
         self.proxy_button.pack(pady=10)
 
 
@@ -86,7 +89,8 @@ class DashboardApp(ctk.CTk):
             command=self.open_adder,
             width=320, height=45, corner_radius=12, 
             fg_color="#3b82f6", 
-            hover_color="#1e40af")
+            hover_color="#1e40af",
+            state="disabled")
         self.adder_button.pack(pady=10)
 
 
@@ -98,7 +102,8 @@ class DashboardApp(ctk.CTk):
             command=self.open_message_sender,
             width=320, height=45, corner_radius=12, 
             fg_color="#3b82f6", 
-            hover_color="#1e40af")
+            hover_color="#1e40af",
+            state="disabled")
         self.message_sender_button.pack(pady=10)
 
 
@@ -146,7 +151,7 @@ class DashboardApp(ctk.CTk):
             text_color="#ffffff")
         self.main_label.pack(pady=20)
 
-
+        self.check_adder_license()
 
     # ======= Méthodes pour ouvrir les fenêtres =======
     def open_account_manager(self):
@@ -181,13 +186,17 @@ class DashboardApp(ctk.CTk):
         """
         Ouvre une seule et unique fenêtre pour adder.
         """
-        if self.adder_window is None or not self.adder_button.winfo_exists():
-            self.withdraw()
-            self.adder_window = AdderUI()
-            self.adder_window.protocol("WM_DELETE_WINDOW", self.on_adder_close)
-            self.adder_window.mainloop()
+        if self.checker.check_lisense_inapp() != True:
+            self.update_main_frame("You are not allowed to use this feature.")
+            return
         else:
-            self.adder_window.lift()
+            if self.adder_window is None or not self.adder_button.winfo_exists():
+                self.withdraw()
+                self.adder_window = AdderUI()
+                self.adder_window.protocol("WM_DELETE_WINDOW", self.on_adder_close)
+                self.adder_window.mainloop()
+            else:
+                self.adder_window.lift()
 
 
 
@@ -250,4 +259,23 @@ class DashboardApp(ctk.CTk):
         self.settings_window = None
         self.deiconify()
 
-    
+
+    def check_adder_license(self):
+        """Active ou désactive le bouton 'Add Members' selon la licence."""
+        try:
+            if self.checker.check_lisense_inapp() == True:
+                self.adder_button.configure(state="normal")
+                self.proxy_button.configure(state="normal")
+                self.message_sender_button.configure(state="normal")
+            else: 
+                self.adder_button.configure(state="disabled")
+                self.proxy_button.configure(state="disabled")
+                self.message_sender_button.configure(state="disabled")
+                print("License not valid")
+
+        except Exception as e:
+            print(e)
+            self.adder_button.config(state="disabled")
+            self.proxy_button.configure(state="disabled")
+            self.message_sender_button.configure(state="disabled")
+            print("License cannot be checked")
