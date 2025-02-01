@@ -2,21 +2,17 @@ import customtkinter as ctk
 from gui.app_account import AccountManagerUI
 from gui.app_scraper import ScraperUI
 from gui.app_adder import AdderUI
-from gui.app_settings import UserSettings
-from features.checker import DeviceChecker
+
 
 class DashboardApp(ctk.CTk):
     
-    def __init__(self, user_email):
+    def __init__(self, ):
         super().__init__()
 
-        self.user_email = user_email
         self.account_manager_window = None
         self.scraper_window = None
         self.adder_window = None
-        self.settings_window = None
 
-        self.checker = DeviceChecker()
 
 
         # ======= Apparence globale ======
@@ -65,7 +61,7 @@ class DashboardApp(ctk.CTk):
             width=320, height=45, corner_radius=12, 
             fg_color="#3b82f6", 
             hover_color="#1e40af",
-            state="disabled")
+            state="enabled")
         self.proxy_button.pack(pady=10)
 
 
@@ -90,7 +86,7 @@ class DashboardApp(ctk.CTk):
             width=320, height=45, corner_radius=12, 
             fg_color="#3b82f6", 
             hover_color="#1e40af",
-            state="disabled")
+            state="enabled")
         self.adder_button.pack(pady=10)
 
 
@@ -103,21 +99,8 @@ class DashboardApp(ctk.CTk):
             width=320, height=45, corner_radius=12, 
             fg_color="#3b82f6", 
             hover_color="#1e40af",
-            state="disabled")
+            state="enabled")
         self.message_sender_button.pack(pady=10)
-
-
-        # Bouton paramètres
-        self.settings_button = ctk.CTkButton(
-            self.sidebar_frame,
-            text="Settings",
-            font=button_font,
-            fg_color="#757575",
-            text_color="white",
-            command=lambda: self.open_user_settings(self.user_email),
-            width=320, height=45, corner_radius=12, 
-            hover_color="#1e40af")
-        self.settings_button.pack(pady=(50,10), padx=10)
 
 
         # Sélection des thèmes
@@ -151,8 +134,6 @@ class DashboardApp(ctk.CTk):
             text_color="#ffffff")
         self.main_label.pack(pady=20)
 
-        self.display_license_message()
-        self.check_adder_license()
 
     # ======= Méthodes pour ouvrir les fenêtres =======
     def open_account_manager(self):
@@ -178,8 +159,7 @@ class DashboardApp(ctk.CTk):
             self.scraper_window = ScraperUI()  
             self.scraper_window.protocol("WM_DELETE_WINDOW", self.on_scraper_close)
             self.scraper_window.mainloop()
-        else:
-            self.scraper_window.lift()
+        
 
 
 
@@ -187,31 +167,14 @@ class DashboardApp(ctk.CTk):
         """
         Ouvre une seule et unique fenêtre pour adder.
         """
-        if self.checker.check_lisense_inapp() != True:
-            self.update_main_frame("You are not allowed to use this feature.")
-            return
-        else:
-            if self.adder_window is None or not self.adder_button.winfo_exists():
-                self.withdraw()
-                self.adder_window = AdderUI()
-                self.adder_window.protocol("WM_DELETE_WINDOW", self.on_adder_close)
-                self.adder_window.mainloop()
-            else:
-                self.adder_window.lift()
-
-
-
-    def open_user_settings(self, user_email):
-        """
-        Ouvre les paramètres de l'utilisateur et affiche ses infos
-        """
-        if self.settings_window is None or not self.settings_window.winfo_exists():
+        if self.adder_window is None or not self.adder_button.winfo_exists():
             self.withdraw()
-            self.settings_window = UserSettings(user_email)
-            self.settings_window.protocol("WM_DELETE_WINDOW", self.on_settings_close)
-            self.settings_window.mainloop()
+            self.adder_window = AdderUI()
+            self.adder_window.protocol("WM_DELETE_WINDOW", self.on_adder_close)
+            self.adder_window.mainloop()
         else:
-            self.settings_window.lift()
+            self.scraper_window.lift()
+
 
 
 
@@ -255,52 +218,7 @@ class DashboardApp(ctk.CTk):
         self.adder_window = None
         self.deiconify()
 
-    def on_settings_close(self):
-        self.settings_window.destroy()
-        self.settings_window = None
-        self.deiconify()
 
-
-    def check_adder_license(self):
-        """Active ou désactive le bouton 'Add Members' selon la licence."""
-        try:
-            if self.checker.check_lisense_inapp() == True:
-                self.adder_button.configure(state="normal")
-                self.proxy_button.configure(state="normal")
-                self.message_sender_button.configure(state="normal")
-            else: 
-                self.adder_button.configure(state="disabled")
-                self.proxy_button.configure(state="disabled")
-                self.message_sender_button.configure(state="disabled")
-                print("License not valid")
-
-        except Exception as e:
-            print(e)
-            self.adder_button.config(state="disabled")
-            self.proxy_button.configure(state="disabled")
-            self.message_sender_button.configure(state="disabled")
-            print("License cannot be checked")
-
-
-
-    def display_license_message(self):
-        message_label = ctk.CTkLabel(
-            self.main_frame,
-            text="Not license bought yet?",
-            font=("Helvetica Neue", 20),
-            text_color="#FF4C4C")
-        message_label.pack(pady=(30, 5))
-
-        link_button = ctk.CTkButton(
-            self.main_frame,
-            text="Go to buy your first one",
-            font=("Helvetica Neue", 18, "underline"),
-            fg_color="transparent",
-            hover_color="#1e40af",
-            text_color="#3b82f6",
-            cursor="hand2",
-            command=lambda: self.open_url("https://telegram-toolbox.online/payment/command"))
-        link_button.pack(pady=(0, 20))
 
     def open_url(self, url):
         import webbrowser

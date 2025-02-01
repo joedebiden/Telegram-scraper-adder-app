@@ -19,7 +19,7 @@ class OpenTerminal:
                 
                 instructions =  'echo    ===== Instructions for Telebox Adder ===== &' \
                                 'echo   [     1. Activate virtual environment:     ]&' \
-                                'echo   [   - call ..\\.venv\\Scripts\\activate       ]&' \
+                                'echo   [   - call .venv\\Scripts\\activate       ]&' \
                                 'echo   [     2. Launch the Telebox adder:         ]&' \
                                 'echo   [   - python telebox_adder_cmd.py          ]&' \
                                 'echo    =========================================='

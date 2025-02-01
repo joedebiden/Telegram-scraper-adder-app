@@ -14,16 +14,16 @@ if __name__ == "__main__":
     proxy_manager.add_proxy(
         section_name="proxy1",
         proxy_type="socks5",
-        addr="127.0.0.1",
-        port=8080,
-        username="user1",
-        password="pass1",
+        addr="PROXY_IP",
+        port=9999,
+        username="username",
+        password="password",
         rdns=True
     )
     # Afficher les proxys
     print(proxy_manager.display_proxies())
     # Modifier un proxy
-    proxy_manager.edit_proxy("proxy1", {"port": 9090, "rdns": False})
+    proxy_manager.edit_proxy("proxy1", {"port": 9999, "rdns": False})
     # Supprimer un proxy
     proxy_manager.delete_proxy("proxy1")
     # Récupérer un proxy aléatoire

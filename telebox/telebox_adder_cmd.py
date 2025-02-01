@@ -2,7 +2,7 @@ from features.adder import Adder
 from tkinter import filedialog
 import os
 from time import sleep
-from features.checker import DeviceChecker
+
 
 def banner():
     os.system('cls')
@@ -26,12 +26,7 @@ def banner():
 if __name__ == "__main__":
 
     adder = Adder(session_name='session_name', config_file='account.data')
-    check = DeviceChecker()
 
-    if check.check_lisense_inapp() == False:
-        print("[!] Your license is invalid. Please contact the support.")
-        sleep(2)
-        exit(0)
 
     while True:
         banner()

@@ -1,4 +1,4 @@
-from gui.app_login import LoginApp
+from gui.app_dashboard import DashboardApp
 """
 endpoint of the application
 $ python main.py
@@ -7,7 +7,7 @@ $ python main.py
 
 
 if __name__ == "__main__":
-    app = LoginApp()
+    app = DashboardApp()
     app.mainloop()
 
 
