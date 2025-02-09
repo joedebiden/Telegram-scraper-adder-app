@@ -1,6 +1,6 @@
 # Telebox application 
 
-Telebox (Telegram toolbox app) is an free application for managing Telegram accounts, scraping groups, and adding members, with a user-friendly graphical interface. This project uses `customtkinter` for the user interface and `telethon` for interaction with the Telegram API.
+Telebox (telegram scraper/adder) is an free application for managing Telegram accounts, scraping groups, and adding members, with a user-friendly graphical interface. This project uses `customtkinter` for the user interface and `telethon` for interaction with the Telegram API.
 
 ## Features
 
@@ -14,7 +14,7 @@ Telebox (Telegram toolbox app) is an free application for managing Telegram acco
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/joedebiden/Telebox-app.git
+    git clone https://github.com/joedebiden/Telegram-scraper-adder-app.git
     cd Telebox-app
     ```
 
